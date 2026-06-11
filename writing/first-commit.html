@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>naveed.io — first commit — Naveed Kakal</title>
+<meta name="description" content="Stood up a home page. Pointed a few subdomains at it. More soon." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="article.css" />
+</head>
+<body>
+
+<div class="strip">
+  <a href="../">← Naveed Kakal · Dossier</a>
+  <span class="label">On record · Changelog · 2025-09</span>
+</div>
+
+<div class="wrap">
+  <div class="label kicker">§ Changelog — 2 min</div>
+  <h1 class="display title">naveed.io — first commit</h1>
+  <p class="standfirst">Stood up a home page. Pointed a few subdomains at it. More soon.</p>
+  <div class="byline">
+    <span class="label">Naveed Kakal</span>
+    <span class="label">September 2025</span>
+    <span class="label">Meta · changelog</span>
+  </div>
+
+  <article>
+    <p>After twenty years of shipping software under other people's names — products, plants, a company's letterhead — it seemed time to have a few hundred kilobytes that are just mine.</p>
+
+    <p>So: a home page. Static HTML, no framework, no build step, no analytics. One CSS file, one portrait, system-adjacent fonts, and a git history. It deploys by pushing to <code>main</code>, which is the only deployment pipeline I have never had to debug at 2 a.m.</p>
+
+    <p>The constraint is deliberate. I spend my working life on software whose failure modes involve eighty thousand pounds of wet linen, redundant everything, and graceful degradation plans for the degradation plans. The correct amount of infrastructure for a personal site is the amount that cannot page me. A page like this should have the operational profile of a printed brochure — and roughly the same attack surface.</p>
+
+    <h2>What goes here</h2>
+
+    <p>Mostly writing I have been doing in private for years: field notes on building software for industrial laundries, on telemetry and what it does and does not tell you, on legacy integration as a discipline rather than a chore, and lately on what it actually looks like to restructure an engineering team around AI tooling — written from the inside of doing it, not from a keynote.</p>
+
+    <p>The bar for publishing: would this have saved me a year, at some point in the last twenty? If yes, it goes up. If it is merely an opinion, it stays in the drafts.</p>
+
+    <h2>Changelog</h2>
+
+    <ul>
+      <li><strong>Added</strong> — single-page dossier: who I am, what I have shipped, how to reach me.</li>
+      <li><strong>Added</strong> — DNS, certificates, and a handful of subdomains reserved for future experiments.</li>
+      <li><strong>Deferred</strong> — RSS, a colophon page, and everything else that would have delayed this commit.</li>
+      <li><strong>Rejected</strong> — analytics, trackers, a newsletter popup, and any JavaScript whose absence you would not notice.</li>
+    </ul>
+
+    <p>First commits are mostly a promise to make a second one. More soon. <span class="endmark">❦</span></p>
+  </article>
+
+  <div class="footer">
+    <a class="label" href="../">← Back to the dossier</a>
+    <span class="label">naveed.io · On record</span>
+  </div>
+</div>
+
+</body>
+</html>

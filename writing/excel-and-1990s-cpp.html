@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>On building software for an industry that runs on Excel and 1990s C++ — Naveed Kakal</title>
+<meta name="description" content="Why the laundry floor is one of the most underrated software opportunities in the trades — and why most attempts fail." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="article.css" />
+</head>
+<body>
+
+<div class="strip">
+  <a href="../">← Naveed Kakal · Dossier</a>
+  <span class="label">On record · Essay · 2026-04</span>
+</div>
+
+<div class="wrap">
+  <div class="label kicker">§ Essay — 12 min</div>
+  <h1 class="display title">On building software for an industry that runs on Excel and 1990s C++</h1>
+  <p class="standfirst">Why the laundry floor is one of the most underrated software opportunities in the trades — and why most attempts to modernize it fail before the first invoice gets paid.</p>
+  <div class="byline">
+    <span class="label">Naveed Kakal</span>
+    <span class="label">April 2026</span>
+    <span class="label">Industrial software · field notes</span>
+  </div>
+
+  <article>
+    <p>Every industrial laundry I have ever walked into — and after twenty years, that is a lot of laundries — runs on three layers of technology. At the bottom there is iron: tunnel washers, presses, dryers, ironers, monorail systems, some of it older than the people operating it. In the middle there is control code, typically C++ or ladder logic written in the 1990s by an engineer who has since retired, speaking serial protocols that were never really documented so much as folklore. And at the top, holding the entire commercial operation together, there is Excel.</p>
+
+    <p>Not Excel as a reporting afterthought. Excel as the system of record. Route manifests, customer par levels, wash formulas, piece counts, payroll incentives — I have seen all of them living in spreadsheets named things like <code>FINAL_v7_USE_THIS_ONE.xlsx</code>, emailed between shifts, with the plant's actual institutional knowledge encoded in cell formulas nobody dares touch.</p>
+
+    <p>The instinct of every software person who sees this for the first time is the same: <em>this is insane, I will fix it</em>. I had that instinct in 2006. What follows is what twenty years of acting on it taught me — about why this industry looks like an easy modernization target, why it eats most of the vendors who try, and what actually works.</p>
+
+    <h2>The opportunity is real</h2>
+
+    <p>Start with the part the modernizers get right. Commercial laundry is a genuinely large, genuinely unsexy industry. Every hotel sheet, every hospital gown, every restaurant napkin and mechanic's uniform in your city cycles through a plant you have never thought about. A single large plant processes hundreds of thousands of pounds of textiles a week, on margins thin enough that a few percentage points of throughput is the difference between a good year and layoffs.</p>
+
+    <p>And it is a process industry pretending to be a logistics business. Soiled goods come in mixed; they have to be sorted, washed in the right formula, dried or conditioned, finished on the right equipment, bundled to the right customer, and trucked back out — usually within twenty-four hours, because hotels do not keep three days of linen inventory anymore. The plant is a directed graph with buffers, and almost nobody running one can see the graph. They see piles.</p>
+
+    <p>That is the underrated part. The data is <em>already there</em>. Every modern machine on that floor counts, weighs, and times everything it touches. The tunnel washer knows exactly what batch is in pocket six. The information exists; it just dies at the machine's local display. The software opportunity in this industry has never been about generating data. It is about making a plant legible — getting the information that already exists into one coherent picture, in time for someone to act on it.</p>
+
+    <h2>Why most attempts fail</h2>
+
+    <p>So why is the field littered with failed plant-software projects? In my experience the failures cluster into four patterns, and none of them are technical in the way outsiders expect.</p>
+
+    <h2>1. They treat the legacy layer as a rewrite target instead of an API</h2>
+
+    <p>The 1990s C++ is not technical debt in the way a web team means the phrase. It is closer to firmware for the building. That code has been debugged against twenty years of physical edge cases — the press that double-strokes when the hydraulics are cold, the rail switch that reports position a half-second late. Its bugs are <em>known</em> bugs, and the plant's operators have muscle memory for every one of them.</p>
+
+    <p>When a vendor proposes replacing that layer, they are proposing to re-learn two decades of physical edge cases in production, on equipment that injures people when software gets it wrong. Plants understand this intuitively even when they cannot articulate it, which is why the proposal dies. The teams I have led took the opposite bet: treat the legacy controller as a device with an API — an undocumented, serial-line, occasionally lying API, but an API. Wrap it, observe it, build above it. Some of our most valuable integration code is a careful conversation with a controller whose vendor stopped existing fifteen years ago. It is unglamorous work, and it is the moat.</p>
+
+    <h2>2. They mistake the spreadsheet for the problem</h2>
+
+    <p>Excel persists in these plants for a reason that software people consistently underrate: it is the only tool on site that the actual domain expert can program. The route supervisor with thirty years of experience cannot file a Jira ticket, but she can add a column. Every one of those horrifying spreadsheets is a domain model, written by the person who understands the domain best, in the only language available to her.</p>
+
+    <p>If your system replaces the spreadsheet but takes away her ability to encode what she knows, you have made the plant <em>less</em> intelligent, and the plant will quietly route around you — the spreadsheet will be back within a quarter, now feeding off exports from your system. The lesson took me an embarrassing number of years to learn: do not compete with the spreadsheet's flexibility, compete with its blindness. Give the supervisor live data the spreadsheet cannot have, keep the system configurable enough that her knowledge has somewhere to live, and the migration happens on its own.</p>
+
+    <h2>3. They sell to the office and ignore the floor</h2>
+
+    <p>Plant software gets purchased by an owner or GM and gets used — or sabotaged — by hourly workers in a hot, loud, wet building, many of whom did not finish high school and some of whom do not read English comfortably. A feature that demos beautifully in a conference room can be unusable forty feet from a tunnel washer. Touch targets matter when hands are wet. Latency matters when a sorter scans six hundred pieces an hour. Iconography matters when your user reads Spanish, Hmong, or Somali better than English.</p>
+
+    <p>Early on we shipped a soil-sort interface that required two taps where one would do. The sorters did not complain; they just stopped scanning, and the plant's data went dark. The fix was one tap. I have thought about that interaction more than any architecture decision I have made since. <strong>On a production floor, every extra interaction is a tax, and the workforce collects taxes by not paying them.</strong></p>
+
+    <h2>4. They underestimate the physics of failure</h2>
+
+    <p>Web-scale intuitions about reliability translate badly to a building full of steam. When a cloud service degrades, requests queue. When a laundry's batch-tracking system degrades, eighty thousand pounds of unidentified linen piles up on a floor with nowhere to put it, and the plant starts making irreversible physical decisions — wash it all in the generic formula, guess at the customer, ship and apologize. Recovery from a one-hour outage can take three days, because the error is now distributed across trucks.</p>
+
+    <blockquote>The plant must be able to limp. Any system that cannot degrade gracefully into the operators' manual fallback procedures will be ripped out the first time it fails — and everything fails.</blockquote>
+
+    <p>This shapes architecture in ways that look conservative from outside: aggressive local buffering, offline-tolerant clients, plain-sight escape hatches that let an operator override the system and tell it what actually happened afterward. The override path is not an edge case. It is the feature that earns the right to be trusted with the happy path.</p>
+
+    <h2>What actually works</h2>
+
+    <p>The through-line, if there is one: in industries like this, software succeeds by subordinating itself to the operation, not the other way around. The systems that survive are the ones that started by observing — putting the data that already existed in front of the people who could act on it — and only then, with trust established, began to orchestrate. Visibility first, control second. Every time we have reversed that order, the floor has reversed it back for us.</p>
+
+    <p>It also means the real product is rarely the feature on the roadmap. The product is the plant manager who can finally answer, at 6 a.m., the only question that matters: <em>are we going to make the trucks today?</em> Everything else — the dashboards, the OEE figures, the alarm feeds — is in service of that sentence.</p>
+
+    <p>I find the constraint clarifying rather than limiting. Twenty years in, the laundry floor is still the best place I know to practice the unfashionable end of software engineering: integration over greenfield, legibility over novelty, systems that have to keep working when they are wet. The industry runs on Excel and 1990s C++ because, until something genuinely earns its place, those are the tools that have never once refused to start on a Monday. The bar for replacing them is exactly that high. It should be. <span class="endmark">❦</span></p>
+  </article>
+
+  <div class="footer">
+    <a class="label" href="../">← Back to the dossier</a>
+    <span class="label">naveed.io · On record</span>
+  </div>
+</div>
+
+</body>
+</html>
