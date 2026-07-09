@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Miscolored — case file · naveed.io</title>
+<meta name="description" content="Miscolored — an AI color consultant. Upload a few selfies and get your seasonal color palette, plus AI photos of you dressed in it." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/apps/miscolored.html" />
+<meta property="og:title" content="Miscolored — an AI color consultant · naveed.io" />
+<meta property="og:description" content="Upload a few selfies and an AI stylist places you in the 12-season color system — best colors, neutrals, metals — then generates photos of you in your palette." />
+<meta property="og:image" content="https://naveed.io/assets/apps/miscolored-og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://naveed.io/assets/apps/miscolored-og.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/site.css" />
+<link rel="stylesheet" href="../assets/apps.css" />
+</head>
+<body style="--hue: var(--miscolored)">
+<div id="glow"></div>
+
+<nav class="nav app-nav">
+  <div class="nav-in">
+    <a class="back" href="../index.html"><span class="arw">←</span> naveed<span style="color:var(--acid)">.io</span></a>
+    <div class="nav-links">
+      <a href="https://miscolored.naveed.io" target="_blank" rel="noopener">miscolored.naveed.io ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="app-hero wrap">
+  <div class="app-crumb"><span class="hue">case file 05</span> · an AI color consultant</div>
+  <h1 class="app-title">Miscolored<span class="accent">.</span></h1>
+  <p class="app-tag">Upload a few selfies. An AI stylist reads your coloring, places you in the 12-season system, and paints you a palette — then generates photos of you wearing it.</p>
+  <div class="app-hero-cta">
+    <span class="live-pill"><span class="d"></span>live · miscolored.naveed.io</span>
+    <a class="btn hue-btn" href="https://miscolored.naveed.io" target="_blank" rel="noopener">Find your colors ↗</a>
+    <a class="btn" href="https://github.com/naveedkakal/miscolored" target="_blank" rel="noopener">Source ↗</a>
+  </div>
+
+  <div class="banner shot rise in">
+    <img src="../assets/apps/miscolored-autumn.png" alt="A True Autumn palette result from Miscolored" />
+    <span class="stamp">LOOK · STRUCTURE · RENDER</span>
+  </div>
+</header>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> what it is</div>
+  <h2>Seasonal color analysis, without the in-person consult.</h2>
+  <div class="lead-2">
+    <div class="rise">
+      <p>"Getting your colors done" is a real thing stylists charge hundreds for — sit under neutral light, drape fabrics against your face, and figure out which <b>season</b> you are. Miscolored does it from a few selfies: it reads your skin, hair, and eye coloring and places you in the <b>12-season system</b>, then hands back your best colors, the ones to avoid, your metals, your neutrals, and your <b>palette twins.</b></p>
+      <p>The finish is the fun part — it generates a handful of <b>AI photos of you</b> dressed in your palette (and a couple deliberately clashing, so the difference is obvious). It's a mobile web app: Google sign-in, and every result has an anonymous share link. It's the color-theory cousin of <b>Mispronounced.</b></p>
+    </div>
+    <div class="rise" style="transition-delay:.08s">
+      <p>Under the surface it's the same three-pass idea I keep coming back to with these models. First a <b>LOOK</b> pass studies your photos free-form. Then a <b>STRUCTURE</b> pass turns that reading into a strict result — season, hexes, confidence. Then a <b>RENDER</b> pass generates the try-on images.</p>
+      <p>Splitting "perceive" from "format" matters: ask a model to judge your undertone <em>and</em> fill in a rigid schema at once and it gets worse at both. Let it look first, structure second, and the analysis holds up.</p>
+    </div>
+  </div>
+
+  <div class="feat-list">
+    <div class="f rise"><div class="n">01</div><h3>12-season placement</h3><p>Not just "warm/cool" — the full system, with a confidence score and the reasoning that put you there.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>Your palette, in full</h3><p>Best colors, colors to avoid, metals, neutrals, and celebrity palette twins — each swatch with its hex.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>See yourself in it</h3><p>AI-generated photos of you dressed in your palette — plus a couple of clashing ones for contrast.</p></div>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> my musings</div>
+  <h2>A color wheel with a camera.</h2>
+  <div class="musing rise">
+    <div class="q">The magic isn't classifying you into a season. It's showing you, in your own face, why the classification is right.</div>
+    <p>Anyone can print a palette. What makes people believe it is the try-on — seeing a version of yourself in the "avoid" colors looking slightly ill, then in the "best" ones looking rested. That <b>before/after on your own face</b> is what turns a party trick into something people actually screenshot and act on.</p>
+    <p>It also scratches the same itch as Mispronounced: can a model do a subtle <b>perceptual</b> job — reading undertone from imperfect phone selfies under whatever lighting you happened to have — well enough that it feels like a person did it? The answer, again, is an uncomfortable yes.</p>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> take it for a spin</div>
+  <h2>Get your colors read in a couple of minutes.</h2>
+  <div class="tryit rise">
+    <div class="tryit-head">
+      <span class="lbl">◐ live app</span>
+      <span class="url">miscolored.naveed.io</span>
+    </div>
+    <div class="tryit-body">
+      <p>Public app — sign in with Google, upload a few clear selfies in decent light, and let it work. Image generation is the expensive part, so runs are gently rate-limited; there's a tip jar but no paywall on your own result.</p>
+      <ol class="steps">
+        <li>Open <b><a href="https://miscolored.naveed.io" target="_blank" rel="noopener">miscolored.naveed.io</a></b> and sign in with Google.</li>
+        <li>Upload a few <b>selfies</b> — front-lit, no heavy filters, is best.</li>
+        <li>Wait a moment while it looks, structures, and renders your palette.</li>
+        <li>Read your season, browse your swatches, and share the <b>result link.</b></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="kick" style="margin-top:44px"><span class="hue">§</span> under the hood</div>
+  <div class="stack">
+    <span class="s"><span class="dot">◆</span>Rails 8.1 + Hotwire</span>
+    <span class="s"><span class="dot">◆</span>Tailwind</span>
+    <span class="s"><span class="dot">◆</span>Gemini · LOOK / STRUCTURE / RENDER</span>
+    <span class="s"><span class="dot">◆</span>Google OAuth</span>
+    <span class="s"><span class="dot">◆</span>Solid Queue (in Puma)</span>
+    <span class="s"><span class="dot">◆</span>Postgres + ActiveStorage · Tigris</span>
+    <span class="s"><span class="dot">◆</span>Stripe · tip jar</span>
+    <span class="s"><span class="dot">◆</span>Fly.io</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="mispronounced.html" style="--hue: var(--mis)"><span class="k" style="color:var(--mis)">← prev case file</span><span class="nm">Mispronounced</span></a>
+    <a href="hushbin.html" class="r" style="--hue: var(--hushbin)"><span class="k" style="color:var(--hushbin)">next case file →</span><span class="nm">Hushbin</span></a>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:clamp(50px,7vw,90px)">
+  <div class="foot-bar"><span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span><span>case file · miscolored</span></div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

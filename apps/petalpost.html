@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PetalPost — case file · naveed.io</title>
+<meta name="description" content="PetalPost — design a card, tie a note, hit send. A real 4×6 art postcard drops in someone's mailbox." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/apps/petalpost.html" />
+<meta property="og:title" content="PetalPost — postcards, mailed for real · naveed.io" />
+<meta property="og:description" content="Design a card, tie a note, hit send — a real 4×6 postcard drops in someone's mailbox a few days later." />
+<meta property="og:image" content="https://naveed.io/assets/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://naveed.io/assets/og.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/site.css" />
+<link rel="stylesheet" href="../assets/apps.css" />
+</head>
+<body style="--hue: var(--petal)">
+<div id="glow"></div>
+
+<nav class="nav app-nav">
+  <div class="nav-in">
+    <a class="back" href="../index.html"><span class="arw">←</span> naveed<span style="color:var(--acid)">.io</span></a>
+    <div class="nav-links">
+      <a href="https://petalpost.io" target="_blank" rel="noopener">petalpost.io ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="app-hero wrap">
+  <div class="app-crumb"><span class="hue">case file 02</span> · postcards, mailed for real</div>
+  <h1 class="app-title">PetalPost<span class="accent">.</span></h1>
+  <p class="app-tag">Design a card, tie a note, hit send — and a real 4×6 art postcard drops in someone's mailbox a few days later.</p>
+  <div class="app-hero-cta">
+    <span class="live-pill"><span class="d"></span>live · petalpost.io</span>
+    <a class="btn hue-btn" href="https://petalpost.io" target="_blank" rel="noopener">Send a card ↗</a>
+    <a class="btn" href="https://github.com/naveedkakal/petalpost" target="_blank" rel="noopener">Source ↗</a>
+  </div>
+
+  <div class="banner rise in">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+    <span class="stamp">DESIGN · ADDRESS · REVIEW · MAIL</span>
+  </div>
+</header>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> what it is</div>
+  <h2>Real mail, without the errand.</h2>
+  <div class="lead-2">
+    <div class="rise">
+      <p>PetalPost is a <b>Design → Address → Review → Mail</b> flow that ends with an actual postcard in the actual post. You build the card in the browser, write your note, punch in an address, pay, and it's printed and mailed for you.</p>
+      <p>It grew out of a little app I made for one person — <b>nazneen.io</b>, where you assemble a bouquet from SVG stems and it lands in her inbox as an email. PetalPost is that same warmth, but on paper, for anyone.</p>
+    </div>
+    <div class="rise" style="transition-delay:.08s">
+      <p>The interesting engineering is the <b>trust boundary</b>: the artwork is rendered in <em>your</em> browser and rasterized to a PNG, addresses are verified before a card can charge, and fulfillment only fires from a verified payment webhook — so nothing gets mailed by accident.</p>
+      <p>No accounts, no database of you. Your order gets an unguessable tracking link and that's the only credential — <b>anonymous by design.</b></p>
+    </div>
+  </div>
+
+  <div class="feat-list">
+    <div class="f rise"><div class="n">01</div><h3>Design in-browser</h3><p>Pick the art, choose a wrap, tie a handwritten-style note. The card renders live — what you see is what gets printed.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>Verified addresses</h3><p>Recipient addresses are checked before you're ever charged, so a typo doesn't turn into a card mailed into the void.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>Anonymous tracking</h3><p>Every order gets a private tracking link. Watch it move from printed to in-transit to delivered — no login, no account.</p></div>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> my musings</div>
+  <h2>Why I built it.</h2>
+  <div class="musing rise">
+    <div class="q">Everyone loves getting real mail. Almost nobody sends it, because the errand is annoying. PetalPost deletes the errand.</div>
+    <p>I like software that turns a warm impulse into a finished thing in under two minutes. You think "I should send my mom a card," and the friction usually wins. This is my attempt to let the <b>impulse</b> win instead.</p>
+    <p>It's also a fun little full-stack puzzle: browser-side rendering, physical-mail APIs, payments, and webhooks all have to agree before a real object gets manufactured and shipped. Getting that chain to be <b>boringly reliable</b> was the whole game.</p>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> take it for a spin</div>
+  <h2>Send a card in about two minutes.</h2>
+  <div class="tryit rise">
+    <div class="tryit-head">
+      <span class="lbl">✉ live app</span>
+      <span class="url">petalpost.io</span>
+    </div>
+    <div class="tryit-body">
+      <p>No demo login needed — it's a public app. You only pay when you actually mail something, so poking around the designer is free.</p>
+      <ol class="steps">
+        <li>Open <b><a href="https://petalpost.io" target="_blank" rel="noopener">petalpost.io</a></b> and start on the <b>Design</b> step.</li>
+        <li>Build a card and write a note — the preview is exactly what prints.</li>
+        <li>Add an address; it's <b>verified live</b> before anything is charged.</li>
+        <li>Review the front and back, then mail it. You'll get a <b>private tracking link</b> by email.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="kick" style="margin-top:44px"><span class="hue">§</span> under the hood</div>
+  <div class="stack">
+    <span class="s"><span class="dot">◆</span>Node + Express</span>
+    <span class="s"><span class="dot">◆</span>React (CDN, no build)</span>
+    <span class="s"><span class="dot">◆</span>Lob · physical mail API</span>
+    <span class="s"><span class="dot">◆</span>Stripe · payments + webhooks</span>
+    <span class="s"><span class="dot">◆</span>Postmark · email</span>
+    <span class="s"><span class="dot">◆</span>Tigris · object storage</span>
+    <span class="s"><span class="dot">◆</span>Fly.io · scale-to-zero</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="weave.html" style="--hue: var(--weave)"><span class="k" style="color:var(--weave)">← prev case file</span><span class="nm">Weave</span></a>
+    <a href="picpost.html" class="r" style="--hue: var(--pic)"><span class="k" style="color:var(--pic)">next case file →</span><span class="nm">PicPost</span></a>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:clamp(50px,7vw,90px)">
+  <div class="foot-bar"><span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span><span>case file · petalpost</span></div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

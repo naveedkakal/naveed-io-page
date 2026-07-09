@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Weave — case file · naveed.io</title>
+<meta name="description" content="Weave — an organization-level CMMS for commercial & industrial laundry. PM scheduling, work orders, parts, and AI throughout." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/apps/weave.html" />
+<meta property="og:title" content="Weave — industrial laundry CMMS · naveed.io" />
+<meta property="og:description" content="Twenty years on the laundry floor, distilled into one super-app. PM scheduling, work orders, parts, and AI throughout." />
+<meta property="og:image" content="https://naveed.io/assets/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://naveed.io/assets/og.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/site.css" />
+<link rel="stylesheet" href="../assets/apps.css" />
+</head>
+<body style="--hue: var(--weave)">
+<div id="glow"></div>
+
+<nav class="nav app-nav">
+  <div class="nav-in">
+    <a class="back" href="../index.html"><span class="arw">←</span> naveed<span style="color:var(--acid)">.io</span></a>
+    <div class="nav-links">
+      <a href="https://weavecmms.com" target="_blank" rel="noopener">weavecmms.com ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="app-hero wrap">
+  <div class="app-crumb"><span class="hue">case file 01</span> · flagship · industrial laundry CMMS</div>
+  <h1 class="app-title">Weave<span class="accent">.</span></h1>
+  <p class="app-tag">Twenty years on the laundry floor, distilled into one super-app. The maintenance system I always wished existed.</p>
+  <div class="app-hero-cta">
+    <span class="live-pill"><span class="d"></span>live · weavecmms.com</span>
+    <a class="btn hue-btn" href="https://weavecmms.com" target="_blank" rel="noopener">Open the app ↗</a>
+    <a class="btn" href="https://github.com/naveedkakal/weave" target="_blank" rel="noopener">Source ↗</a>
+  </div>
+
+  <div class="banner rise in">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+    <span class="stamp">CMMS · PM · PARTS · TELEMETRY · AI</span>
+  </div>
+</header>
+
+<!-- what it is -->
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> what it is</div>
+  <h2>A CMMS that finally speaks laundry.</h2>
+  <div class="lead-2">
+    <div class="rise">
+      <p>Industrial laundry maintenance is <b>scattered</b>. PM schedules live in spreadsheets. Procedures are in binders. Parts are tracked on whiteboards. Photos of error codes sit on someone's phone. The knowledge is there — but when a machine goes down, nothing connects it.</p>
+      <p>Weave is an <b>organization-level CMMS</b> that pulls PM scheduling, work orders, procedures, parts inventory, and vendor collaboration into one platform — built for multi-plant operators, not adapted from generic manufacturing software.</p>
+    </div>
+    <div class="rise" style="transition-delay:.08s">
+      <p>The part I'm proudest of is the <b>document intelligence</b>. Every manual you upload gets fingerprinted page-by-page into vectors, so a question like "how do I replace the steam valve?" instantly finds the three relevant pages across a 300-page PDF — and the AI answers with <b>page-level citations</b> back to the source.</p>
+      <p>It's the whole career folded into software: the pattern-matching a good tech does on a Tuesday afternoon, made queryable.</p>
+    </div>
+  </div>
+
+  <div class="feat-list">
+    <div class="f rise"><div class="n">01</div><h3>PM scheduling</h3><p>Calendar, cycle-based, and runtime-based triggers with configurable grace periods and real-time compliance % across every facility.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>Work orders</h3><p>Step-by-step checklists with measurement entry, pass/fail checks, photo capture, and a digital signature at the end.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>Parts inventory</h3><p>Define a part once, deploy it to every facility with per-site stock. Photograph a packing slip and AI matches the line items.</p></div>
+    <div class="f rise"><div class="n">04</div><h3>Machine AI chat</h3><p>Ask any machine a question and get an answer sourced from its own documents — with clickable citations to the exact page.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">05</div><h3>QR issue reporting</h3><p>Anyone scans a machine's QR code to report a problem. No app, no login — the issue lands with photos and context.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">06</div><h3>Vendor portal</h3><p>Service providers get a branded, scoped portal — their logo, their subdomain, access to only the machines they service.</p></div>
+  </div>
+</section>
+
+<!-- musings -->
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> my musings</div>
+  <h2>Why this one matters to me.</h2>
+  <div class="musing rise">
+    <div class="q">This is the app I'd hand to 2006-me on his first day, and it would have saved him a decade of Excel.</div>
+    <p>Everything I've ever learned about the laundry floor is in here somewhere — the way a good maintenance tech thinks, the questions a plant manager asks at 6am, the reason a "simple" PM slips three weeks. I didn't want another dashboard. I wanted the thing that <b>connects the dots</b> when a machine goes down.</p>
+    <p>It's also my playground for AI-native product design: embeddings, context caching that lives on the machine instead of the session, agents that read a service manual and hand back structured procedures. If you want to see where twenty years of domain obsession meets bleeding-edge tooling — <b>this is it.</b> ♥</p>
+  </div>
+</section>
+
+<!-- try it -->
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> take it for a spin</div>
+  <h2>Try Weave with a demo account.</h2>
+  <div class="tryit rise">
+    <div class="tryit-head">
+      <span class="lbl">▲ live demo</span>
+      <span class="url">weavecmms.com</span>
+    </div>
+    <div class="tryit-body">
+      <p>The demo environment is seeded with a fictional multi-plant operator — machines, PM schedules, parts, and a few open work orders. Sign in with any of the accounts below to see it from a different seat.</p>
+      <ol class="steps">
+        <li>Go to <b><a href="https://weavecmms.com" target="_blank" rel="noopener">weavecmms.com</a></b> and hit sign in.</li>
+        <li>Use one of the demo logins below — <b>click any field to copy it.</b></li>
+        <li>Start with <b>Laundry Admin</b> for the full picture: dashboards, PM compliance, parts, and the machine AI chat.</li>
+        <li>Try scanning a machine's QR issue-report flow, or ask a machine a question and watch the citations.</li>
+      </ol>
+
+      <div class="creds">
+        <div class="cr"><span>email</span><span>password</span><span>role</span></div>
+        <div class="cr"><span class="em copyable" data-copy="admin@demo.com">admin@demo.com</span><span class="pw copyable" data-copy="password123">password123</span><span class="rl">Laundry Admin</span></div>
+        <div class="cr"><span class="em copyable" data-copy="rep@demo.com">rep@demo.com</span><span class="pw copyable" data-copy="password123">password123</span><span class="rl">Laundry Rep</span></div>
+        <div class="cr"><span class="em copyable" data-copy="customer@demo.com">customer@demo.com</span><span class="pw copyable" data-copy="password123">password123</span><span class="rl">Customer User</span></div>
+        <div class="cr"><span class="em copyable" data-copy="weave@demo.com">weave@demo.com</span><span class="pw copyable" data-copy="password123">password123</span><span class="rl">Weave Admin</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kick" style="margin-top:44px"><span class="hue">§</span> under the hood</div>
+  <div class="stack">
+    <span class="s"><span class="dot">◆</span>Rails 8.1 API</span>
+    <span class="s"><span class="dot">◆</span>PostgreSQL + pgvector</span>
+    <span class="s"><span class="dot">◆</span>React 18 + TypeScript</span>
+    <span class="s"><span class="dot">◆</span>Vite + Tailwind v4</span>
+    <span class="s"><span class="dot">◆</span>Capacitor (iOS + Android)</span>
+    <span class="s"><span class="dot">◆</span>Gemini · embeddings + caching</span>
+    <span class="s"><span class="dot">◆</span>RabbitMQ event bus</span>
+    <span class="s"><span class="dot">◆</span>Fly.io</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="../index.html"><span class="k">← back to</span><span class="nm">All work</span></a>
+    <a href="petalpost.html" class="r" style="--hue: var(--petal)"><span class="k" style="color:var(--petal)">next case file →</span><span class="nm">PetalPost</span></a>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:clamp(50px,7vw,90px)">
+  <div class="foot-bar"><span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span><span>case file · weave</span></div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

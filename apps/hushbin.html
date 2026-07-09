@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hushbin — case file · naveed.io</title>
+<meta name="description" content="Hushbin — an end-to-end encrypted pastebin. Share sensitive text between devices; everything is AES-256 encrypted in the browser before it reaches the server." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/apps/hushbin.html" />
+<meta property="og:title" content="Hushbin — an end-to-end encrypted pastebin · naveed.io" />
+<meta property="og:description" content="Share sensitive text between your own devices without trusting the server. AES-256, encrypted client-side, the passphrase never leaves your browser." />
+<meta property="og:image" content="https://naveed.io/assets/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://naveed.io/assets/og.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/site.css" />
+<link rel="stylesheet" href="../assets/apps.css" />
+</head>
+<body style="--hue: var(--hushbin)">
+<div id="glow"></div>
+
+<nav class="nav app-nav">
+  <div class="nav-in">
+    <a class="back" href="../index.html"><span class="arw">←</span> naveed<span style="color:var(--acid)">.io</span></a>
+    <div class="nav-links">
+      <a href="https://hushbin.naveed.io" target="_blank" rel="noopener">hushbin.naveed.io ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="app-hero wrap">
+  <div class="app-crumb"><span class="hue">case file 06</span> · an end-to-end encrypted pastebin</div>
+  <h1 class="app-title">Hushbin<span class="accent">.</span></h1>
+  <p class="app-tag">A pastebin for secrets. Share sensitive text between your own devices without ever trusting the server with a single readable byte.</p>
+  <div class="app-hero-cta">
+    <span class="live-pill"><span class="d"></span>live · hushbin.naveed.io</span>
+    <a class="btn hue-btn" href="https://hushbin.naveed.io" target="_blank" rel="noopener">Open a pad ↗</a>
+    <a class="btn" href="https://github.com/naveedkakal/hushbin" target="_blank" rel="noopener">Source ↗</a>
+  </div>
+
+  <div class="banner logo rise in">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+    <img src="../assets/apps/hushbin-logo.svg" alt="Hushbin logo" />
+    <span class="stamp">AES-256-GCM · PBKDF2 · WEB CRYPTO</span>
+  </div>
+</header>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> what it is</div>
+  <h2>A clipboard that spans your devices, and trusts no one.</h2>
+  <div class="lead-2">
+    <div class="rise">
+      <p>You know the moment: you need to move an API key, a config blob, or a wall of text from your laptop to your phone, and every easy option means pasting a secret into something you don't control. Hushbin is a <b>named pad</b> you open on both devices — type once, it appears on the other — but the server only ever holds <b>ciphertext.</b></p>
+      <p>Every save is encrypted in the browser with <b>AES-256-GCM</b> before it goes anywhere. The pad's name is just its address; a separate <b>passphrase</b> is the key, and that passphrase <b>never leaves your device.</b> The server literally cannot read your pads — it's a dumb, encrypted mailbox.</p>
+    </div>
+    <div class="rise" style="transition-delay:.08s">
+      <p>The key is derived with <b>PBKDF2</b> (100k iterations) via the native Web Crypto API, with a fresh random IV per save. Nice touches on top: <b>version history</b> (every save is immutable — browse, restore, or delete), <b>syntax highlighting</b> for JSON and XML, a <b>privacy mode</b> that blurs content while you screen-share, and light polling so a change on one device shows up on the other within seconds.</p>
+      <p>No accounts. The whole thing is a small Next.js app over raw SQL — deliberately boring where it counts, because the interesting part is the part I made sure I can't see.</p>
+    </div>
+  </div>
+
+  <div class="feat-list">
+    <div class="f rise"><div class="n">01</div><h3>Client-side AES-256</h3><p>Encrypt/decrypt happen in your browser via Web Crypto. The server stores ciphertext and an IV — nothing else.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>Immutable versions</h3><p>Every save is a new version. Scroll the history, restore an old one, or delete what you no longer want around.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>Built for screens</h3><p>JSON/XML syntax highlighting, a privacy blur for screen-sharing, and 3-second polling so both devices stay in sync.</p></div>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> my musings</div>
+  <h2>The feature is what it can't do.</h2>
+  <div class="musing rise">
+    <div class="q">The best thing I can say about Hushbin's backend is that if it were breached, the attacker would get a pile of noise.</div>
+    <p>I spend my day job on systems that must degrade gracefully and never lose data. Hushbin is the opposite discipline: a system designed so that the operator — me — is <b>deliberately blind.</b> Zero-knowledge isn't a marketing word here; it's an architecture where the trust boundary sits at the edge of your browser, and everything past it assumes the server is hostile.</p>
+    <p>It started as a genuine itch — I kept needing to shuttle secrets between machines and hated every option. It turned into a tidy exercise in doing <b>real cryptography with the platform's own primitives</b>: no dependencies, no key ever on the wire, and a threat model I could explain in one sentence.</p>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> take it for a spin</div>
+  <h2>Move a secret between two devices.</h2>
+  <div class="tryit rise">
+    <div class="tryit-head">
+      <span class="lbl">▤ live app</span>
+      <span class="url">hushbin.naveed.io</span>
+    </div>
+    <div class="tryit-body">
+      <p>No sign-up. A pad exists the moment you name it; keep the name obscure (or let it generate one) and treat the passphrase like the password it is.</p>
+      <ol class="steps">
+        <li>Open <b><a href="https://hushbin.naveed.io" target="_blank" rel="noopener">hushbin.naveed.io</a></b> and pick or generate a <b>pad name.</b></li>
+        <li>Set a <b>passphrase</b> — this is the encryption key, and it never leaves your browser.</li>
+        <li>Paste your text; it's encrypted and saved as an immutable version.</li>
+        <li>On your other device, open the <b>same pad name</b> and enter the same passphrase — it decrypts locally.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="kick" style="margin-top:44px"><span class="hue">§</span> under the hood</div>
+  <div class="stack">
+    <span class="s"><span class="dot">◆</span>Next.js 16 · App Router</span>
+    <span class="s"><span class="dot">◆</span>React 19 + TypeScript</span>
+    <span class="s"><span class="dot">◆</span>Web Crypto · AES-256-GCM</span>
+    <span class="s"><span class="dot">◆</span>PBKDF2 · 100k iterations</span>
+    <span class="s"><span class="dot">◆</span>Tailwind v4</span>
+    <span class="s"><span class="dot">◆</span>PostgreSQL · raw SQL</span>
+    <span class="s"><span class="dot">◆</span>Fly.io + Docker</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="miscolored.html" style="--hue: var(--miscolored)"><span class="k" style="color:var(--miscolored)">← prev case file</span><span class="nm">Miscolored</span></a>
+    <a href="weave.html" class="r" style="--hue: var(--weave)"><span class="k" style="color:var(--weave)">back to the top →</span><span class="nm">Weave</span></a>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:clamp(50px,7vw,90px)">
+  <div class="foot-bar"><span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span><span>case file · hushbin</span></div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

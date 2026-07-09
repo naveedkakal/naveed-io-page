@@ -1,0 +1,179 @@
+/* ══════════════════════════════════════════════════════════
+   naveed.io — shared design system
+   dark · grotesk · terminal · brutalist grid
+   ══════════════════════════════════════════════════════════ */
+
+:root {
+  /* surfaces — near-black, faintly blue */
+  --bg:      #07090e;
+  --bg-2:    #0b0e15;
+  --surface: #0f131c;
+  --surface-2:#141924;
+  --line:    #1f2530;
+  --line-2:  #2a323f;
+
+  /* ink */
+  --fg:      #eef0f4;
+  --fg-2:    #a2a8b4;
+  --fg-3:    #6b7280;
+  --fg-4:    #464c58;
+
+  /* signature accent — azure, with a soft-purple partner */
+  --acid:    #5bc8ff;
+  --acid-dim:#3f7fa6;
+  --acid-glow: rgba(91,200,255,0.20);
+  --accent2: #9d8bff;
+  --accent2-glow: rgba(157,139,255,0.15);
+
+  /* per-app hues (cool arc: teal → azure → periwinkle → violet, then a warm + green pop) */
+  --weave:   #2fd0c6;
+  --petal:   #4aa6ff;
+  --pic:     #8a86ff;
+  --mis:     #bf82ff;
+  --miscolored: #e2725b;
+  --hushbin: #54c86a;
+
+  --edge: 1px solid var(--line);
+
+  --font-display: 'Bricolage Grotesque', 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'Instrument Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  --maxw: 1280px;
+  --gutter: clamp(20px, 5vw, 72px);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { margin: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+img { max-width: 100%; display: block; }
+
+/* faint background grid + vignette, fixed */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.28;
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 30%, transparent 78%);
+          mask-image: radial-gradient(120% 90% at 50% 0%, #000 30%, transparent 78%);
+}
+/* cursor spotlight */
+#glow {
+  position: fixed; z-index: 0; pointer-events: none; inset: 0;
+  background:
+    radial-gradient(300px 300px at var(--mx, 50%) var(--my, 30%), var(--acid-glow), transparent 68%),
+    radial-gradient(520px 520px at var(--mx, 50%) var(--my, 30%), var(--accent2-glow), transparent 72%);
+  opacity: 0.6; transition: opacity .4s;
+  mix-blend-mode: screen;
+}
+
+/* ── type ─────────────────────────────────────────────── */
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+.mono { font-family: var(--font-mono); }
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--fg-3);
+}
+.kicker .acc { color: var(--acid); }
+
+h1,h2,h3 { margin: 0; }
+
+a { color: var(--acid); text-decoration: none; }
+a:hover { color: var(--fg); }
+
+/* ── layout primitives ────────────────────────────────── */
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); position: relative; z-index: 2; }
+section { position: relative; z-index: 2; }
+
+.sec-rule { border-top: 1px solid var(--line-2); }
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding: 18px 0 0; }
+.sec-title { font-size: clamp(30px, 5vw, 60px); color: var(--fg); text-wrap: balance; margin: 26px 0 0; }
+
+/* ── nav ──────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(14px);
+  background: color-mix(in oklab, var(--bg) 72%, transparent);
+  border-bottom: 1px solid var(--line);
+}
+.nav-in { max-width: var(--maxw); margin: 0 auto; padding: 14px var(--gutter);
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { display: inline-flex; align-items: center; gap: 12px; color: var(--fg); font-family: var(--font-mono); font-weight: 700; letter-spacing: .04em; }
+.brand .mk { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--line-2); border-radius: 7px; color: var(--acid); font-size: 13px; background: var(--surface); }
+.nav-links { display: flex; gap: 6px; align-items: center; }
+.nav-links a { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .04em; color: var(--fg-2); padding: 8px 12px; border-radius: 8px; }
+.nav-links a:hover { color: var(--fg); background: var(--surface); }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--acid); box-shadow: 0 0 0 0 var(--acid); animation: ping 2s infinite; }
+.status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--acid); border: 1px solid color-mix(in oklab, var(--acid) 40%, var(--line));
+  padding: 7px 12px; border-radius: 999px; background: color-mix(in oklab, var(--acid) 7%, transparent);
+}
+
+@keyframes ping { 0% { box-shadow: 0 0 0 0 var(--acid-glow); } 70%,100% { box-shadow: 0 0 0 8px transparent; } }
+
+/* ── buttons ──────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 13px; letter-spacing: .02em;
+  padding: 12px 18px; border-radius: 10px; border: 1px solid var(--line-2);
+  color: var(--fg); background: var(--surface); cursor: pointer;
+  transition: transform .18s, border-color .18s, background .18s, color .18s;
+}
+.btn:hover { transform: translateY(-2px); border-color: var(--acid); color: var(--fg); }
+.btn-primary { background: var(--acid); color: #0b0d08; border-color: var(--acid); font-weight: 600; }
+.btn-primary:hover { color: #0b0d08; box-shadow: 0 10px 30px -8px var(--acid-glow); }
+
+/* ── reveal on scroll ─────────────────────────────────── */
+.rise { opacity: 0; transform: translateY(18px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+.rise.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rise { opacity: 1; transform: none; transition: none; }
+  .status-dot { animation: none; }
+  #glow { display: none; }
+  * { scroll-behavior: auto; }
+}
+
+/* ── footer ───────────────────────────────────────────── */
+.foot { border-top: 1px solid var(--line-2); margin-top: 40px; }
+.foot-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+.foot-grid a {
+  display: block; padding: 34px var(--gutter); color: var(--fg);
+  border-left: 1px solid var(--line); transition: background .18s;
+}
+.foot-grid a:first-child { border-left: none; }
+.foot-grid a:hover { background: var(--surface); }
+.foot-grid .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--fg-3); }
+.foot-grid .v { font-family: var(--font-display); font-weight: 700; font-size: clamp(18px,2vw,24px); margin: 14px 0 12px; word-break: break-word; }
+.foot-grid .go { font-family: var(--font-mono); font-size: 12px; color: var(--acid); }
+.foot-bar { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  padding: 18px var(--gutter); border-top: 1px solid var(--line); max-width: var(--maxw); margin: 0 auto;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: var(--fg-4); text-transform: uppercase; }
+
+@media (max-width: 720px) {
+  .foot-grid { grid-template-columns: 1fr; }
+  .foot-grid a { border-left: none; border-top: 1px solid var(--line); }
+  .foot-grid a:first-child { border-top: none; }
+  .nav-links .hide-sm { display: none; }
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mispronounced — case file · naveed.io</title>
+<meta name="description" content="Mispronounced — read one short paragraph into your phone and an AI dialect coach breaks down your accent." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/apps/mispronounced.html" />
+<meta property="og:title" content="Mispronounced — an AI dialect coach · naveed.io" />
+<meta property="og:description" content="Read one short paragraph into your phone. An AI phonetician breaks down your accent — region, blend, and the words that gave you away." />
+<meta property="og:image" content="https://naveed.io/assets/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://naveed.io/assets/og.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/site.css" />
+<link rel="stylesheet" href="../assets/apps.css" />
+</head>
+<body style="--hue: var(--mis)">
+<div id="glow"></div>
+
+<nav class="nav app-nav">
+  <div class="nav-in">
+    <a class="back" href="../index.html"><span class="arw">←</span> naveed<span style="color:var(--acid)">.io</span></a>
+    <div class="nav-links">
+      <a href="https://mispronounced.io" target="_blank" rel="noopener">mispronounced.io ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="app-hero wrap">
+  <div class="app-crumb"><span class="hue">case file 04</span> · an AI dialect coach</div>
+  <h1 class="app-title">Mispronounced<span class="accent">.</span></h1>
+  <p class="app-tag">Read one short paragraph into your phone. An AI phonetician breaks down your accent — region, blend, and the exact words that gave you away.</p>
+  <div class="app-hero-cta">
+    <span class="live-pill"><span class="d"></span>live · mispronounced.io</span>
+    <a class="btn hue-btn" href="https://mispronounced.io" target="_blank" rel="noopener">Get analyzed ↗</a>
+    <a class="btn" href="https://github.com/naveedkakal/mispronounced" target="_blank" rel="noopener">Source ↗</a>
+  </div>
+
+  <div class="banner rise in">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+    <span class="stamp">RECORD · LISTEN · STRUCTURE · REPORT</span>
+  </div>
+</header>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> what it is</div>
+  <h2>The party trick that reads your voice.</h2>
+  <div class="lead-2">
+    <div class="rise">
+      <p>You record two short clips — a diagnostic reading passage and a spontaneous answer — and an AI dialect coach writes you a genuine breakdown: <b>where your accent is from, what it's blended with,</b> and the specific words and sounds that gave you away.</p>
+      <p>It's part linguistics, part party trick. The report is written to be <b>playful</b> — it doesn't just classify you, it tells you a story about how you talk.</p>
+    </div>
+    <div class="rise" style="transition-delay:.08s">
+      <p>The pipeline is the fun part. It runs in <b>two passes</b>: first a model <em>listens</em> to your audio free-form and writes a "phonetician's notebook," then a second, text-only pass turns that notebook into a structured, shareable result.</p>
+      <p>That split matters — I found that forcing a rigid output schema onto the listening step measurably <b>degrades</b> how well the model hears. Let it listen loosely, then structure it after.</p>
+    </div>
+  </div>
+
+  <div class="feat-list">
+    <div class="f rise"><div class="n">01</div><h3>Two clips</h3><p>A scripted passage plus an off-the-cuff answer, recorded right in the browser — no upload, no setup.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>Two-pass analysis</h3><p>Listen first, structure second. A free-form "notebook" pass, then a schema pass that turns it into the report.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>Shareable result</h3><p>Every analysis gets an anonymous share link, so you can send your accent breakdown to the group chat.</p></div>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> my musings</div>
+  <h2>A weekend "what if" that stuck.</h2>
+  <div class="musing rise">
+    <div class="q">I wanted to know if a model could actually hear an accent — not guess from text, but listen. Turns out: unnervingly well.</div>
+    <p>This one started as a curiosity about the <b>edges of what these models can do with raw audio</b>. The surprise wasn't that it worked — it was how much the <em>prompt structure</em> mattered. Ask it to fill in a form while listening and it goes deaf; let it ramble in a notebook first and it hears everything.</p>
+    <p>It's the smallest app on this page and probably the most fun to show someone. Everyone wants to know what their voice says about them. <b>Read the paragraph. Find out.</b></p>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> take it for a spin</div>
+  <h2>Get your own accent read.</h2>
+  <div class="tryit rise">
+    <div class="tryit-head">
+      <span class="lbl">◉ live app</span>
+      <span class="url">mispronounced.io</span>
+    </div>
+    <div class="tryit-body">
+      <p>Public app — sign in with Google, allow the mic, and you're off. Results are never locked; there's a tip jar if you like it, but no paywall on your own report.</p>
+      <ol class="steps">
+        <li>Open <b><a href="https://mispronounced.io" target="_blank" rel="noopener">mispronounced.io</a></b> and sign in with Google.</li>
+        <li>Allow microphone access when your browser asks.</li>
+        <li>Record the <b>reading passage</b>, then a short <b>spontaneous answer.</b></li>
+        <li>Wait a moment for the analysis, then read (and share) your report.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="kick" style="margin-top:44px"><span class="hue">§</span> under the hood</div>
+  <div class="stack">
+    <span class="s"><span class="dot">◆</span>Rails 8 + Hotwire</span>
+    <span class="s"><span class="dot">◆</span>Gemini · multimodal audio</span>
+    <span class="s"><span class="dot">◆</span>Solid Queue jobs</span>
+    <span class="s"><span class="dot">◆</span>MediaRecorder (browser)</span>
+    <span class="s"><span class="dot">◆</span>Postgres + ActiveStorage</span>
+    <span class="s"><span class="dot">◆</span>Stripe · tip jar</span>
+    <span class="s"><span class="dot">◆</span>Fly.io</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="picpost.html" style="--hue: var(--pic)"><span class="k" style="color:var(--pic)">← prev case file</span><span class="nm">PicPost</span></a>
+    <a href="miscolored.html" class="r" style="--hue: var(--miscolored)"><span class="k" style="color:var(--miscolored)">next case file →</span><span class="nm">Miscolored</span></a>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:clamp(50px,7vw,90px)">
+  <div class="foot-bar"><span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span><span>case file · mispronounced</span></div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
