@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>One door for a fleet of apps: the token in the redirect — Naveed Kakal</title>
+<meta name="description" content="How a single redirect and a short-lived signed token retired forty login screens — and why putting a token in the URL is fine when you do it right." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="article.css" />
+</head>
+<body>
+
+<div class="strip">
+  <a href="../">← Naveed Kakal · Dossier</a>
+  <span class="label">On record · Essay · 2026-06</span>
+</div>
+
+<div class="wrap">
+  <div class="label kicker">§ Essay — systems &amp; auth</div>
+  <h1 class="display title">One door for a fleet of apps: the token in the redirect</h1>
+  <p class="standfirst">How a single redirect and a short-lived signed token retired forty login screens across our plant apps — and why putting a token in a URL, the thing every security tutorial tells you never to do, is exactly the right move when you do it right.</p>
+  <div class="byline">
+    <span class="label">Naveed Kakal</span>
+    <span class="label">June 2026</span>
+    <span class="label">Auth · single sign-on</span>
+  </div>
+
+  <article>
+    <p>For most of our history, logging into an internal tool meant meeting a login screen that some engineer had reinvented from memory. Every plant app — the dispatch board, the maintenance console, the telemetry dashboards, the little one-off report viewers that quietly became load-bearing — carried its own username box, its own password box, and its own opinion about what a session was. Some spoke Azure AD through a tangle of MSAL config. A few, to my lasting embarrassment, still answered to HTTP Basic Auth over a connection we had to keep promising ourselves we'd lock down. The result was forty front doors with forty different locks, and a support queue full of people who had walked up to the wrong one.</p>
+
+    <p>We replaced all of it with a single idea you already understand if you've ever used a hotel key card. You don't authenticate to the door. You authenticate once, at the front desk, and walk away holding a token the doors know how to read. The clever part — the part worth writing down — is what that token is, how it travels, and why the most disreputable-looking step in the whole dance is the one that makes it safe.</p>
+
+    <h2>The shape of the dance</h2>
+
+    <p>Here is the entire flow, and it is short. A user opens the maintenance console. The console checks for a session cookie, finds none, and instead of drawing its own login box it does the one thing it knows how to do well: it redirects. The browser is sent to a central <strong>auth broker</strong> — for us, one service that every app trusts and no app <em>is</em> — carrying two facts in the querystring: who's asking (the app) and where to come back to (the original URL).</p>
+
+    <p>The broker is the only thing in the building that talks to the identity provider. If the user already has a broker session, this is invisible; if not, the broker bounces them to Azure AD, collects the corporate login, and brings them back. Either way the broker now knows who the user is, and it does the thing this essay is about: it mints a small, signed, single-use token and redirects the browser <em>back</em> to the app — with the token sitting right there in the URL.</p>
+
+    <blockquote>The token in the querystring is not the session. It is a coat-check ticket: useless to steal, because by the time you've read it over someone's shoulder, the coat is already gone.</blockquote>
+
+    <p>The app receives that redirect, pulls the token out of the URL, and immediately hands it back to the broker through a server-to-server call — browser not involved — saying, in effect, "I was given this; is it real, and who does it belong to?" The broker verifies its own signature, confirms the token has not been used before, burns it so it can never be used again, and answers with the user's identity. Only now does the app create its own session cookie. The very next thing it does is strip the token out of the address bar with a history replace, so it never lands in browser history, never gets bookmarked, never rides along in a <code>Referer</code> header to some third party. Total elapsed time: less than the page's first paint.</p>
+
+    <h2>Why the URL is fine, actually</h2>
+
+    <p>Every instinct trained by a decade of security write-ups screams at this point: <em>tokens in URLs leak.</em> They leak into server logs, into analytics, into browser history, into the <code>Referer</code> header, into the screenshot someone pastes into a support ticket. That instinct is correct, and it is aimed at the wrong target. It assumes the thing in the URL is a <strong>bearer credential</strong> — something that grants access for as long as it lives. Ours isn't. It is engineered to be worthless the instant after it's used, and the engineering is all in the adjectives:</p>
+
+    <ul>
+      <li><strong>Short-lived.</strong> The token is valid for seconds, not hours. Its entire job is to survive one redirect. A token that leaks into a log at 2:14:03 expired at 2:14:13, and the log is now a museum exhibit.</li>
+      <li><strong>Single-use.</strong> The broker remembers every token it has redeemed and refuses the second attempt. Even within its ten-second window, a captured token has already been spent by the legitimate app a few hundred milliseconds after it was issued. The attacker is racing a server-to-server call they can't see and have already lost.</li>
+      <li><strong>Signed, not guessed-at.</strong> The token carries a signature the broker can verify and nobody else can forge. You cannot mint your own. You cannot tamper with the one you have. The app never has to <em>trust</em> the URL; it trusts the broker's answer about the URL.</li>
+      <li><strong>Exchanged, never trusted in place.</strong> The token in the address bar is never what logs you in. It's the question. The session cookie — set later, server-side, <code>HttpOnly</code>, never in any URL — is the answer. The leaky channel only ever carries the question, and the question has a ten-second shelf life.</li>
+    </ul>
+
+    <p>This is the same reasoning that makes OAuth authorization codes safe to put in a redirect, and it is not a coincidence — we are standing on the same ground OIDC stands on, just with a broker we own sitting where the spec leaves a blank. The lesson generalizes past auth: <strong>"never put X in a URL" is shorthand for "never put a long-lived secret in a URL."</strong> Put a self-destructing one there and the channel's leakiness stops being a vulnerability and starts being a non-event.</p>
+
+    <h2>What the broker bought us</h2>
+
+    <p>The flow is elegant, but elegance wasn't the goal; <em>removal</em> was. Pushing every app through one broker meant the apps stopped knowing anything about how authentication works. They don't hold Azure client secrets. They don't carry MSAL. They don't know what an identity provider is. They know how to redirect when they have no session, and how to exchange a token when they're handed one. That's the whole contract, and it fits on an index card.</p>
+
+    <p>Which means the day we change identity providers — or add MFA, or a step-up challenge for the apps that can take a press offline, or a hardware-key requirement for the few people who can — we change it in exactly one place. The forty apps don't get redeployed. They don't even find out. We had spent years with security policy fragmented across forty codebases, each slightly out of date in its own direction, and the broker collapsed all of it into a single surface we could actually reason about. The first time we rotated a signing key and watched the entire fleet keep working without a single app being touched, it felt less like shipping a feature and more like finally paying off a debt I'd been quietly servicing since the Basic Auth days.</p>
+
+    <h2>The part the diagram hides</h2>
+
+    <p>I'll close with the failure mode, because the happy path is the easy half and the redirect dance has a sharp edge the diagram politely omits: the round trip back to the app has to land on <em>where the user was going</em>, not on a generic home page. Get that wrong and you've built a system that successfully authenticates everyone and then dumps them at the lobby, and a maintenance tech who clicked a deep link to a specific work order does not care that your auth is elegant. They care that they're not looking at the work order.</p>
+
+    <p>So the original URL — the deep link, the querystring, the anchor — has to be carried through the entire ricochet from app to broker to identity provider and all the way back, untouched, and the app has to honor it on return. It is the least glamorous line of code in the system and the one users feel most directly. The token gets the security write-ups. The return URL gets the trust. <span class="endmark">❦</span></p>
+  </article>
+
+  <div class="footer">
+    <a class="label" href="../">← Back to the dossier</a>
+    <span class="label">naveed.io · On record</span>
+  </div>
+</div>
+
+</body>
+</html>
