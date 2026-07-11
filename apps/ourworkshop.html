@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OurWorkshop — case file · naveed.io</title>
+<meta name="description" content="OurWorkshop — a multi-tenant 'shop OS' for small custom-maker shops to run the whole arc: lead → quote → multi-week build → deliver, with the client kept in the loop." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/apps/ourworkshop.html" />
+<meta property="og:title" content="OurWorkshop — a multi-tenant shop OS · naveed.io" />
+<meta property="og:description" content="A white-label back office for custom-maker shops — lead → quote → multi-week build → deliver, with the client watching progress the whole way." />
+<meta property="og:image" content="https://naveed.io/assets/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://naveed.io/assets/og.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/site.css" />
+<link rel="stylesheet" href="../assets/apps.css" />
+</head>
+<body style="--hue: var(--ourworkshop)">
+<div id="glow"></div>
+
+<nav class="nav app-nav">
+  <div class="nav-in">
+    <a class="back" href="../index.html"><span class="arw">←</span> naveed<span style="color:var(--acid)">.io</span></a>
+    <div class="nav-links">
+      <a href="#build">the architecture ↓</a>
+    </div>
+  </div>
+</nav>
+
+<header class="app-hero wrap">
+  <div class="app-crumb"><span class="hue">case file 07</span> · a multi-tenant shop OS</div>
+  <h1 class="app-title">OurWorkshop<span class="accent">.</span></h1>
+  <p class="app-tag">A white-label back office for small custom-maker shops — woodworkers, framers, sign shops — to run the one arc they all share: <b>lead → quote → multi-week build → deliver</b>, with the client watching the whole way.</p>
+  <div class="app-hero-cta">
+    <span class="live-pill build"><span class="d"></span>in active development</span>
+    <a class="btn hue-btn" href="https://github.com/naveedkakal/ourworkshop" target="_blank" rel="noopener">Source ↗</a>
+  </div>
+
+  <div class="banner logo rise in">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+    <img src="../assets/apps/ourworkshop-icon.svg" alt="OurWorkshop logo" />
+    <span class="stamp">MULTI-TENANT · ROW-LEVEL · CONCIERGE</span>
+  </div>
+</header>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> what it is</div>
+  <h2>The software the client watches, not just the one you close in.</h2>
+  <div class="lead-2">
+    <div class="rise">
+      <p>Think of a husband-and-wife shop that takes custom inquiries, sends a quote, builds over several weeks, and keeps the customer excited with progress photos. A CRM's job <em>ends at the deal.</em> This one keeps going — <b>past the close</b>, through the build, all the way to delivery — and brings the client along with a portal, milestones, and photos.</p>
+      <p>It grew out of a real single-tenant app I'd built for one maker (<b>mh-handcraft</b>). OurWorkshop is that domain generalized into a <b>white-label platform</b>: every shop runs its business at <code>theirshop.ourworkshop.io</code>, with its own branding, catalog, and client list.</p>
+    </div>
+    <div class="rise" style="transition-delay:.08s">
+      <p>The deliberate stance: <b>we are not a website.</b> A shop's public presence stays on the shop's own domain. OurWorkshop stays out of the design business and feeds that site two API-shaped things — a <b>catalog feed</b> to read and a <b>lead-intake</b> endpoint (plus a drop-in widget) to write — then owns everything <em>after</em> the lead lands.</p>
+      <p>Clients never get a login. They reach their project through a <b>portal token + PIN</b> and see only what the shop has chosen to share. Shop owners self-manage their team; I (platform admin) gate which Google identities may enter each workshop.</p>
+    </div>
+  </div>
+
+  <div class="feat-list">
+    <div class="f rise"><div class="n">01</div><h3>Past the close</h3><p>Quote → multi-week build → deliver, with a client portal, milestones, and build photos the customer can follow.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>One house, many shops</h3><p>Row-level multi-tenancy: every query is default-scoped to the current workshop, fail-closed, guarded by a load-bearing test suite.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>Their brand, their money</h3><p>Per-tenant logo, palette, and fonts on the portal and emails; payments flow through Stripe Connect straight to the shop.</p></div>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> my musings</div>
+  <h2>Generalize in place. Don't rewrite.</h2>
+  <div class="musing rise">
+    <div class="q">The domain was already built and battle-tested for one shop. The interesting problem wasn't the features — it was turning &ldquo;one&rdquo; into &ldquo;N&rdquo; without breaking the one.</div>
+    <p>The tempting move is a clean-slate rewrite for multi-tenancy. I did the opposite: <b>copy the working single-tenant app and change only what tenancy and white-labelling require</b>, proving parity as tenant #1 before any new feature. It's less glamorous and far less risky.</p>
+    <p>The load-bearing decision is isolation. I moved from SQLite-per-tenant to <b>one shared Postgres with row-level <code>workshop_id</code> scoping</b> — every model fail-closed to the current tenant, so an unbound query returns <em>no</em> rows rather than everyone's. That convention only holds because a test suite treats "tenant A can see tenant B" as a P0. The safety isn't the code; it's the test that dares the code to leak.</p>
+  </div>
+</section>
+
+<section class="app-sec wrap" id="build">
+  <div class="kick"><span class="hue">§</span> the architecture</div>
+  <h2>Three audiences, one boundary.</h2>
+  <div class="tryit rise">
+    <div class="tryit-head">
+      <span class="lbl">⚙ how it's wired</span>
+      <span class="url">theirshop.ourworkshop.io</span>
+    </div>
+    <div class="tryit-body">
+      <p>The whole design turns on one control boundary: <b>platform admin decides which Google identities may enter which workshop.</b> Past that gate, everything else follows.</p>
+      <ol class="steps">
+        <li><b>Platform admin</b> (me) creates workshops, allow-lists Google accounts, can impersonate, and bills.</li>
+        <li><b>Workshop members</b> (shop staff) run projects, quotes, and the client portal — no billing, no platform access.</li>
+        <li><b>Clients</b> get no account at all — a portal token + PIN scopes them to exactly what's shared.</li>
+        <li>The shop's <b>own public site</b> consumes a catalog feed and posts leads back in; OurWorkshop owns the whole journey after.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="kick" style="margin-top:44px"><span class="hue">§</span> under the hood</div>
+  <div class="stack">
+    <span class="s"><span class="dot">◆</span>Rails 8.1 · Hotwire</span>
+    <span class="s"><span class="dot">◆</span>Propshaft + importmap · Stimulus</span>
+    <span class="s"><span class="dot">◆</span>PostgreSQL · row-level tenancy</span>
+    <span class="s"><span class="dot">◆</span>pgvector</span>
+    <span class="s"><span class="dot">◆</span>Google OAuth · per-shop allow-list</span>
+    <span class="s"><span class="dot">◆</span>Stripe Connect</span>
+    <span class="s"><span class="dot">◆</span>Fly.io</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="hushbin.html" style="--hue: var(--hushbin)"><span class="k" style="color:var(--hushbin)">← prev case file</span><span class="nm">Hushbin</span></a>
+    <a href="weave.html" class="r" style="--hue: var(--weave)"><span class="k" style="color:var(--weave)">back to the top →</span><span class="nm">Weave</span></a>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:clamp(50px,7vw,90px)">
+  <div class="foot-bar"><span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span><span>case file · ourworkshop</span></div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

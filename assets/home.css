@@ -123,6 +123,25 @@
   filter: drop-shadow(0 10px 30px color-mix(in oklab, var(--hue) 55%, transparent));
   transition: transform .5s cubic-bezier(.2,.7,.2,1); }
 .card:hover .poster.logo img { transform: translateY(-4px) scale(1.05); }
+/* hushbin's mark carries its own dark tile — let it breathe a little smaller */
+.poster.logo.tile img { width: 46%; max-width: 210px; border-radius: 20px;
+  box-shadow: 0 16px 40px -18px #000; }
+
+/* full-bleed photographic poster (a dark, self-contained image) */
+.poster.cover { padding: 0; }
+.poster.cover::after { opacity: .12; }
+.poster.cover img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%;
+  object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.poster.cover::before { content: ""; position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(180deg, transparent 55%, color-mix(in oklab, var(--bg) 78%, transparent)); }
+.card:hover .poster.cover img { transform: scale(1.04); }
+
+/* featured poster: the app's mark floating over its blobs */
+.poster .feat-mark { position: absolute; z-index: 2; right: 7%; top: 50%;
+  transform: translateY(-50%); width: min(38%, 220px);
+  filter: drop-shadow(0 12px 34px color-mix(in oklab, var(--hue) 55%, transparent));
+  transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.card:hover .poster .feat-mark { transform: translateY(-50%) scale(1.05) rotate(-2deg); }
 
 /* card body */
 .card-body { padding: 24px 24px 26px; display: flex; flex-direction: column; flex: 1; }

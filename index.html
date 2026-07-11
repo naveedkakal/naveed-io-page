@@ -110,7 +110,7 @@
 
 <!-- ── work / apps ─────────────────────────────────────── -->
 <section class="showcase wrap sec-rule" id="work">
-  <div class="sec-head"><div class="kicker"><span class="acc">§ 02</span> — things I've built</div><div class="kicker">06 projects</div></div>
+  <div class="sec-head"><div class="kicker"><span class="acc">§ 02</span> — things I've built</div><div class="kicker">09 projects</div></div>
   <h2 class="sec-title display">The after-hours pile.</h2>
 
   <div class="cards">
@@ -120,6 +120,7 @@
       <div class="poster">
         <div class="blob b1" style="width:60%;height:80%;left:6%;top:8%"></div>
         <div class="blob b2" style="width:42%;height:60%;right:2%;bottom:-6%;opacity:.7"></div>
+        <img class="feat-mark" src="assets/apps/weave-logo.svg" alt="Weave logo" loading="lazy" />
         <span class="tag">cmms · pm · parts · ai</span>
       </div>
       <div class="card-body">
@@ -177,7 +178,7 @@
     </a>
 
     <!-- Miscolored -->
-    <a class="card half tilt rise" style="--hue: var(--miscolored)" href="apps/miscolored.html">
+    <a class="card tilt rise" style="--hue: var(--miscolored)" href="apps/miscolored.html">
       <div class="poster shot">
         <img src="assets/apps/miscolored-og.png" alt="Miscolored — find your colors" loading="lazy" />
         <span class="tag">selfies → seasonal palette</span>
@@ -191,8 +192,8 @@
     </a>
 
     <!-- Hushbin -->
-    <a class="card half tilt rise" style="--hue: var(--hushbin); transition-delay:.06s" href="apps/hushbin.html">
-      <div class="poster logo">
+    <a class="card tilt rise" style="--hue: var(--hushbin); transition-delay:.06s" href="apps/hushbin.html">
+      <div class="poster logo tile">
         <img src="assets/apps/hushbin-logo.svg" alt="Hushbin logo" loading="lazy" />
         <span class="tag">aes-256 · client-side · zero-knowledge</span>
       </div>
@@ -201,6 +202,48 @@
         <div class="kind">An end-to-end encrypted pastebin · hushbin.naveed.io</div>
         <p class="desc">Share sensitive text between your own devices without trusting the server. Every pad is AES-256 encrypted in the browser before it leaves — the passphrase never travels — with version history, syntax highlighting, and a privacy mode for screen-sharing.</p>
         <span class="open">open case file <span class="arw">→</span></span>
+      </div>
+    </a>
+
+    <!-- OurWorkshop -->
+    <a class="card tilt rise" style="--hue: var(--ourworkshop); transition-delay:.12s" href="apps/ourworkshop.html">
+      <div class="poster logo">
+        <img src="assets/apps/ourworkshop-icon.svg" alt="OurWorkshop logo" loading="lazy" />
+        <span class="tag">lead → quote → build → deliver</span>
+      </div>
+      <div class="card-body">
+        <div class="card-head"><span class="name">OurWorkshop</span><span class="chip">platform</span></div>
+        <div class="kind">A multi-tenant shop OS for custom makers</div>
+        <p class="desc">A white-label back office for small custom-maker shops — woodworkers, framers, sign shops — to run the arc they all share: a lead becomes a quote becomes a multi-week build, with the client watching progress the whole way. Row-level tenancy; each shop at its own subdomain.</p>
+        <span class="open">open case file <span class="arw">→</span></span>
+      </div>
+    </a>
+
+    <!-- Glow Garden (client site) -->
+    <a class="card half tilt rise" style="--hue: var(--glow)" href="https://glowgardenusa.com" target="_blank" rel="noopener">
+      <div class="poster cover">
+        <img src="assets/apps/glow-garden-og.jpg" alt="Glow Garden Studio" loading="lazy" />
+        <span class="tag">client site · live</span>
+      </div>
+      <div class="card-body">
+        <div class="card-head"><span class="name">Glow Garden</span><span class="chip">client</span></div>
+        <div class="kind">HydraFacial &amp; hair-wellness studio · glowgardenusa.com</div>
+        <p class="desc">A landing site for a HydraFacial &amp; hair-wellness home studio in Bolingbrook, IL. One fast, static page — no framework, no build step — in a sage-and-cream editorial palette. Built for my mother-in-law.</p>
+        <span class="open">visit the site <span class="arw">↗</span></span>
+      </div>
+    </a>
+
+    <!-- M&F Laundry (client site) -->
+    <a class="card half tilt rise" style="--hue: var(--mf); transition-delay:.06s" href="https://mf.naveed.io" target="_blank" rel="noopener">
+      <div class="poster shot">
+        <img src="assets/apps/mf-home.png" alt="M&amp;F Laundry — chic editorial redesign" loading="lazy" />
+        <span class="tag">client site · live</span>
+      </div>
+      <div class="card-body">
+        <div class="card-head"><span class="name">M&amp;F Laundry</span><span class="chip">client</span></div>
+        <div class="kind">Commercial-laundry site &amp; careers portal · mf.naveed.io</div>
+        <p class="desc">A chic-editorial marketing site for a family-owned commercial laundry in Los Angeles — DIN type, hairline rules, a working OPL cost calculator, a bilingual careers page with resume intake, and 301s off the old WordPress URLs to keep the SEO.</p>
+        <span class="open">visit the site <span class="arw">↗</span></span>
       </div>
     </a>
   </div>
@@ -289,7 +332,7 @@
     { t: '<span class="k">tabs open</span> <span class="v">→ 47 (don\'t ask)</span>', d: 50 },
     { t: '', d: 30 },
     { t: '<span class="pr">nk@naveed.io</span> <span class="v">~ %</span> ls ./apps', d: 0 },
-    { t: '<span class="ok">weave</span>  <span class="ok">petalpost</span>  <span class="ok">picpost</span>  <span class="ok">mispronounced</span>  <span class="ok">miscolored</span>  <span class="ok">hushbin</span>', d: 60 },
+    { t: '<span class="ok">weave</span>  <span class="ok">petalpost</span>  <span class="ok">picpost</span>  <span class="ok">mispronounced</span>  <span class="ok">miscolored</span>  <span class="ok">hushbin</span>  <span class="ok">ourworkshop</span>  <span class="ok">glow-garden</span>  <span class="ok">mf-laundry</span>', d: 60 },
     { t: '<span class="cm"># scroll down — they\'re all playable ↓</span>', d: 40 },
     { t: '<span class="pr">nk@naveed.io</span> <span class="v">~ %</span> <span class="caret"></span>', d: 0, hold: true }
   ];

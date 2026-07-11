@@ -27,6 +27,7 @@
   letter-spacing: .06em; color: var(--hue); border: 1px solid color-mix(in oklab, var(--hue) 40%, var(--line));
   background: color-mix(in oklab, var(--hue) 8%, transparent); padding: 8px 13px; border-radius: 999px; }
 .live-pill .d { width: 7px; height: 7px; border-radius: 50%; background: var(--hue); box-shadow: 0 0 12px var(--hue); }
+.live-pill.build .d { background: transparent; border: 1.5px solid var(--hue); box-shadow: none; }
 .btn.hue-btn { background: var(--hue); color: #08090c; border-color: var(--hue); font-weight: 600; }
 .btn.hue-btn:hover { color: #08090c; box-shadow: 0 12px 34px -10px var(--hue); }
 
