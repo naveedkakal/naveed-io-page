@@ -60,8 +60,11 @@
 .banner.shot img { position: relative; z-index: 3; max-height: 100%; max-width: 100%; width: auto;
   border-radius: 10px; box-shadow: 0 26px 60px -26px #000, 0 0 0 1px var(--line-2); }
 
-/* banner centering an app's own logo, glowing over the floating blobs */
+/* banner centering an app's own logo on a soft hue glow */
 .banner.logo { display: grid; place-items: center; }
+.banner.logo::before { content: ""; position: absolute; z-index: 1; width: min(46%, 460px);
+  aspect-ratio: 1; border-radius: 50%; filter: blur(30px);
+  background: radial-gradient(circle, color-mix(in oklab, var(--hue) 40%, transparent), transparent 70%); }
 .banner.logo img { position: relative; z-index: 3; width: clamp(180px, 30vw, 340px);
   filter: drop-shadow(0 14px 40px color-mix(in oklab, var(--hue) 55%, transparent)); }
 

@@ -136,12 +136,10 @@
   background: linear-gradient(180deg, transparent 55%, color-mix(in oklab, var(--bg) 78%, transparent)); }
 .card:hover .poster.cover img { transform: scale(1.04); }
 
-/* featured poster: the app's mark floating over its blobs */
-.poster .feat-mark { position: absolute; z-index: 2; right: 7%; top: 50%;
-  transform: translateY(-50%); width: min(38%, 220px);
-  filter: drop-shadow(0 12px 34px color-mix(in oklab, var(--hue) 55%, transparent));
-  transition: transform .5s cubic-bezier(.2,.7,.2,1); }
-.card:hover .poster .feat-mark { transform: translateY(-50%) scale(1.05) rotate(-2deg); }
+/* featured poster: the app's mark, larger, on its glow */
+.poster.logo.feat-logo img { width: 60%; max-width: 300px; }
+.poster.logo.feat-logo::before { width: 70%; }
+.card:hover .poster.logo.feat-logo img { transform: translateY(-2px) scale(1.04) rotate(-2deg); }
 
 /* card body */
 .card-body { padding: 24px 24px 26px; display: flex; flex-direction: column; flex: 1; }
