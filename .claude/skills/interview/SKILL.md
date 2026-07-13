@@ -96,7 +96,11 @@ Kinetic verbs, concrete machinery, short punches mixed with long rolling sentenc
 jokes that land because they're true. Calibration: a wink of gonzo, not cosplay — no
 drug-fueled pastiche, no "as your attorney advises" bits. The facts stay checkable;
 the energy is in service of truth, because the audience includes people deciding
-whether to trust him with an engineering org.
+whether to trust him with their plants and their teams.
+
+**Framing note:** Naveed dislikes "run an engineering org" phrasing about himself —
+corporate-ladder flavor. Frame his work as *seeing several hundred plants through
+daily problems and growth ideas*: service and stewardship, not org-chart altitude.
 
 **Banned:** AI-buzzword sludge (leverage, seamless, robust, delve, landscape, journey,
 transformative, cutting-edge, game-changer, "it's not just X, it's Y"), LinkedIn cadence,
