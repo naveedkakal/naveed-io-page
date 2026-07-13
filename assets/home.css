@@ -66,6 +66,7 @@
 .stat { padding: 26px 22px; border-left: 1px solid var(--line); }
 .stat:first-child { border-left: none; }
 .stat .num { font-family: var(--font-display); font-weight: 800; font-size: clamp(38px,4vw,58px); color: var(--fg); line-height: 1; font-variant-numeric: tabular-nums; }
+.stat .num.range { font-size: clamp(28px,2.9vw,42px); letter-spacing: -.01em; white-space: nowrap; }
 .stat .lab { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--fg-3); margin-top: 12px; }
 
 /* ── showcase ─────────────────────────────────────────── */
