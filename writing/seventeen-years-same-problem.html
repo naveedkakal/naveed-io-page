@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Seventeen years in the same problem — Naveed Kakal</title>
+<meta name="description" content="What concentrated experience inside one industrial system actually buys you — told through two god models, a deleted production database, and a pot of apology coffee in Ottawa." />
+<meta name="generator" content="Interview pipeline: Claude Code (Anthropic) as researcher, interviewer & drafter; Naveed Kakal as source, fact-checker & editor" />
+<link rel="canonical" href="https://naveed.io/writing/seventeen-years-same-problem.html" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://naveed.io/writing/seventeen-years-same-problem.html" />
+<meta property="og:title" content="Seventeen years in the same problem" />
+<meta property="og:description" content="What concentrated experience inside one industrial system actually buys you — two god models, a deleted production database, and a pot of apology coffee in Ottawa." />
+<meta property="og:image" content="https://naveed.io/assets/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Seventeen years in the same problem" />
+<meta name="twitter:description" content="What concentrated experience inside one industrial system actually buys you." />
+<meta name="twitter:image" content="https://naveed.io/assets/og.png" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Seventeen years in the same problem",
+  "description": "What concentrated experience inside one industrial system actually buys you — told through two god models, a deleted production database, and a pot of apology coffee in Ottawa.",
+  "datePublished": "2026-07-13",
+  "dateModified": "2026-07-13",
+  "url": "https://naveed.io/writing/seventeen-years-same-problem.html",
+  "mainEntityOfPage": "https://naveed.io/writing/seventeen-years-same-problem.html",
+  "keywords": ["industrial laundry automation", "inventory state management", "PLC integration", "engineering leadership", "concentrated experience", "production incident response", "plant floor software", "Kannegiesser ETECH", "AI-assisted writing", "human-AI collaboration"],
+  "genre": "Reported case file — drawn from a recorded voice interview",
+  "isBasedOn": {
+    "@type": "Conversation",
+    "name": "Recorded voice interview with Naveed Kakal",
+    "dateCreated": "2026-07-12",
+    "description": "Conducted by an interview skill Naveed Kakal built for Claude Code: the agent researches his version-control history, interviews him one question at a time, and drafts the piece; he fact-checks and edits before publication."
+  },
+  "contributor": {
+    "@type": "SoftwareApplication",
+    "name": "Claude Code",
+    "applicationCategory": "AI research, interviewing, and drafting agent",
+    "creator": { "@type": "Organization", "name": "Anthropic" }
+  },
+  "about": {
+    "@type": "Person",
+    "@id": "https://naveed.io/#naveed"
+  },
+  "author": {
+    "@type": "Person",
+    "@id": "https://naveed.io/#naveed",
+    "name": "Naveed Kakal",
+    "jobTitle": "Director of Software Development",
+    "worksFor": { "@type": "Organization", "name": "Kannegiesser ETECH" },
+    "url": "https://naveed.io",
+    "sameAs": [
+      "https://www.linkedin.com/in/naveed-kakal-b7416417/",
+      "https://github.com/naveedkakal"
+    ]
+  },
+  "publisher": { "@type": "Person", "name": "Naveed Kakal", "url": "https://naveed.io" }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="article.css" />
+</head>
+<body>
+
+<div class="strip">
+  <a href="../">← naveed.io</a>
+  <span class="label">On record · Case file · 2026-07</span>
+</div>
+
+<div class="wrap">
+  <div class="label kicker">§ Case file — 8 min</div>
+  <h1 class="display title">Seventeen years in the same problem</h1>
+  <p class="standfirst">Everyone's arguing about which model is smarter. Almost nobody asks what you used it for. On concentrated experience — told through two god models, a deleted production database, and a pot of apology coffee in Ottawa.</p>
+  <div class="byline">
+    <span class="label">Naveed Kakal</span>
+    <span class="label"><time datetime="2026-07-13">July 2026</time></span>
+    <span class="label">From a recorded interview</span>
+  </div>
+
+  <article>
+    <p>The first thing nobody tells you about an industrial laundry is that it happens in three dimensions. You walk in expecting a bigger version of the machine in your basement and instead there is weather overhead — bags of linen zooming around on rails, shuttles ferrying compressed slabs of it back and forth, air blasts going off like the building is breathing. On the clean side there's the smell of hot pressed linen, which Naveed Kakal has spent seventeen years failing to describe better than "that fresh linen feel." On the soil side there are hospital sheets and hotel bar towels that have been sitting out for a day, and the job of sorting them by hand. He's blunter about that one: you need, in his words, a gross-level tolerance that can just hang around. Some people quit the same day. Soil sort runs some of the highest turnover in the building.</p>
+
+    <p>Kakal has been writing the software that runs these buildings since March 2009 — roughly 9,700 commits across two decades of version control, from Subversion to git, from his first week (an event handler named after his boss, created and deleted three minutes apart) to last month. He is now Director of Software Development at Kannegiesser ETECH. This is what that much time inside one problem actually buys, in his telling.</p>
+
+    <h2>Not a brain. Cels.</h2>
+
+    <p>Ask him about the system — eVue, the plant-floor platform he's driven most of his career — and he'll correct your framing before you finish. You imagine an all-controlling brain. It isn't one. "It's a collection of capabilities that we've put a unifying experience around," he says, and reaches for an older image: watching how a cartoon used to be assembled, the stacked transparent cels each carrying one moving piece, composing into a scene. The craft isn't the brain; the craft is the composition — and keeping it composed across every installation, each one a different building with different machines and a different floor plan.</p>
+
+    <p>The data model underneath is honest about where it came from. The team grew out of a couple of Minnesota neighborhoods, and the jargon came with them, straight off the floor. The unit of truth in the database is the <em>sling</em> — the bag the linen rides in — lately formalized as a <em>batch</em>. "That's sort of the god-model-level anchor of how we think of laundry," he says. Two gods, in the end: the parcel, and the rail it hangs from. Everything else is commentary.</p>
+
+    <p>He considers the plainness a feature with teeth. The model "isn't architected to be obtuse — by being so abstract and correct all the time." Because the software speaks the floor's language, the people on the floor can tell when it's wrong, and — more important — can help it get right again.</p>
+
+    <h2>When the picture lies</h2>
+
+    <p>Because it will be wrong. Bags fall. Linen gets pulled mid-process. Someone reroutes by hand because a line is backed up. The physical plant and its digital picture drift, and an undetected drift compounds: everything upstream coded wrong, reroutable or not, and his favorite summary of the whole failure genre — "did the towels not get dried because they thought they were sheets?"</p>
+
+    <p>So the system grew two reflexes, both of them older than the buzzwords for them. First, workflows for reality winning: when a load is expected somewhere and never shows up, an alarm asks a human what actually happened — it ended up here, it never left, it's gone, I'll handle it. The software offers the options that can physically occur, rather than insisting on its own arithmetic. Second, a complete memory of human touches: every user action logged, so that when a deleted batch knocks a line off-by-one for two hours and burns half a shift in rework, someone can trace exactly where truth left the building. His commit log has been muttering about this for sixteen years — <em>log what sling each bundle got matched to</em>, <em>make the tag event visible in user actions</em> — less a feature than a habit.</p>
+
+    <h2>Ottawa, 1 p.m.</h2>
+
+    <p>His best story about state is the day he destroyed all of it. Around 2011, on a call, mid-demo, he went to reset what he believed was his local environment. The terminal was remoted into a customer's plant — the biggest one in the portfolio, in Ottawa. The command dropped their production database while the plant was running. Every bag still hanging, every rail still moving, and the system that knew what any of it was — gone, at one in the afternoon.</p>
+
+    <p>What happened next is the part he actually tells the story for. The call went out within minutes: it was us, here's what happened. He was on a plane that night, and on the floor for morning startup. By the time he landed, the plant had mostly re-inventoried itself back to life — so what was left to repair wasn't technical. He stood in the executive wing and took the accounting of what it had cost. He brought the coffees. He absorbed the ribbing — <em>thanks for coming out and not fixing it for us</em> — and then spent a couple of days on site tuning their system to their liking, because showing up is a deliverable too.</p>
+
+    <p>The company's response is the detail engineers don't believe: nobody revoked his access. He can, to this day, connect to that system and run the same command. "It was a very Naveed issue, not an ETECH issue," he says — and the years of work already banked meant one catastrophic afternoon didn't outweigh them. The customer stayed. They upgraded that same plant's software and controls recently, and built a new plant with the company besides. He still has those guys' numbers; they still trade birthday messages. He came out of the worst day of his career owing them one, and has been quietly paying the debt in reporting favors ever since.</p>
+
+    <h2>The ledger</h2>
+
+    <p>He did leave once. From late 2014 to early 2017 he worked at Centro, in a well-run, properly democratic engineering org — sprints, agreements, review culture. He rates it honestly: great team, real growth. "I think I wrote a lot better software," he says, "but we solved a lot less problems per developer dollar spent." That sentence is the whole ledger of his career philosophy. Back at ETECH, the operating mode was what he cheerfully calls dictatorial before immediately redefining it: not my-way-or-the-highway, but a zone of control — the standing permission to make the call, build your own tools, and skip the meeting. The team were "real escape artists" about committed roadmaps, he admits, and in exchange got to be relentlessly reactive to the actual floor. What looks like indiscipline from the outside was a compounding education: what's worth building, where you'll get burned, how burns resolve.</p>
+
+    <p>The outsider's read on all this — one person with production access and no committee — is a governance nightmare, and he knows it. His answer is arithmetic: flatten the roles into one capable person and you don't just save salaries, you remove <em>seams</em> — the joints between specialists through which responsibility gets passed, softened, and lost. Fewer seams, fewer places for the obvious solution to die of incentive misalignment. Ottawa is his proof: the reason a dropped database became a fourteen-year customer relationship is that the person who broke it, the person who understood it, and the person with standing to apologize for it were the same person, on the same flight.</p>
+
+    <h2>What the years are for</h2>
+
+    <p>Which brings him to why he's putting any of this on the record. The discourse he reads is model-versus-model, benchmark-versus-benchmark. "What did you use it for, and how you're going to put it together, seems to get lost in the weeds," he says. His claim is that seventeen years concentrated in one industry's process is precisely the thing that transfers: it trains you to see whole systems — where the constraints live, what's worth building at all, which feature dies because it depends on a human input step nobody will actually perform. So you don't build it. Ship the part that survives contact with the floor.</p>
+
+    <p>The new tools haven't changed that instinct; they've industrialized it. These days he starts AI-assisted projects by laying down constraints — little handbooks, auto-updated, describing how each app is architected, readable by humans and machines alike. Telemetry gets sized to the flock: "not every app needs a whole Sentry. Sometimes you can just tail a log and watch it happen live" — and skip months of instrumentation on someone else's SaaS. The one-man army with a zone of control used to be a weird artifact of a Minnesota laundry company. He suspects it's about to be the standard shape of a software team.</p>
+
+    <p>Seventeen years ago, three days into the job, he committed the message "sorting is working?" The question mark was doing a lot of work. Last November he shipped four hundred and thirty-four commits in a month against the same sort, the same rails, the same two gods. Somewhere in there is the difference between experience and concentrated experience: the question mark is gone, and he knows exactly which bag is lying to him. <span class="endmark">❦</span></p>
+  </article>
+
+  <div class="byline" style="margin-top:36px">
+    <span class="label">Method — researched from 19 years of commit history</span>
+    <span class="label">Interviewed &amp; drafted by Claude Code, via an interview skill Naveed built</span>
+    <span class="label">Style: reported case file</span>
+    <span class="label">Fact-checked &amp; edited by Naveed Kakal</span>
+  </div>
+
+  <div class="footer">
+    <a class="label" href="../">← Back to the dossier</a>
+    <span class="label">naveed.io · On record</span>
+  </div>
+</div>
+
+</body>
+</html>

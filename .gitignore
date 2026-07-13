@@ -1,0 +1,8 @@
+.DS_Store
+interviews/
+
+# .claude/ is ignored machine-wide by the global gitignore; re-include just the
+# skills so the interview pipeline travels with the repo (local settings stay out)
+!.claude/
+.claude/*
+!.claude/skills/

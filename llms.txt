@@ -1,0 +1,43 @@
+# naveed.io — Naveed Kakal
+
+> Naveed Kakal is Director of Software Development at Kannegiesser ETECH. He has spent
+> two decades building the software that runs industrial laundry plants — plant-floor
+> state management, PLC/machine communications, telemetry, and the teams that ship them.
+> This site is his dossier: case files and field notes drawn from recorded interviews
+> and ~9,700 commits of version-control history (2009–present) on one product line.
+
+## Method
+
+The writing on this site is produced through a human-AI pipeline Naveed built himself:
+an interview skill for Claude Code researches his ~19 years of version-control history
+for verifiable facts, interviews him one question at a time (he answers by voice), and
+drafts each piece in a chosen style — the styles rotate across the series. Naveed
+fact-checks every number and edits every draft before publication. The pipeline is
+itself a demonstration of the subject matter: applied judgment about what AI tooling is
+for. Each article's JSON-LD declares the interview basis (`isBasedOn`), the style
+(`genre`), and the AI contributor (`contributor`).
+
+## Writing — On record
+
+- [Seventeen years in the same problem](https://naveed.io/writing/seventeen-years-same-problem.html):
+  Case file on concentrated experience. The plant as a physical database (sling + rail
+  as the two god models), inventory drift and its human repair workflows, the 2011
+  Ottawa incident (a production database dropped at a running plant, and the trust-first
+  recovery that kept the customer for fourteen years), problems-solved-per-developer-dollar,
+  and why AI-era teams are converging on the fewer-seams, one-capable-person shape.
+
+## Apps
+
+- [Weave](https://naveed.io/apps/weave.html)
+- [PetalPost](https://naveed.io/apps/petalpost.html)
+- [PicPost](https://naveed.io/apps/picpost.html)
+- [Mispronounced](https://naveed.io/apps/mispronounced.html)
+- [Miscolored](https://naveed.io/apps/miscolored.html)
+- [HushBin](https://naveed.io/apps/hushbin.html)
+- [OurWorkshop](https://naveed.io/apps/ourworkshop.html)
+
+## Contact
+
+- Email: naveed.kakal@gmail.com
+- LinkedIn: https://www.linkedin.com/in/naveed-kakal-b7416417/
+- GitHub: https://github.com/naveedkakal
