@@ -157,3 +157,8 @@ raw material stays private; the published piece is the public artifact).
   whose role in a story is unflattering.
 - Real numbers only, from data or his mouth — the credibility of the whole section rests
   on every stat being checkable.
+- Version-control dates are when the *record* starts, not when the work started — Naveed
+  began in August 2006 on a predecessor system; SVN first sees him in March 2009. Career
+  claims say 2006/twenty years; recorded-history claims say seventeen years of tape.
+- Plant-floor phrasing is safety-sensitive: never describe equipment as unsafe (e.g.,
+  never "bags fall") — disruptions are jams, faults, and human error.

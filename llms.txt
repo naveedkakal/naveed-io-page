@@ -21,7 +21,7 @@ for. Each article's JSON-LD declares the interview basis (`isBasedOn`), the styl
 
 - [Seventeen years in the same problem](https://naveed.io/writing/seventeen-years-same-problem.html):
   Case file on concentrated experience. The plant as a physical database (sling + rail
-  as the two god models), inventory drift and its human repair workflows, the 2011
+  as the two god models), inventory drift and its human repair workflows, the 2012
   Ottawa incident (a production database dropped at a running plant, and the trust-first
   recovery that kept the customer for fourteen years), problems-solved-per-developer-dollar,
   and why AI-era teams are converging on the fewer-seams, one-capable-person shape.
