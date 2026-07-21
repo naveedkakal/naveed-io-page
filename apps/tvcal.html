@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TV Cal — case file · naveed.io</title>
+<meta name="description" content="TV Cal — a phone-guided TV calibration walkthrough. Cast AVS HD 709 test patterns to the screen, follow eight steps in your TV's own menu names, and let the phone camera read the bars and call the setting live." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/apps/tvcal.html" />
+<meta property="og:title" content="TV Cal — a better picture in 15 minutes · naveed.io" />
+<meta property="og:description" content="Your TV ships mis-tuned. TV Cal walks you through fixing it from your phone — test patterns on the screen, instructions in your hand, and a camera assist that reads the bars for you." />
+<meta property="og:image" content="https://naveed.io/assets/apps/tvcal-og.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://naveed.io/assets/apps/tvcal-og.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/site.css" />
+<link rel="stylesheet" href="../assets/apps.css" />
+</head>
+<body style="--hue: var(--tvcal)">
+<div id="glow"></div>
+
+<nav class="nav app-nav">
+  <div class="nav-in">
+    <a class="back" href="../index.html"><span class="arw">←</span> naveed<span style="color:var(--acid)">.io</span></a>
+    <div class="nav-links">
+      <a href="https://tv.naveed.io" target="_blank" rel="noopener">tv.naveed.io ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="app-hero wrap">
+  <div class="app-crumb"><span class="hue">case file 08</span> · a phone-guided TV calibration</div>
+  <h1 class="app-title">TV Cal<span class="accent">.</span></h1>
+  <p class="app-tag">Your TV has a better picture hiding in it. Patterns on the screen, instructions in your hand — about fifteen minutes, no meter, no service call.</p>
+  <div class="app-hero-cta">
+    <span class="live-pill"><span class="d"></span>live · tv.naveed.io</span>
+    <a class="btn hue-btn" href="https://tv.naveed.io" target="_blank" rel="noopener">Calibrate your TV ↗</a>
+  </div>
+
+  <div class="banner shot rise in">
+    <img src="../assets/apps/tvcal-og.jpg" alt="TV Cal — a phone guiding a calibration pattern shown on a television" />
+    <span class="stamp">PATTERN · READ · VERDICT</span>
+  </div>
+</header>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> what it is</div>
+  <h2>Every TV ships wrong. This walks you through fixing it.</h2>
+  <div class="lead-2">
+    <div class="rise">
+      <p>New TVs leave the factory in a mode built to win a fight under showroom lighting — backlight pinned, sharpness cranked, motion smoothing on. In your living room that reads as crushed shadows, blown highlights, halos around edges, and the soap-opera effect. The fix is well documented and free, and almost nobody does it, because the good instructions assume you already speak <b>PLUGE</b> and <b>2-point white balance.</b></p>
+      <p>TV Cal is the translation layer. You tell it your <b>brand, panel type, and room</b>; it casts the right <b>AVS HD 709 test patterns</b> to the TV from YouTube and then walks you through <b>eight steps</b> — backlight, black level, white detail, sharpness, color &amp; tint, motion, plus gamma and white balance for the ambitious — using the exact menu names and paths your set actually uses.</p>
+    </div>
+    <div class="rise" style="transition-delay:.08s">
+      <p>The phone stays free the whole time, which is the trick that makes it work: the patterns play on the TV, so the screen in your hand can hold the instruction, the slider, and the "here's what you should be seeing" note.</p>
+      <p>Then there's the part I actually built it for. Point the phone's camera at the TV and it finds the screen, tells you how to line up, waits until you're steady, and <b>reads the bars itself</b> — a live verdict that keeps updating while you're still pressing buttons on the remote. It's the closest thing to a colorimeter you can get out of a phone that's already in your pocket.</p>
+      <p>No backend, no accounts. Profiles live in <b>localStorage</b>, so the settings you landed on are still there next year when someone factory-resets the thing.</p>
+    </div>
+  </div>
+
+  <div class="feat-list">
+    <div class="f rise"><div class="n">01</div><h3>Speaks your TV's language</h3><p>Samsung, LG, Sony, Vizio, TCL, Hisense, Roku TV, Fire TV — each with its own control names, ranges, and menu paths. No more guessing which slider "Shadow Detail" means.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>Camera assist</h3><p>Screen detection, alignment guidance, a steadiness gate, then a rolling read of the bar strip — with a live verdict that updates as you turn the dial.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>A blue filter, without the glasses</h3><p>Color and Tint are traditionally set through blue-filter glasses. The app does it in canvas compositing instead — 60fps on an iPhone, no WebGL, no pixel loops.</p></div>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> my musings</div>
+  <h2>A phone camera can't measure light. It can still answer the question.</h2>
+  <div class="musing rise">
+    <div class="q">Every step of this calibration is really asking "can you still see bar 17?" — and that's a relative judgment, which is exactly what a camera is good at.</div>
+    <p>The instinct is that you need a colorimeter, because auto-exposure and auto-white-balance make a phone camera useless for absolute measurement. True — and irrelevant. Black level asks whether the near-black bars separate from the background. White clipping asks where the near-white bars stop separating. Both are <b>within-frame comparisons</b>, and both survive the camera lying to you about absolutes, as long as it lies the same way across the frame.</p>
+    <p>That reframing is the whole engine. It's the same move I make on the plant floor: the expensive instrument is usually answering a coarser question than you assumed, and if you can state the question precisely enough, cheap hardware and honest math will get you there.</p>
+    <p>The other half was restraint. The engine is framework-free and the UI never sees a raw frame — align, hold, read, verdict. Everything I wanted to add (histograms, delta-E, charts) would have made it a tool for people who already own a colorimeter, which is the one audience that doesn't need it.</p>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> take it for a spin</div>
+  <h2>Fifteen minutes, and it's a different television.</h2>
+  <div class="tryit rise">
+    <div class="tryit-head">
+      <span class="lbl">▤ live app</span>
+      <span class="url">tv.naveed.io</span>
+    </div>
+    <div class="tryit-body">
+      <p>Nothing to install and nothing to sign up for. You'll want your TV remote, your phone, and a room lit the way you normally watch.</p>
+      <ol class="steps">
+        <li>Open <b><a href="https://tv.naveed.io" target="_blank" rel="noopener">tv.naveed.io</a></b> on your phone and pick your <b>brand, panel type, and room.</b></li>
+        <li>Cast the <b>test-pattern video</b> to the TV from the YouTube app — the phone stays free for instructions.</li>
+        <li>Run the <b>prep list</b> (accurate picture mode on, eco dimming and enhancements off), then walk the steps.</li>
+        <li>Optional: hit <b>camera assist</b> on the black-level and white-detail steps and let the phone call the verdict.</li>
+        <li>Your settings are saved as a <b>profile</b> — handy the day someone resets the TV.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="kick" style="margin-top:44px"><span class="hue">§</span> under the hood</div>
+  <div class="stack">
+    <span class="s"><span class="dot">◆</span>React 19 + TypeScript</span>
+    <span class="s"><span class="dot">◆</span>Vite</span>
+    <span class="s"><span class="dot">◆</span>getUserMedia · camera pipeline</span>
+    <span class="s"><span class="dot">◆</span>Canvas compositing · blue-only preview</span>
+    <span class="s"><span class="dot">◆</span>sRGB → linear luminance math</span>
+    <span class="s"><span class="dot">◆</span>localStorage · no backend</span>
+    <span class="s"><span class="dot">◆</span>GitHub Pages</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="ourworkshop.html" style="--hue: var(--ourworkshop)"><span class="k" style="color:var(--ourworkshop)">← prev case file</span><span class="nm">OurWorkshop</span></a>
+    <a href="weave.html" class="r" style="--hue: var(--weave)"><span class="k" style="color:var(--weave)">back to the top →</span><span class="nm">Weave</span></a>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:clamp(50px,7vw,90px)">
+  <div class="foot-bar"><span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span><span>case file · tv cal</span></div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
