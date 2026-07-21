@@ -5,8 +5,16 @@
   <link href="https://naveed.io/feed.xml" rel="self" type="application/atom+xml"/>
   <link href="https://naveed.io/" rel="alternate" type="text/html"/>
   <id>https://naveed.io/</id>
-  <updated>2026-07-13T00:00:00Z</updated>
+  <updated>2026-07-21T00:00:00Z</updated>
   <author><name>Naveed Kakal</name><uri>https://naveed.io</uri></author>
+  <entry>
+    <title>Teaching the condemned new tricks</title>
+    <link href="https://naveed.io/writing/teaching-the-condemned.html" rel="alternate" type="text/html"/>
+    <id>https://naveed.io/writing/teaching-the-condemned.html</id>
+    <published>2026-07-21T00:00:00Z</published>
+    <updated>2026-07-21T00:00:00Z</updated>
+    <summary>Before the tape starts: a car-wash hunch, a licensing-fee villain, a doomed GE stack — and why the best thing you can do for a new system is teach the old one new tricks.</summary>
+  </entry>
   <entry>
     <title>Seventeen years in the same problem</title>
     <link href="https://naveed.io/writing/seventeen-years-same-problem.html" rel="alternate" type="text/html"/>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Teaching the condemned new tricks — Naveed Kakal</title>
+<meta name="description" content="Before the version-control tape starts: a car-wash hunch, a licensing-fee villain, a doomed GE stack — and why the best thing you can do for a new system is teach the old one new tricks." />
+<meta name="generator" content="Interview pipeline: Claude Code (Anthropic) as researcher, interviewer & drafter; Naveed Kakal as source, fact-checker & editor" />
+<link rel="canonical" href="https://naveed.io/writing/teaching-the-condemned.html" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://naveed.io/writing/teaching-the-condemned.html" />
+<meta property="og:title" content="Teaching the condemned new tricks" />
+<meta property="og:description" content="Before the tape starts: a car-wash hunch, a licensing-fee villain, a doomed GE stack — and the platform that grew out of its limits." />
+<meta property="og:image" content="https://naveed.io/assets/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Teaching the condemned new tricks" />
+<meta name="twitter:description" content="Before the tape starts: the 2006–2009 prehistory of a twenty-year system." />
+<meta name="twitter:image" content="https://naveed.io/assets/og.png" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Teaching the condemned new tricks",
+  "description": "Before the version-control tape starts: a car-wash hunch, a licensing-fee villain, a doomed GE stack — and why the best thing you can do for a new system is teach the old one new tricks.",
+  "datePublished": "2026-07-21",
+  "dateModified": "2026-07-21",
+  "url": "https://naveed.io/writing/teaching-the-condemned.html",
+  "mainEntityOfPage": "https://naveed.io/writing/teaching-the-condemned.html",
+  "keywords": ["industrial automation", "GE 90-30 PLC", "GE Cimplicity HMI", "legacy system migration", "Ruby on Rails", "industrial web applications", "plant commissioning", "controls engineering", "concentrated experience", "Kannegiesser ETECH"],
+  "genre": "Reported case file — drawn from a recorded voice interview",
+  "isBasedOn": {
+    "@type": "Conversation",
+    "name": "Recorded voice interview with Naveed Kakal",
+    "dateCreated": "2026-07-21",
+    "description": "Conducted by an interview skill Naveed Kakal built for Claude Code: the agent researches his version-control history, interviews him one question at a time, and drafts the piece; he fact-checks and edits before publication."
+  },
+  "contributor": {
+    "@type": "SoftwareApplication",
+    "name": "Claude Code",
+    "applicationCategory": "AI research, interviewing, and drafting agent",
+    "creator": { "@type": "Organization", "name": "Anthropic" }
+  },
+  "about": {
+    "@type": "Person",
+    "@id": "https://naveed.io/#naveed"
+  },
+  "author": {
+    "@type": "Person",
+    "@id": "https://naveed.io/#naveed",
+    "name": "Naveed Kakal",
+    "jobTitle": "Director of Software Development",
+    "worksFor": { "@type": "Organization", "name": "Kannegiesser ETECH" },
+    "url": "https://naveed.io",
+    "sameAs": [
+      "https://www.linkedin.com/in/naveed-kakal-b7416417/",
+      "https://github.com/naveedkakal"
+    ]
+  },
+  "publisher": { "@type": "Person", "name": "Naveed Kakal", "url": "https://naveed.io" }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="article.css" />
+</head>
+<body>
+
+<div class="strip">
+  <a href="../">← naveed.io</a>
+  <span class="label">On record · Case file · 2026-07</span>
+</div>
+
+<div class="wrap">
+  <div class="label kicker">§ Case file — 8 min</div>
+  <h1 class="display title">Teaching the condemned new tricks</h1>
+  <p class="standfirst">The version-control tape doesn't see Naveed Kakal until March 2009. He'd already been there three years. This is the prehistory: a car-wash hunch, a licensing-fee villain, and the strange art of improving a system everyone had agreed to kill.</p>
+  <div class="byline">
+    <span class="label">Naveed Kakal</span>
+    <span class="label"><time datetime="2026-07-21">July 2026</time></span>
+    <span class="label">From a recorded interview</span>
+  </div>
+
+  <article>
+    <p>In August 2006, a man named Brian Schlichting — Naveed Kakal's first boss then, his colleague still — made a hiring decision on a hunch. The candidate was a fresh electrical-engineering grad whose main professional credential was managing car washes. Schlichting reasoned, in Kakal's telling, that car washes had "spiritual similarities to laundry controls," and he wasn't wrong: machines, water, valuable things moving through a tunnel on a schedule. Kakal had simply been practicing on cars. The job was on the controls team at ETECH in Minneapolis, relieving a small crew burning out on workload and travel, under a title — "ICS Systems Engineer" — that he suspects was invented the week he was hired. Small shops don't need real title ladders; everyone can see what everyone actually does.</p>
+
+    <p>What everyone actually did, in 2006, was keep laundry plants running on the GE automation package: 90-30 PLCs on the floor, Cimplicity HMI screens above them. The villain of this story is not that hardware. It's the licensing model. Cimplicity charged per computer, and a laundry plant is exactly the kind of place that wants a terminal on every post — soil sort, wash aisle, finishing, the manager's office. Every screen was a line item. The floor wanted eyes everywhere; the invoice said pick two.</p>
+
+    <p>So in 2007, Larry Erickson — employee number one of this saga, the lgerickson whose name opens the version-control record — started asking a question that was close to heresy in industrial automation at the time: what if the HMI was just a web page? The record shows him finding out alone at first: October 29, 2007, <em>initial import</em>, Rails 1.2.6. SOAP calls poking PLC points. A "main program" that launched when Windows booted. A mid-project upgrade to Rails 2.0 over Christmas. And in the spring, a commit message for the ages: <em>"Weekend of Fail."</em></p>
+
+    <h2>Improving the condemned</h2>
+
+    <p>Here is where the story goes somewhere most engineering careers don't. While Larry chased the new platform, Kakal's job was to keep the old world running — and he did considerably more than that. "I was really improving the old system more than anyone thought was possible," he says, "while it was being decommissioned." He learned the business by learning the tools the company had already agreed to kill, and then pushed those tools past what anyone believed they'd do.</p>
+
+    <p>On paper this sounds like effort poured down a drain. It was the opposite, and understanding why is maybe the most transferable thing in this whole story. Every improvement he forced out of the dying GE stack mapped its true limits — not the rumored limits, the real ones. And every real limit became a specification for the successor. The old platform couldn't say what the new one needed to be, but it could say precisely where it hurt. "Where our old tools limited us, we had a new platform ready to carry the conceptual torch," he says, and then, with feeling: "which we hella did."</p>
+
+    <p>He calls that stretch the most formative of his career — the era he still reaches for "when thinking about how to do anything conceptually new on an existing domain." Which, two decades later, describing AI-era product work, is more or less his job description.</p>
+
+    <h2>Click to force</h2>
+
+    <p>The proof that the torch actually got carried is specific, and it's a good one. On some of the last 90-30 plants, Kakal built a UI trick: click a sensor on the screen and it forces the input in the controller. Suddenly you could run imaginary goods through a real control system with your fingertip — trip a sensor, wait ten seconds, watch the device react. Miss the window a real bag would have hit, and a real alarm fires. The plant, playable. It made testing tactile, and it made commissioning faster, because you could exercise the logic without hanging linen.</p>
+
+    <p>That trick became the testing standard for the new platform — "we ran bags around using click-to-force," he says, and the new system supported it from day one. And here the tape delivers a small miracle of corroboration. Kakal told this story from memory, nineteen years out, unprompted and unhedged. His second week ever in the version-control record — r361, March 12, 2009 — reads: <em>"Working on force."</em> The concept crossing from the condemned system into the new one, timestamped, exactly where he said it would be. The interviewer checked. His memory of that era, it turns out, runs sharper than most people's memory of last quarter — which tells you something about how hard those years imprinted. The line runs unbroken from that commit to November 2025, where he's still tuning simulated weights in the same subsystem. One idea, seventeen years of tape, first taught to a machine that was already scheduled to die.</p>
+
+    <h2>The final 10%</h2>
+
+    <p>The crossing itself wasn't dramatic. Larry's R&D reached the point where a cutover was real, and closing the distance became Kakal's job: "the final 10% on almost every feature," proof-of-concept to v1. The record shows what that looked like — the repo's activity explodes from 71 revisions in 2008 to 1,191 in 2009, the year he arrives. R&D gets you a demo. The final 10% is where somebody decides a plant can bet a shift on it.</p>
+
+    <p>Then came the part you can't simulate. In the fall of 2009, Kakal and Erickson commissioned the new system at Angelica's Los Angeles plant. The first night ran so close to the edge that the two of them slept in their cars. The years around it were, by his cheerful accounting, travel "on a hope and a prayer" that the current technical issue wouldn't detonate mid-project. Two self-taught web developers, no seniors anywhere to ask, a database they were learning in production — "what is an index?" — on Rails 1, a framework the wider internet was still skeptical of, in an era with hardly any Stack Overflow to fall back on. It had existed for about a year.</p>
+
+    <p>The failure mode of that education wasn't ignorance; it was mislearning. "We'd often learn the wrong lesson from an experience," he says, "or not understand the root cause until years later." Early on, every behavior in the system was treated as suspect, and days went into tracing code that ended with the debugging koan he still quotes: <em>it did exactly what it was written to do — we just designed it wrong.</em> Features got rewritten fast, sometimes with architectural hacks he freely describes as terrible. None of the projects got hard-abandoned. Almost none of them went to plan either.</p>
+
+    <h2>Trust, again</h2>
+
+    <p>What made the difference — and readers of the last case file will feel the rhyme — wasn't technical at all. "Establishing trusting relationships gives you space and time to figure out problems on bespoke systems," he says. "If they trust you, they'll leave you alone to fix it right. If they don't trust you, you'll never have a peaceful project even if everything is going well." In the 2012 Ottawa story, he spent banked trust to survive a catastrophe. In 2009, sleeping in a car outside a Los Angeles laundry, he was still making the first deposits.</p>
+
+    <p>Comfort took a year or two after the cutover; the complexity-versus-automation tradeoff didn't resolve cleanly for a while. The moment they knew the bet had paid was procedural, not triumphant: the day they could say, with process in place, <em>here is what a project build looks like</em> — and mean it.</p>
+
+    <p>Ask what outsiders get wrong about all this and he goes straight at the modern imagination: people picture migrations as project-management black holes, dozens of meetings confirming that nothing has moved. "We had none of that. We were super lean and had full agency to design the future." The genuinely hard part wasn't Rails and it wasn't the PLCs — it was cultural. Internet connections to the plant computer weren't standard. A system you could update remotely was a strange and mildly alarming idea, and selling it meant chipping away at habits that ran through sales and service, not just engineering. The web part was a bet; the trust part was the work.</p>
+
+    <p>The condemned GE stack, for its part, went out with more dignity than most systems get: improved to the end, mined for every concept it could donate, its best trick — click a sensor, force the point, watch the plant respond — still alive in its successor's testing tools seventeen years later. There are worse legacies for a machine. There are worse teachers for an engineer. <span class="endmark">❦</span></p>
+  </article>
+
+  <div class="byline" style="margin-top:36px">
+    <span class="label">Method — researched from 19 years of commit history</span>
+    <span class="label">Interviewed &amp; drafted by Claude Code, via an interview skill Naveed built</span>
+    <span class="label">Style: reported case file</span>
+    <span class="label">Fact-checked &amp; edited by Naveed Kakal</span>
+  </div>
+
+  <div class="footer">
+    <a class="label" href="../">← Back to the dossier</a>
+    <span class="label">naveed.io · On record</span>
+  </div>
+</div>
+
+</body>
+</html>

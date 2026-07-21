@@ -19,6 +19,14 @@ for. Each article's JSON-LD declares the interview basis (`isBasedOn`), the styl
 
 ## Writing — On record
 
+- [Teaching the condemned new tricks](https://naveed.io/writing/teaching-the-condemned.html):
+  Case file on the 2006–2009 prehistory, before version control saw him. Hired off a
+  car-wash hunch by Brian Schlichting; the GE 90-30/Cimplicity era and its per-seat
+  licensing villain; improving a condemned system as R&D for its successor; the
+  click-to-force testing concept that crossed into the new platform (r361, "Working on
+  force," March 2009) and still lives in its simulator tools; the Angelica LA
+  commissioning (slept in cars); trust as the infrastructure under bespoke systems.
+
 - [Seventeen years in the same problem](https://naveed.io/writing/seventeen-years-same-problem.html):
   Case file on concentrated experience. The plant as a physical database (sling + rail
   as the two god models), inventory drift and its human repair workflows, the 2012
