@@ -114,6 +114,9 @@ him the discrepancy — the resolution is usually the most interesting paragraph
 Length 800–1600 words. Structure matches the samples: `.strip` header, `.kicker`,
 `.title`, `.standfirst`, `.byline`, `<article>` body with `<h2>` sections, `❦` endmark,
 footer. Stylesheet `writing/article.css`, fonts per the existing sample heads.
+Also include `<div id="glow"></div>` as the first element in `<body>` and
+`<script src="../assets/app.js"></script>` just before `</body>` — that pair drives the
+cursor-spotlight background the rest of the site has.
 
 **Note:** the five articles in `writing/` as of 2026-07 are AI-generated presentation
 samples, not real published pieces. They define the *format*, not the corpus.

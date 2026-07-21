@@ -8,6 +8,7 @@
   --line: #20242e; --line-2: #2b303c;
   --fg: #eef0f4; --fg-2: #a2a8b4; --fg-3: #6b7280; --fg-4: #464c58;
   --acid: #5bc8ff; --acid-glow: rgba(91,200,255,0.16); --accent2: #9d8bff;
+  --accent2-glow: rgba(157,139,255,0.12);
   --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
   --font-body: 'Instrument Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -27,6 +28,15 @@ body::before {
   background-size: 64px 64px; opacity: .22;
   -webkit-mask-image: radial-gradient(120% 80% at 50% 0%, #000 25%, transparent 75%);
           mask-image: radial-gradient(120% 80% at 50% 0%, #000 25%, transparent 75%);
+}
+/* cursor spotlight — --mx/--my set by assets/app.js */
+#glow {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(300px 300px at var(--mx, 50%) var(--my, 30%), var(--acid-glow), transparent 68%),
+    radial-gradient(520px 520px at var(--mx, 50%) var(--my, 30%), var(--accent2-glow), transparent 72%);
+  opacity: 0.6; transition: opacity .4s;
+  mix-blend-mode: screen;
 }
 
 .display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; line-height: 1.0; }
