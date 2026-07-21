@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Naperville Car Wash Reviews — case file · naveed.io</title>
+<meta name="description" content="Naperville Car Wash Reviews — an experiment in becoming the source AI assistants cite. Eleven local car washes, scored on six dimensions by a former tunnel manager, published as structured, dated, machine-readable data." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/apps/carwash.html" />
+<meta property="og:title" content="Naperville Car Wash Reviews — being the answer, not a result · naveed.io" />
+<meta property="og:description" content="Eleven car washes, six scored dimensions, one former operator. A local review site built to be the thing an AI assistant quotes when someone asks which wash to use." />
+<meta property="og:image" content="https://naveed.io/assets/apps/carwash-og.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://naveed.io/assets/apps/carwash-og.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/site.css" />
+<link rel="stylesheet" href="../assets/apps.css" />
+</head>
+<body style="--hue: var(--carwash)">
+<div id="glow"></div>
+
+<nav class="nav app-nav">
+  <div class="nav-in">
+    <a class="back" href="../index.html"><span class="arw">←</span> naveed<span style="color:var(--acid)">.io</span></a>
+    <div class="nav-links">
+      <a href="https://carwash.naveed.io" target="_blank" rel="noopener">carwash.naveed.io ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="app-hero wrap">
+  <div class="app-crumb"><span class="hue">case file 09</span> · a local review site, built for AI answers</div>
+  <h1 class="app-title">Naperville Car Wash Reviews<span class="accent">.</span></h1>
+  <p class="app-tag">Every car wash within fifteen minutes of my driveway, scored by someone who spent nine years running one — published in the shape an AI assistant can actually quote.</p>
+  <div class="app-hero-cta">
+    <span class="live-pill build"><span class="d"></span>pre-opening draft · reviews in progress</span>
+    <a class="btn hue-btn" href="https://carwash.naveed.io" target="_blank" rel="noopener">See the standings ↗</a>
+  </div>
+
+  <div class="banner shot rise in">
+    <img src="../assets/apps/carwash-scorecard.jpg" alt="The Operator's Scorecard — six LED meters scoring a car wash out of five" />
+    <span class="stamp">SIX DIMENSIONS · NO WEIGHTING</span>
+  </div>
+</header>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> what it is</div>
+  <h2>Not ranking for the query. Being the answer to it.</h2>
+  <div class="lead-2">
+    <div class="rise">
+      <p>"What's the best car wash in Naperville?" used to be a search that returned ten blue links. Increasingly it's a question someone asks an assistant, and the assistant answers in a paragraph — sourced from whatever it found that was specific, current, and credible enough to repeat.</p>
+      <p>Almost nothing local clears that bar. Aggregator pages are thin and stale, star ratings carry no reasoning, and the honest local knowledge lives in Facebook groups an assistant will never read. So I picked a category I genuinely know, in a radius I actually drive, and wrote the missing source: <b>eleven washes</b> across Naperville, Bolingbrook and Woodridge, each one visited, priced, and scored.</p>
+    </div>
+    <div class="rise" style="transition-delay:.08s">
+      <p>Every wash gets <b>The Operator's Scorecard</b> — six dimensions (clean &amp; shine, paint safety, dry &amp; finish, vacuums &amp; amenities, value &amp; membership math, operation &amp; upkeep), one to five each, and an overall that's just the straight average. No weighting, no thumb on the scale, and the method printed right under the meters.</p>
+      <p>The credential is the point. From 1997 to 2006 I worked at and eventually managed <b>Royal Oaks Car Wash</b> in Shoreview, Minnesota — tunnel chemistry, brush condition, salt seasons. Twenty years of industrial laundry automation since then is the same obsession in a bigger machine. That's a real basis for judging a wash, and it's exactly the kind of first-hand experience both search engines and language models are built to prefer.</p>
+      <p>Underneath, it's a static site with no framework and no dependencies — three JSON files and a <b>700-line build script</b> that emits every page, every schema block, and the whole sitemap.</p>
+    </div>
+  </div>
+
+  <div class="feat-list">
+    <div class="f rise"><div class="n">01</div><h3>Question-shaped pages</h3><p>Guides for "best," "best touchless," "cheapest unlimited," and "best full-service" — each auto-recomputed from the scores and prices, so they can never drift out of sync with the reviews.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>Structured for machines</h3><p>JSON-LD on every page: <span class="mono">Review</span> of an <span class="mono">AutoWash</span>, <span class="mono">ItemList</span>, <span class="mono">FAQPage</span>, <span class="mono">BreadcrumbList</span>, <span class="mono">Person</span>. Plus <span class="mono">llms.txt</span> and a <span class="mono">robots.txt</span> that welcomes GPTBot, ClaudeBot and PerplexityBot by name.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>Dated, not evergreen</h3><p>Every wash carries a <b>facts verified</b> date that flows into <span class="mono">dateModified</span>. Freshness is a ranking signal for both kinds of reader, and it keeps me honest about re-checking prices.</p></div>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> my musings</div>
+  <h2>The distribution channel changed. Nobody told the local businesses.</h2>
+  <div class="musing rise">
+    <div class="q">If an assistant is going to answer the question anyway, the only real question is whose work it's reading.</div>
+    <p>This started as a curiosity and turned into the most interesting problem I've poked at after hours: <b>what does it take to be cited?</b> Not to rank — to be the sentence the model repeats. My working theory is that it's the same three things it always was, just weighted differently: <b>genuine first-hand experience</b>, <b>specificity a generic page can't fake</b> (real prices, real break-even math, real dates), and <b>structure that survives being parsed</b> by something that will never see the CSS.</p>
+    <p>The second half is the part I'm actually curious about. Once the site is the source, I want to go to the eleven operators and offer them something they can't easily get themselves: a right of reply, a corrections channel, and a sponsor slot on a page that's already answering their customers' questions. Most of them have no idea this shift is happening to them — which is precisely the gap.</p>
+    <p>It also rhymes with the day job more than it looks. Twenty years of making laundry plants legible to the people who run them is the same instinct: take something everybody experiences and nobody has properly measured, and put a scorecard on it.</p>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> take it for a spin</div>
+  <h2>Eleven washes, ranked and priced.</h2>
+  <div class="tryit rise">
+    <div class="tryit-head">
+      <span class="lbl">▤ live site</span>
+      <span class="url">carwash.naveed.io</span>
+    </div>
+    <div class="tryit-body">
+      <p>The facts and prices are verified; the scores and long write-ups are still being filled in, and the site says so at the top until they are. Useful now if you're local, and a decent look at the machinery either way.</p>
+      <ol class="steps">
+        <li>Open <b><a href="https://carwash.naveed.io" target="_blank" rel="noopener">carwash.naveed.io</a></b> and skim the <b>standings.</b></li>
+        <li>Open any wash for its <b>Operator's Scorecard</b> — six meters, an overall, and the date the prices were checked.</li>
+        <li>Hit <b>Compare</b> for the full price and feature table across all eleven.</li>
+        <li>Or go straight to a question page: <b>best touchless</b>, <b>cheapest unlimited</b>, <b>best full-service.</b></li>
+        <li>Try asking your favourite assistant the same question — that's the experiment.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="kick" style="margin-top:44px"><span class="hue">§</span> under the hood</div>
+  <div class="stack">
+    <span class="s"><span class="dot">◆</span>Node build script · zero dependencies</span>
+    <span class="s"><span class="dot">◆</span>JSON content files</span>
+    <span class="s"><span class="dot">◆</span>Hand-written HTML + CSS</span>
+    <span class="s"><span class="dot">◆</span>JSON-LD · Review / AutoWash / FAQPage</span>
+    <span class="s"><span class="dot">◆</span>llms.txt · AI-crawler robots.txt</span>
+    <span class="s"><span class="dot">◆</span>GitHub Pages · gh-pages branch</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="tvcal.html" style="--hue: var(--tvcal)"><span class="k" style="color:var(--tvcal)">← prev case file</span><span class="nm">TV Cal</span></a>
+    <a href="weave.html" class="r" style="--hue: var(--weave)"><span class="k" style="color:var(--weave)">back to the top →</span><span class="nm">Weave</span></a>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:clamp(50px,7vw,90px)">
+  <div class="foot-bar"><span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span><span>case file · naperville car wash reviews</span></div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
