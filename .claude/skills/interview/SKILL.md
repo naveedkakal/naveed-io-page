@@ -116,7 +116,9 @@ Length 800–1600 words. Structure matches the samples: `.strip` header, `.kicke
 footer. Stylesheet `writing/article.css`, fonts per the existing sample heads.
 Also include `<div id="glow"></div>` as the first element in `<body>` and
 `<script src="../assets/app.js"></script>` just before `</body>` — that pair drives the
-cursor-spotlight background the rest of the site has.
+cursor-spotlight background the rest of the site has. And
+`<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />` in the `<head>` —
+every other page on the site carries it.
 
 **Note:** the five articles in `writing/` as of 2026-07 are AI-generated presentation
 samples, not real published pieces. They define the *format*, not the corpus.
