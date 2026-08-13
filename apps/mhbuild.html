@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MH Build Studio — case file · naveed.io</title>
+<meta name="description" content="MH Build Studio — the public site for a Chicagoland fabrication shop that builds wedding arches, candy carts, bar fronts and brand activations. A thin, re-skinnable Rails frontend over the OurWorkshop back office, with no database of its own." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/apps/mhbuild.html" />
+<meta property="og:title" content="MH Build Studio — a storefront with no database · naveed.io" />
+<meta property="og:description" content="Arches, carts, bars and brand activations for a two-person shop in Bloomingdale, IL — and the reference model for how any OurWorkshop client runs a public site over the platform." />
+<meta property="og:image" content="https://naveed.io/assets/apps/mhbuild-og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://naveed.io/assets/apps/mhbuild-og.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/site.css" />
+<link rel="stylesheet" href="../assets/apps.css" />
+</head>
+<body style="--hue: var(--mhbuild)">
+<div id="glow"></div>
+
+<nav class="nav app-nav">
+  <div class="nav-in">
+    <a class="back" href="../index.html"><span class="arw">←</span> naveed<span style="color:var(--acid)">.io</span></a>
+    <div class="nav-links">
+      <a href="https://mhbuildstudio.com" target="_blank" rel="noopener">mhbuildstudio.com ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="app-hero wrap">
+  <div class="app-crumb"><span class="hue">case file 10</span> · a storefront with no database</div>
+  <h1 class="app-title">MH Build Studio<span class="accent">.</span></h1>
+  <p class="app-tag">The public site for a two-person fabrication shop in Bloomingdale, Illinois — arches, candy carts, bar fronts, panelled walls, marquee signs. Underneath, it's the proof that a client's website can be the cheap, disposable layer.</p>
+  <div class="app-hero-cta">
+    <span class="live-pill"><span class="d"></span>live · mhbuildstudio.com</span>
+    <a class="btn hue-btn" href="https://mhbuildstudio.com" target="_blank" rel="noopener">Visit the site ↗</a>
+  </div>
+
+  <div class="banner shot rise in">
+    <img src="../assets/apps/mhbuild-marquee.jpg" alt="A lit marquee sign built by MH Build Studio, mounted on brickwork above a country-club entrance and reading OPENING GALA" />
+    <span class="stamp">BLOOMINGDALE, IL · TENANT #1</span>
+  </div>
+</header>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> what it is</div>
+  <h2>They build the decorations. This builds the storefront.</h2>
+  <div class="lead-2">
+    <div class="rise">
+      <p>Masooma and Habib run a custom fabrication shop out of a garage-sized workshop in the western Chicago suburbs. She designs — layouts, digital models, 3D renderings a client can approve before a single sheet is cut. He runs the floor: CNC machining, structure, finish. Between them they turn out <b>Moroccan arches for weddings, scalloped candy carts, panelled bar fronts, dimensional wall panels, monogram walls and lit marquee signs</b> for corporate galas.</p>
+      <p>They needed a website. What they got first was the whole business in one app — catalog, pipeline, quotes, client portal. Then the useful half of it was pulled out into <a href="ourworkshop.html" style="color:var(--hue)">OurWorkshop</a>, and this repo was rebuilt as something much smaller and much more interesting: a marketing site that <b>keeps no domain data at all.</b></p>
+    </div>
+    <div class="rise" style="transition-delay:.08s">
+      <p>Everything dynamic arrives over a documented contract. The catalog is a feed it reads. The inquiry form and the mailing-list signup are two relays it writes. There is a database on the box, and its only job is to back the cache. Pull the plug on the back office and the storefront keeps serving the last good catalog for a week.</p>
+      <p>In August 2026 the shop repositioned — <b>MH Handcrafted</b>, a wedding maker, became <b>MH Build Studio</b>, a consultative build studio chasing event planners and corporate clients. New name, new graphite-and-timber palette, new structural type, new domain. The app needed exactly one functional change to follow it.</p>
+    </div>
+  </div>
+
+  <div class="gal">
+    <figure class="rise"><img src="../assets/apps/mhbuild-arches.jpg" loading="lazy" alt="Three white Moroccan-style arches standing in a driveway, built as a wedding backdrop set" /><figcaption>Moroccan arch set · rental</figcaption></figure>
+    <figure class="rise" style="transition-delay:.05s"><img src="../assets/apps/mhbuild-cart.jpg" loading="lazy" alt="A teal candy cart with a scalloped green-and-white awning and brass poles" /><figcaption>Scalloped candy cart</figcaption></figure>
+    <figure class="rise" style="transition-delay:.1s"><img src="../assets/apps/mhbuild-bar.jpg" loading="lazy" alt="A white panelled event bar with matching pedestals on a paver patio" /><figcaption>Panelled bar + pedestals</figcaption></figure>
+    <figure class="rise" style="transition-delay:.15s"><img src="../assets/apps/mhbuild-panels.jpg" loading="lazy" alt="Four dimensional wall panel designs — Moroccan zellige, fluted oak, parametric voronoi and an asymmetric walnut grid" /><figcaption>Dimensional wall panels</figcaption></figure>
+  </div>
+
+  <div class="feat-list">
+    <div class="f rise"><div class="n">01</div><h3>No database of its own</h3><p>The catalog is a feed — ten minutes fresh, last good payload kept a week and served on any failure, with a back-off so a dead API costs one slow request a minute rather than one per page view.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>One public write, hardened</h3><p>Honeypot, signed render-time token, server-side length caps, image-only attachment filtering, per-IP throttle. The bot filtering lives here, where the human is; the clean submission relays onward and nothing is stored.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>Rendered on the server, deliberately</h3><p>OG tags, JSON-LD and the sitemap all ship in the initial HTML. Google runs JavaScript; the crawler behind an iMessage link preview does not. That single fact is why this stayed Rails instead of going static.</p></div>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> my musings</div>
+  <h2>The copy was the expensive asset. The design was the cheap one.</h2>
+  <div class="musing rise">
+    <div class="q">The rebrand shipped on a Tuesday. The first note back was: keep the new look, give us the old words.</div>
+    <p>I had it backwards, and I suspect most people do. The rename ran as a set of parallel agents against a decided brand spec — palette, type, wordmark, every call site — and it landed clean. Then the client read it and asked for <b>the wording restored</b>: the hero, the offer blurbs, the about page, the footer tagline. They'd spent months getting those sentences right with real customers. The graphite-and-timber aesthetic they'd only just seen, and they were happy to keep. <b>Copy was the vetted asset; styling was the disposable one</b> — the opposite of the usual assumption, and worth remembering the next time a redesign starts by rewriting everything.</p>
+    <p>The domain went the same way. A month of the cutover to their own <span class="mono">.com</span> sat blocked on records they had to add inside a Shopify admin they rarely opened. Post-rename the name was wrong anyway, so I registered <b>mhbuildstudio.com</b> in my own account instead and the client dependency evaporated. The app needed one environment variable changed — every canonical URL, the sitemap and robots.txt already derived from the request host — and the old hostnames still 301 with the path intact, which is what carried the indexed pages across.</p>
+    <p>The part I keep thinking about is the loop after launch. Client requests land in a queue, an agent picks one up, branches, builds it, opens a pull request, merges and deploys — and the shop sees their fix without me touching a keyboard. The guardrails are the whole design: one request at a time, a dirty-tree check, no writes to deploy config or dependencies, and a bail-out when the request isn't clear enough to act on. Small shops don't need a retainer. They need a queue that empties.</p>
+  </div>
+</section>
+
+<section class="app-sec wrap" id="build">
+  <div class="kick"><span class="hue">§</span> the architecture</div>
+  <h2>The website is the part you're supposed to throw away.</h2>
+  <div class="tryit rise">
+    <div class="tryit-head">
+      <span class="lbl">⚙ the contract</span>
+      <span class="url">mhbuildstudio.com</span>
+    </div>
+    <div class="tryit-body">
+      <p>This repo is also the reference model for the platform behind it: an OurWorkshop client should be able to run a good public site without paying anyone to build or operate a backend. Two rules make that true for <em>any</em> frontend, not just this one.</p>
+      <ol class="steps">
+        <li><b>Reads are keyless and subdomain-scoped.</b> The catalog and blog feeds are public data at the shop's own back-office host — any site, including client-side JavaScript, can read them.</li>
+        <li><b>Feeds carry meaning, never styling.</b> Semantic HTML, absolute image URLs, no classes and no inline styles, so the consumer's stylesheet owns the look and the same catalog renders in anyone's brand.</li>
+        <li><b>Only writes need the key</b> — leads and signups relay server-side, which is the one thing a purely static site can't do alone. A drop-in iframe widget covers that case.</li>
+        <li><b>Everything else is this repo</b> — copy, layout, palette, SEO — and it's meant to be forked, re-skinned, rebuilt in another framework, or generated whole. The shop's business stays put either way.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="tryit rise" style="margin-top:22px">
+    <div class="tryit-head">
+      <span class="lbl">▲ the bug worth the detour</span>
+      <span class="url">iMessage · blank card</span>
+    </div>
+    <div class="tryit-body">
+      <p>Product links previewed fine in WhatsApp and Slack and came up blank in iMessage. Two separate causes, and both are the kind you only find in the logs. Rails' default <span class="mono">allow_browser</span> guard was returning <b>406</b> to Apple's link fetcher, which identifies as a decade-old Safari — so it never saw the tags at all. Then the images: iOS requests them with a <b>Range</b> header and drops anything that isn't a <b>206</b>, while the HTTP cache in front was happily replaying a flat 200. Catalog photos now re-serve from this origin through a small proxy that answers ranges properly and is marked private so the shared cache never stores it. Apple also caches the <em>failure</em> per URL, so every retest needs a fresh one.</p>
+    </div>
+  </div>
+
+  <div class="kick" style="margin-top:44px"><span class="hue">§</span> under the hood</div>
+  <div class="stack">
+    <span class="s"><span class="dot">◆</span>Rails 8.1 · Hotwire</span>
+    <span class="s"><span class="dot">◆</span>Propshaft + importmap · Stimulus</span>
+    <span class="s"><span class="dot">◆</span>No domain DB · SQLite backs the cache only</span>
+    <span class="s"><span class="dot">◆</span>OurWorkshop feeds + key-gated relays</span>
+    <span class="s"><span class="dot">◆</span>JSON-LD · sitemap · host-derived robots.txt</span>
+    <span class="s"><span class="dot">◆</span>Fly.io · single machine · ord</span>
+    <span class="s"><span class="dot">◆</span>DNSControl · the zone as code</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="carwash.html" style="--hue: var(--carwash)"><span class="k" style="color:var(--carwash)">← prev case file</span><span class="nm">Naperville Car Wash Reviews</span></a>
+    <a href="weave.html" class="r" style="--hue: var(--weave)"><span class="k" style="color:var(--weave)">back to the top →</span><span class="nm">Weave</span></a>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:clamp(50px,7vw,90px)">
+  <div class="foot-bar"><span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span><span>case file · mh build studio</span></div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

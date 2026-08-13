@@ -68,6 +68,16 @@
 .banner.logo img { position: relative; z-index: 3; width: clamp(180px, 30vw, 340px);
   filter: drop-shadow(0 14px 40px color-mix(in oklab, var(--hue) 55%, transparent)); }
 
+/* photo strip — real pieces, shot on location */
+.gal { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-top: 34px; }
+.gal figure { margin: 0; border: 1px solid var(--line-2); border-radius: 14px; overflow: hidden; background: var(--bg-2); }
+.gal img { display: block; width: 100%; aspect-ratio: 4/3; object-fit: cover; transition: transform .45s ease; }
+.gal figure:hover img { transform: scale(1.05); }
+.gal figcaption { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--fg-3); padding: 12px 14px 14px; border-top: 1px solid var(--line); }
+.gal figure:hover figcaption { color: var(--hue); }
+@media (prefers-reduced-motion: reduce) { .gal img { transition: none; } }
+
 /* ── generic section ──────────────────────────────────── */
 .app-sec { padding-top: clamp(44px,6vw,80px); }
 .app-sec .kick { font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--fg-3); }
@@ -147,6 +157,7 @@
   .feat-list .f:first-child { border-top: none; }
   .creds .cr { grid-template-columns: 1fr; gap: 4px; }
   .creds .cr:first-child { display: none; }
+  .gal { grid-template-columns: 1fr 1fr; }
   .creds .cr .rl::before { content: "role · "; color: var(--fg-4); }
   .pager { grid-template-columns: 1fr; }
 }
