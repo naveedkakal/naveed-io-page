@@ -19,6 +19,15 @@ for. Each article's JSON-LD declares the interview basis (`isBasedOn`), the styl
 
 ## Writing — On record
 
+- [The prank that brought him back](https://naveed.io/writing/prank-that-brought-him-back.html):
+  Case file on the 2014–2017 gap. Why he left after eight years (the "does my
+  experience translate?" itch), the Centro years in Chicago tech — becoming a better
+  developer, watching thoughtful projects become "a flotilla of blah," discovering he's
+  an IC at heart who was promoted to dev lead and engineering manager anyway — and the
+  fake service call prank that reconnected him with ETECH, weeks before learning
+  Kannegiesser had acquired the company. Returned March 2017, "better armed and less
+  scared," and reshaped the department into a product team.
+
 - [Teaching the condemned new tricks](https://naveed.io/writing/teaching-the-condemned.html):
   Case file on the 2006–2009 prehistory, before version control saw him. Hired off a
   car-wash hunch by Brian Schlichting; the GE 90-30/Cimplicity era and its per-seat

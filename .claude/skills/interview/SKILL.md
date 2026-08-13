@@ -111,9 +111,13 @@ Facts discipline: every number and date comes from the research or from his mout
 Nothing invented, no composite anecdotes. If his memory contradicts the git data, show
 him the discrepancy — the resolution is usually the most interesting paragraph.
 
-Length 800–1600 words. Structure matches the samples: `.strip` header, `.kicker`,
-`.title`, `.standfirst`, `.byline`, `<article>` body with `<h2>` sections, `❦` endmark,
-footer. Stylesheet `writing/article.css`, fonts per the existing sample heads.
+Length 800–1600 words. Structure matches the published pieces: `.strip` header,
+`.kicker`, `.title`, `.standfirst`, `.byline`, `<article>` body with `<h2>` sections,
+`❦` endmark, Method colophon, footer. Stylesheet `writing/article.css`, fonts per the
+existing article heads. Match the current article template exactly — Naveed has added
+site-wide touches to it (favicon `<link>`, the `<div id="glow"></div>` cursor
+spotlight); copy the head/body scaffolding from the most recent published piece, not
+from memory.
 Also include `<div id="glow"></div>` as the first element in `<body>` and
 `<script src="../assets/app.js"></script>` just before `</body>` — that pair drives the
 cursor-spotlight background the rest of the site has. And
