@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0c12"/><stop offset="1" stop-color="#07080b"/>
+    </linearGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0v64" fill="none" stroke="#20242e" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow" cx="0.15" cy="0.12" r="0.8">
+      <stop offset="0" stop-color="#3ddc9a" stop-opacity="0.15"/>
+      <stop offset="1" stop-color="#3ddc9a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.92" cy="0.9" r="0.7">
+      <stop offset="0" stop-color="#5bc8ff" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#5bc8ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.25" stop-color="#eef0f4"/><stop offset="1" stop-color="#5c6270"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.5"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+    <text x="80" y="112" fill="#3ddc9a" font-size="20" font-weight="600" letter-spacing="4.2">§ ONE GROUP CHAT, READ END TO END</text>
+
+    <text x="72" y="300" fill="url(#fade)" font-size="176" font-weight="700" letter-spacing="-9">23,838</text>
+
+    <text x="80" y="360" fill="#eef0f4" font-size="42" font-weight="600" letter-spacing="-1.2">messages later, I have identified all of us</text>
+
+    <rect x="80" y="404" width="1040" height="1" fill="#2b303c"/>
+
+    <text x="80" y="454" fill="#a2a8b4" font-size="25">Six and a half years. 960 days. Nobody ever went back and read them.</text>
+    <text x="80" y="490" fill="#a2a8b4" font-size="25">I did. Here is the roster, with receipts.</text>
+
+    <g>
+      <rect x="80" y="530" width="252" height="38" rx="19" fill="#101319" stroke="#2b303c"/>
+      <text x="102" y="555" fill="#a2a8b4" font-size="18" letter-spacing="1.5">naveed.io/optioneers</text>
+
+      <rect x="346" y="530" width="200" height="38" rx="19" fill="#0f1a16" stroke="#2c5546"/>
+      <text x="368" y="555" fill="#3ddc9a" font-size="18" letter-spacing="1.5">PEAK HOUR: 11 AM</text>
+    </g>
+  </g>
+</svg>
