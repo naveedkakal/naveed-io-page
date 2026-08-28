@@ -126,6 +126,9 @@
   width: 30px; height: 26px; display: grid; place-items: center;
   position: absolute; left: 0; top: 0; }
 .steps li b { color: var(--fg); font-weight: 600; }
+/* a closing note after the steps needs its own top gap — .tryit-body > p
+   carries a bottom margin only. */
+.tryit-body > .steps + p { margin: 20px 0 0; }
 
 /* demo credentials table */
 .creds { margin-top: 22px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }

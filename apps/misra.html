@@ -9,7 +9,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://naveed.io/apps/misra.html" />
 <meta property="og:title" content="Misra — Urdu poetry, carried forward · naveed.io" />
-<meta property="og:description" content="One poem a week in three scripts at once, every word glossed, every poem recited. A library of 144 poems from Urdu Wikisource — built in two days and 76 pull requests." />
+<meta property="og:description" content="One poem a week in three scripts at once, every word glossed, every poem recited. A library of 144 poems from Ghalib, Iqbal and Mir, browsable by mood." />
 <meta property="og:image" content="https://naveed.io/assets/apps/misra-og.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://naveed.io/assets/apps/misra-og.jpg" />
@@ -69,58 +69,41 @@
 
   <div class="feat-list">
     <div class="f rise"><div class="n">01</div><h3>Three layers, never derived</h3><p>Urdu is <span class="mono">rtl</span>, Roman Urdu is Urdu written in Latin letters and reads <span class="mono">ltr</span>, and each is stored in its own field. A Roman line rendered right-to-left is a bug — and it's the one the first design shipped.</p></div>
-    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>Every poem, recited</h3><p>A text-to-speech model reads each poem in the measured cadence of <em>shayari khwaani</em> — a beat at the end of every misra, weight on the rhyme. Implausibly short audio is detected and regenerated couplet by couplet, then stitched with a quarter-second of silence.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>Every poem, recited</h3><p>Not read like prose. Every poem is recited in the measured cadence of <em>shayari khwaani</em> — a beat at the end of each misra, weight on the rhyme — so you hear where the line is supposed to break before you can read it.</p></div>
     <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>The model never writes the poem</h3><p>It transliterates, translates and explains text that came from a named source with a real URL. An invented poet or a guessed provenance is a defect, not content — and <span class="mono">unknown</span> is a legitimate answer that displays as nothing at all.</p></div>
   </div>
 </section>
 
 <section class="app-sec wrap">
   <div class="kick"><span class="hue">§</span> my musings</div>
-  <h2>Two languages agreeing on where a word is turned out to be the hard part.</h2>
+  <h2>Two scripts don't agree on where a word ends.</h2>
   <div class="musing rise">
-    <div class="q">Hovering <span lang="ur" dir="rtl">اِس</span> lit up &ldquo;rab&rdquo;. Every gloss after the first mismatch was one word off, all the way down the poem.</div>
-    <p>Here's the bug I did not see coming. A gloss knows which word it belongs to by counting <b>Urdu</b> tokens. The Roman line was handing out those same glosses by counting <b>its own</b> tokens. The two scripts do not agree on what a word is: <span lang="ur" dir="rtl">یارب</span> is one written word and two Roman ones; an izafat chain the Roman joins with hyphens — <span class="mono">khanda-e-zere-lab</span> — is three separate words in the script. One disagreement skews every pairing after it.</p>
-    <p>Matching by content instead of position fixed the premise and exposed three more layers underneath, each found by listing exactly which glosses still detached rather than by theorizing about it. The transliteration and the glosses come from <b>two different model calls</b>, and they don't spell alike: <span class="mono">hazāroñ</span> against <span class="mono">hazaron</span> — so decompose the diacritics before stripping them, or the vowel leaves with its macron. Then they romanize by different conventions — <span class="mono">gham</span>/<span class="mono">gam</span>, <span class="mono">chahiye</span>/<span class="mono">chahie</span>, <span class="mono">w</span>/<span class="mono">v</span> — so both sides fold to one canonical spelling, and the fold has to run to a fixpoint because <span class="mono">kuchh</span> needs two passes. Measured on the poem I reported it on: <b>13 of 36 glosses attached, then 25, then all but one.</b> The one is <span class="mono">sahib</span> against <span class="mono">Sahab</span>, a genuine spelling difference, and it stays dark rather than guessing — a word that doesn't answer is better than a word that answers wrongly.</p>
-    <p>The other thing I'd tell myself: <b>I got the design wrong first and only knew it when I saw it live.</b> The first shipped reading screen was competent and read to me as 1980s budget design — I said exactly that — and it took a full replacement of the palette, the faces and the type scale to get to the neon Nastaliq that's up now. I also had it paging through one couplet at a time, which is fine for a mock and wrong for a poem. A poem is a whole. That went in the bin too.</p>
+    <div class="q">Hovering <span lang="ur" dir="rtl">اِس</span> lit up &ldquo;rab&rdquo;. Every word after it was one off, all the way down the poem.</div>
+    <p>The hard part of this app was never the translating. It was that the same line, written twice, doesn't break into the same number of pieces. <span lang="ur" dir="rtl">یارب</span> is one written word and two Roman ones. An izafat chain the Roman joins with hyphens — <span class="mono">khanda-e-zere-lab</span> — is three separate words in the script. So you cannot pair the two lines by position, the way you'd pair anything else. You have to pair them by <b>what the words mean</b>, and then get two spellings of the same sound to admit they're the same word.</p>
+    <p>That produced the rule I like most in here. When the two sides genuinely disagree — <span class="mono">sahib</span> against <span class="mono">Sahab</span> — the word stays dark and doesn't respond. <b>A word that doesn't answer is better than a word that answers wrongly.</b> Guessing would look better on a screenshot and quietly teach someone the wrong meaning, which is the opposite of the point.</p>
+    <p>The rest was restraint. The English never sits on top of the poem — it's one click away, because the reason you're here is the sound and the shape. And an early version paged through one couplet at a time, which is fine for a mock and wrong for a poem. A poem is a whole. That went in the bin.</p>
   </div>
 </section>
 
 <section class="app-sec wrap" id="build">
-  <div class="kick"><span class="hue">§</span> the build</div>
-  <h2>Two days, eighty-one commits, seventy-six pull requests.</h2>
+  <div class="kick"><span class="hue">§</span> read one</div>
+  <h2>No account, no app, nothing to install.</h2>
   <div class="tryit rise">
     <div class="tryit-head">
-      <span class="lbl">⚙ how it got built</span>
-      <span class="url">26–27 Aug 2026</span>
+      <span class="lbl">▤ live app</span>
+      <span class="url">misra.naveed.io</span>
     </div>
     <div class="tryit-body">
-      <p>Misra went from an empty directory to a live site with a 144-poem library in about forty-eight hours, and almost none of that was me typing. The shape is the thing I keep reusing: a spec that says what the app does, a roadmap that is a strict queue, and a brief per item that stands entirely alone.</p>
+      <p>It's a web page. Open it on a phone in a queue somewhere — that's the length of a sher, roughly.</p>
       <ol class="steps">
-        <li><b>One queue line is one agent run and one pull request.</b> Never two at once — they share a checkout and a base branch, and the merge order stops being knowable.</li>
-        <li><b>Verify the premise before building.</b> Every brief was written against an empty scaffold; a run that finds the work already half-done updates the brief instead of building it twice.</li>
-        <li><b>Merging is not shipping.</b> An earlier version of the roadmap claimed a deploy ran on every merge while nothing of the sort was wired up — and the site served the day-one scaffold through two merged items with nothing reporting it.</li>
-        <li><b>A run that hits a decision only I can make parks and asks.</b> Dependencies, deploy config and anything that mails a real person are off-limits to an automated run by rule.</li>
+        <li>Open <b><a href="https://misra.naveed.io" target="_blank" rel="noopener">misra.naveed.io</a></b> for <b>this week's poem</b>, or hit <b>random</b> and take what you get.</li>
+        <li><b>Hover or tap any word</b> — in either script — for its meaning. Its twin lights up in the other line at the same time.</li>
+        <li><b>Reveal the translation</b> line by line, when you want it and not before.</li>
+        <li>Press <b>play</b> and hear the poem recited, so you know how it's meant to land.</li>
+        <li>Browse the <b>library</b> by mood rather than by poet — grief, defiance, wit &amp; rebuke, love &amp; longing.</li>
+        <li>Prefer paper to neon? There are <b>two themes</b>, and the light one is black ink on near-white.</li>
       </ol>
-    </div>
-  </div>
-
-  <div class="tryit rise" style="margin-top:22px">
-    <div class="tryit-head">
-      <span class="lbl">▲ the one chunk still held back</span>
-      <span class="url">the weekly send</span>
-    </div>
-    <div class="tryit-body">
-      <p>Signup and unsubscribe are live. The weekly email exists — one couplet in three scripts, the poem card travelling inline as an attachment rather than a linked image, because a proxy that fetches at open time will happily cache a failure and keep it. What is <em>not</em> built yet is the part that loops over real subscribers: the send loop, the bounce and complaint suppression, and the weekly timer. That's deliberate. <b>Mailing the list twice cannot be undone.</b> Every path that sends has to check the week's issue status and claim it atomically first, and that is the one chunk where a held gate is worth however many review passes it takes. A redeploy fixes a bad page; nothing fixes a duplicate send.</p>
-    </div>
-  </div>
-
-  <div class="tryit rise" style="margin-top:22px">
-    <div class="tryit-head">
-      <span class="lbl">◆ the bug that cost the whole box</span>
-      <span class="url">litestream · one PUT per second</span>
-    </div>
-    <div class="tryit-body">
-      <p>The entire persistence story is SQLite files on one volume, replicated continuously to object storage. Which is lovely, until you notice the job queue is also SQLite and polls itself every second — so the replicator was shipping a write-ahead-log segment to Tigris <b>once a second, forever</b>, buying nothing, and quietly burning the shared CPU's burst credits until the whole site crawled. The queue database left replication, polling dropped to ten seconds. Then the fix bit back: the boot script still asked the replicator to restore a database it no longer knew about, which exits non-zero, which under <span class="mono">set -e</span> crash-looped any fresh machine with an empty volume. Small app, real operations.</p>
+      <p>Signup is open. The weekly letter starts once the send is finished and reviewed — mailing a real list twice can't be undone, so that's the one piece not being rushed.</p>
     </div>
   </div>
 
