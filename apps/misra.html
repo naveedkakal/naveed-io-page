@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Misra — case file · naveed.io</title>
+<meta name="description" content="Misra — one Urdu poem a week, by email, and a permanent library of 144 poems shown three ways at once: original Urdu, Roman Urdu, natural English, with a gloss on every interesting word and a recitation on every poem." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/apps/misra.html" />
+<meta property="og:title" content="Misra — Urdu poetry, carried forward · naveed.io" />
+<meta property="og:description" content="One poem a week in three scripts at once, every word glossed, every poem recited. A library of 144 poems from Urdu Wikisource — built in two days and 76 pull requests." />
+<meta property="og:image" content="https://naveed.io/assets/apps/misra-og.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://naveed.io/assets/apps/misra-og.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/site.css" />
+<link rel="stylesheet" href="../assets/apps.css" />
+</head>
+<body style="--hue: var(--misra)">
+<div id="glow"></div>
+
+<nav class="nav app-nav">
+  <div class="nav-in">
+    <a class="back" href="../index.html"><span class="arw">←</span> naveed<span style="color:var(--acid)">.io</span></a>
+    <div class="nav-links">
+      <a href="https://misra.naveed.io" target="_blank" rel="noopener">misra.naveed.io ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="app-hero wrap">
+  <div class="app-crumb"><span class="hue">case file 11</span> · one line, three ways</div>
+  <h1 class="app-title">Misra<span class="accent">.</span></h1>
+  <p class="app-tag"><b>Misra</b> — <span lang="ur" dir="rtl">مصرع</span> — is one line of a couplet. The site is one Urdu poem a week, sent by email and kept forever on the web, shown in Urdu script, Roman Urdu and natural English at the same time, with a meaning under every word that carries one.</p>
+  <div class="app-hero-cta">
+    <span class="live-pill"><span class="d"></span>live · misra.naveed.io</span>
+    <a class="btn hue-btn" href="https://misra.naveed.io" target="_blank" rel="noopener">Read this week's poem ↗</a>
+  </div>
+
+  <div class="banner shot rise in">
+    <img src="../assets/apps/misra-banner.jpg" alt="The Misra homepage — a Mir Taqi Mir couplet glowing in rose Nastaliq script on a near-black lattice, with the Roman Urdu beneath it and a reveal-translation control alongside" />
+    <span class="stamp">144 POEMS · 8 POETS · ONE A WEEK</span>
+  </div>
+</header>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> what it is</div>
+  <h2>My Urdu is a listening Urdu. This is the reading half.</h2>
+  <div class="lead-2">
+    <div class="rise">
+      <p>I grew up hearing Urdu poetry and never learned to read it. That's an ordinary place to be if you're second-generation: the sound is familiar, the script isn't, and the <em>meaning</em> is a third thing again, because a classical <b>sher</b> is compressed on purpose — Persian idiom, an old courtly register, a metaphor doing four jobs at once. The usual fix is a translation, and a translation quietly throws away the two things you actually wanted: the sound and the shape.</p>
+      <p>So Misra refuses to pick. Every poem is stored and rendered as <b>three separate layers</b> — the original Urdu in Nastaliq, the Roman Urdu transliteration, and a plain English reading — and none of them is derived from another at render time. You read the script, you hear the line in your head off the Roman, and the English is one click away when you want it, not sitting on top of the poem by default.</p>
+    </div>
+    <div class="rise" style="transition-delay:.08s">
+      <p>Then the layer that makes it useful: <b>hover any word</b>, in either script, and the gloss bar at the foot of the screen names it and gives its meaning — while its twin in the other script lights up at the same time. That cross-script pairing is the whole product, and it is also the part that fought back hardest. More on that below.</p>
+      <p>The library is <b>144 poems from eight poets</b> — Ghalib, Iqbal and Mir carry all but a handful — pulled from Urdu Wikisource, where the text is public domain and the source URL is a real, citable thing. You can browse it by mood rather than by name: love &amp; longing, grief, faith &amp; the divine, wit &amp; rebuke, defiance. Every poem has a recitation. One is featured each week, and everyone gets the same one.</p>
+    </div>
+  </div>
+
+  <div class="gal">
+    <figure class="rise"><img src="../assets/apps/misra-reading.jpg" loading="lazy" alt="A Hasrat Mohani ghazal on Misra with two translations revealed and the word zamana lit in rose in both scripts, its meaning shown in the gloss bar at the foot of the screen" /><figcaption>Gloss bar · both scripts lit</figcaption></figure>
+    <figure class="rise" style="transition-delay:.05s"><img src="../assets/apps/misra-light.jpg" loading="lazy" alt="The same ghazal in Misra's Gallery Light theme — black Nastaliq on near-white paper" /><figcaption>Gallery Light · ink on paper</figcaption></figure>
+    <figure class="rise" style="transition-delay:.1s"><img src="../assets/apps/misra-library.jpg" loading="lazy" alt="The Misra library page, listing poems by poet with mood filters across the top" /><figcaption>The library · browse by mood</figcaption></figure>
+    <figure class="rise" style="transition-delay:.15s"><img src="../assets/apps/misra-faq.jpg" loading="lazy" alt="Misra's A Little Intro page explaining what a misra, a sher and a ghazal are" /><figcaption>A little intro · the words</figcaption></figure>
+  </div>
+
+  <div class="feat-list">
+    <div class="f rise"><div class="n">01</div><h3>Three layers, never derived</h3><p>Urdu is <span class="mono">rtl</span>, Roman Urdu is Urdu written in Latin letters and reads <span class="mono">ltr</span>, and each is stored in its own field. A Roman line rendered right-to-left is a bug — and it's the one the first design shipped.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>Every poem, recited</h3><p>A text-to-speech model reads each poem in the measured cadence of <em>shayari khwaani</em> — a beat at the end of every misra, weight on the rhyme. Implausibly short audio is detected and regenerated couplet by couplet, then stitched with a quarter-second of silence.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>The model never writes the poem</h3><p>It transliterates, translates and explains text that came from a named source with a real URL. An invented poet or a guessed provenance is a defect, not content — and <span class="mono">unknown</span> is a legitimate answer that displays as nothing at all.</p></div>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> my musings</div>
+  <h2>Two languages agreeing on where a word is turned out to be the hard part.</h2>
+  <div class="musing rise">
+    <div class="q">Hovering <span lang="ur" dir="rtl">اِس</span> lit up &ldquo;rab&rdquo;. Every gloss after the first mismatch was one word off, all the way down the poem.</div>
+    <p>Here's the bug I did not see coming. A gloss knows which word it belongs to by counting <b>Urdu</b> tokens. The Roman line was handing out those same glosses by counting <b>its own</b> tokens. The two scripts do not agree on what a word is: <span lang="ur" dir="rtl">یارب</span> is one written word and two Roman ones; an izafat chain the Roman joins with hyphens — <span class="mono">khanda-e-zere-lab</span> — is three separate words in the script. One disagreement skews every pairing after it.</p>
+    <p>Matching by content instead of position fixed the premise and exposed three more layers underneath, each found by listing exactly which glosses still detached rather than by theorizing about it. The transliteration and the glosses come from <b>two different model calls</b>, and they don't spell alike: <span class="mono">hazāroñ</span> against <span class="mono">hazaron</span> — so decompose the diacritics before stripping them, or the vowel leaves with its macron. Then they romanize by different conventions — <span class="mono">gham</span>/<span class="mono">gam</span>, <span class="mono">chahiye</span>/<span class="mono">chahie</span>, <span class="mono">w</span>/<span class="mono">v</span> — so both sides fold to one canonical spelling, and the fold has to run to a fixpoint because <span class="mono">kuchh</span> needs two passes. Measured on the poem I reported it on: <b>13 of 36 glosses attached, then 25, then all but one.</b> The one is <span class="mono">sahib</span> against <span class="mono">Sahab</span>, a genuine spelling difference, and it stays dark rather than guessing — a word that doesn't answer is better than a word that answers wrongly.</p>
+    <p>The other thing I'd tell myself: <b>I got the design wrong first and only knew it when I saw it live.</b> The first shipped reading screen was competent and read to me as 1980s budget design — I said exactly that — and it took a full replacement of the palette, the faces and the type scale to get to the neon Nastaliq that's up now. I also had it paging through one couplet at a time, which is fine for a mock and wrong for a poem. A poem is a whole. That went in the bin too.</p>
+  </div>
+</section>
+
+<section class="app-sec wrap" id="build">
+  <div class="kick"><span class="hue">§</span> the build</div>
+  <h2>Two days, eighty-one commits, seventy-six pull requests.</h2>
+  <div class="tryit rise">
+    <div class="tryit-head">
+      <span class="lbl">⚙ how it got built</span>
+      <span class="url">26–27 Aug 2026</span>
+    </div>
+    <div class="tryit-body">
+      <p>Misra went from an empty directory to a live site with a 144-poem library in about forty-eight hours, and almost none of that was me typing. The shape is the thing I keep reusing: a spec that says what the app does, a roadmap that is a strict queue, and a brief per item that stands entirely alone.</p>
+      <ol class="steps">
+        <li><b>One queue line is one agent run and one pull request.</b> Never two at once — they share a checkout and a base branch, and the merge order stops being knowable.</li>
+        <li><b>Verify the premise before building.</b> Every brief was written against an empty scaffold; a run that finds the work already half-done updates the brief instead of building it twice.</li>
+        <li><b>Merging is not shipping.</b> An earlier version of the roadmap claimed a deploy ran on every merge while nothing of the sort was wired up — and the site served the day-one scaffold through two merged items with nothing reporting it.</li>
+        <li><b>A run that hits a decision only I can make parks and asks.</b> Dependencies, deploy config and anything that mails a real person are off-limits to an automated run by rule.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="tryit rise" style="margin-top:22px">
+    <div class="tryit-head">
+      <span class="lbl">▲ the one chunk still held back</span>
+      <span class="url">the weekly send</span>
+    </div>
+    <div class="tryit-body">
+      <p>Signup and unsubscribe are live. The weekly email exists — one couplet in three scripts, the poem card travelling inline as an attachment rather than a linked image, because a proxy that fetches at open time will happily cache a failure and keep it. What is <em>not</em> built yet is the part that loops over real subscribers: the send loop, the bounce and complaint suppression, and the weekly timer. That's deliberate. <b>Mailing the list twice cannot be undone.</b> Every path that sends has to check the week's issue status and claim it atomically first, and that is the one chunk where a held gate is worth however many review passes it takes. A redeploy fixes a bad page; nothing fixes a duplicate send.</p>
+    </div>
+  </div>
+
+  <div class="tryit rise" style="margin-top:22px">
+    <div class="tryit-head">
+      <span class="lbl">◆ the bug that cost the whole box</span>
+      <span class="url">litestream · one PUT per second</span>
+    </div>
+    <div class="tryit-body">
+      <p>The entire persistence story is SQLite files on one volume, replicated continuously to object storage. Which is lovely, until you notice the job queue is also SQLite and polls itself every second — so the replicator was shipping a write-ahead-log segment to Tigris <b>once a second, forever</b>, buying nothing, and quietly burning the shared CPU's burst credits until the whole site crawled. The queue database left replication, polling dropped to ten seconds. Then the fix bit back: the boot script still asked the replicator to restore a database it no longer knew about, which exits non-zero, which under <span class="mono">set -e</span> crash-looped any fresh machine with an empty volume. Small app, real operations.</p>
+    </div>
+  </div>
+
+  <div class="kick" style="margin-top:44px"><span class="hue">§</span> under the hood</div>
+  <div class="stack">
+    <span class="s"><span class="dot">◆</span>Rails 8.1 · Ruby 3.3.6</span>
+    <span class="s"><span class="dot">◆</span>Propshaft + importmap · Stimulus · no Node step</span>
+    <span class="s"><span class="dot">◆</span>SQLite everywhere · Litestream → Tigris</span>
+    <span class="s"><span class="dot">◆</span>Solid Queue inside Puma · no second service</span>
+    <span class="s"><span class="dot">◆</span>Gemini · transliteration, translation, glosses</span>
+    <span class="s"><span class="dot">◆</span>Gemini TTS + ffmpeg · AAC recitations</span>
+    <span class="s"><span class="dot">◆</span>Postmark · one letter a week</span>
+    <span class="s"><span class="dot">◆</span>Fly.io · single machine · ord</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="mhbuild.html" style="--hue: var(--mhbuild)"><span class="k" style="color:var(--mhbuild)">← prev case file</span><span class="nm">MH Build Studio</span></a>
+    <a href="weave.html" class="r" style="--hue: var(--weave)"><span class="k" style="color:var(--weave)">back to the top →</span><span class="nm">Weave</span></a>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:clamp(50px,7vw,90px)">
+  <div class="foot-bar"><span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span><span>case file · misra</span></div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

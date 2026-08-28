@@ -55,7 +55,10 @@
 @media (prefers-reduced-motion: reduce) { .banner .blob { animation: none; } }
 
 /* banner showing a real OG card, framed on the dark banner */
-.banner.shot { display: grid; place-items: center; padding: clamp(20px,4vw,44px); }
+.banner.shot { display: grid; place-items: center; padding: clamp(20px,4vw,44px);
+  /* a definite row, so the image's max-height: 100% has something to resolve
+     against — with an auto row it does not, and a tall shot gets clipped. */
+  grid-template-rows: minmax(0, 1fr); }
 .banner.shot::after { opacity: .16; }
 .banner.shot img { position: relative; z-index: 3; max-height: 100%; max-width: 100%; width: auto;
   border-radius: 10px; box-shadow: 0 26px 60px -26px #000, 0 0 0 1px var(--line-2); }
