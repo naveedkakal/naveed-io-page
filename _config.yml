@@ -1,0 +1,19 @@
+# GitHub Pages builds this repo with Jekyll (branch deploy, no workflow), which
+# copies every top-level directory into the published site. `dns/` is DNS-as-code
+# for the naveed.io zone, not site content — without this it would be served at
+# https://naveed.io/dns/dnsconfig.js.
+#
+# Setting `exclude` REPLACES Jekyll's default list, so the defaults are repeated
+# here. Add to this list, don't overwrite it.
+exclude:
+  - dns
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby

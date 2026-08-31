@@ -79,9 +79,9 @@
   <h2>The copy was the expensive asset. The design was the cheap one.</h2>
   <div class="musing rise">
     <div class="q">The rebrand shipped on a Tuesday. The first note back was: keep the new look, give us the old words.</div>
-    <p>I had it backwards, and I suspect most people do. The rename ran as a set of parallel agents against a decided brand spec — palette, type, wordmark, every call site — and it landed clean. Then the client read it and asked for <b>the wording restored</b>: the hero, the offer blurbs, the about page, the footer tagline. They'd spent months getting those sentences right with real customers. The graphite-and-timber aesthetic they'd only just seen, and they were happy to keep. <b>Copy was the vetted asset; styling was the disposable one</b> — the opposite of the usual assumption, and worth remembering the next time a redesign starts by rewriting everything.</p>
+    <p>I had it backwards, and I suspect most people do. The rebrand was a clean sweep against a decided spec — palette, type, wordmark, every call site — and it landed well. Then the client read it and asked for <b>the wording restored</b>: the hero, the offer blurbs, the about page, the footer tagline. They'd spent months getting those sentences right with real customers. The graphite-and-timber aesthetic they'd only just seen, and they were happy to keep. <b>Copy was the vetted asset; styling was the disposable one</b> — the opposite of the usual assumption, and worth remembering the next time a redesign starts by rewriting everything.</p>
     <p>The domain went the same way. A month of the cutover to their own <span class="mono">.com</span> sat blocked on records they had to add inside a Shopify admin they rarely opened. Post-rename the name was wrong anyway, so I registered <b>mhbuildstudio.com</b> in my own account instead and the client dependency evaporated. The app needed one environment variable changed — every canonical URL, the sitemap and robots.txt already derived from the request host — and the old hostnames still 301 with the path intact, which is what carried the indexed pages across.</p>
-    <p>The part I keep thinking about is the loop after launch. Client requests land in a queue, an agent picks one up, branches, builds it, opens a pull request, merges and deploys — and the shop sees their fix without me touching a keyboard. The guardrails are the whole design: one request at a time, a dirty-tree check, no writes to deploy config or dependencies, and a bail-out when the request isn't clear enough to act on. Small shops don't need a retainer. They need a queue that empties.</p>
+    <p>The part I keep thinking about is what happens after launch. A small shop's website requests are all tiny — a price, a photo, one more product — and each one is too small to be worth a meeting and too annoying to batch. So they land in a queue and go out on their own, and the guardrails are the whole design: <b>one request at a time, nothing that touches deploy config or dependencies, and a stop when the request isn't clear enough to act on.</b> A shop with two people in it doesn't need a retainer. It needs a queue that empties.</p>
   </div>
 </section>
 
@@ -106,11 +106,11 @@
 
   <div class="tryit rise" style="margin-top:22px">
     <div class="tryit-head">
-      <span class="lbl">▲ the bug worth the detour</span>
-      <span class="url">iMessage · blank card</span>
+      <span class="lbl">◆ the visitor that isn't a browser</span>
+      <span class="url">the link preview</span>
     </div>
     <div class="tryit-body">
-      <p>Product links previewed fine in WhatsApp and Slack and came up blank in iMessage. Two separate causes, and both are the kind you only find in the logs. Rails' default <span class="mono">allow_browser</span> guard was returning <b>406</b> to Apple's link fetcher, which identifies as a decade-old Safari — so it never saw the tags at all. Then the images: iOS requests them with a <b>Range</b> header and drops anything that isn't a <b>206</b>, while the HTTP cache in front was happily replaying a flat 200. Catalog photos now re-serve from this origin through a small proxy that answers ranges properly and is marked private so the shared cache never stores it. Apple also caches the <em>failure</em> per URL, so every retest needs a fresh one.</p>
+      <p>Most of this shop's traffic arrives through a link someone pasted into a message. So the first thing to load the page is never a person — it's a link-preview fetcher, and it is nothing like a browser. It runs no JavaScript, it identifies as a decade-old Safari that modern frameworks are happy to turn away, it asks for images a byte range at a time, and it caches a failure as eagerly as a success. Treating that fetcher as a <b>first-class client</b> — server-rendered tags, a permissive browser policy, images served from this origin over a path that answers ranges properly — is why a shared product link opens as a card with a photo on it instead of a bare domain.</p>
     </div>
   </div>
 
