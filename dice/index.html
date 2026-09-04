@@ -321,7 +321,6 @@
   var diceEl = $("dice"), verdict = $("verdict"), vt = $("vt");
   var rollBtn = $("rollbtn"), rollT = $("roll-t"), shakeBtn = $("shake");
   var cur = [], els = [], results = [], lastParts = [], inFlight = 0;
-  var PIPS = { 2: [1, 9], 3: [1, 5, 9], 4: [1, 3, 7, 9], 5: [1, 3, 5, 7, 9], 6: [1, 3, 4, 6, 7, 9] };
 
   function renderRoll(dice) {
     cur = dice; els = []; results = []; lastParts = []; inFlight = 0;
@@ -332,31 +331,42 @@
     diceEl.innerHTML = "";
     dice.forEach(function (d, i) { var e = dieEl(d, i); els.push(e); diceEl.appendChild(e); });
     verdict.classList.remove("show"); rollT.textContent = "Roll"; rollBtn.classList.remove("busy");
+    $("share-res").textContent = canShare() ? "Share the verdict" : "Copy the verdict";
     shakeBtn.hidden = shakeOn || !(("DeviceMotionEvent" in window) && matchMedia("(pointer: coarse)").matches);
     window.scrollTo(0, 0);
   }
-  function pipFace(cls, n) {
-    var cells = ""; for (var k = 1; k <= 9; k++) cells += PIPS[n].indexOf(k) >= 0 ? '<i class="pip"></i>' : "<i></i>";
-    return '<div class="f ' + cls + '">' + cells + "</div>";
+  function face(cls) {
+    return '<div class="f ' + cls + '"><i class="pip c1"></i><i class="pip c2"></i><i class="pip c3"></i><i class="pip c4"></i><span class="txt"></span></div>';
   }
   function dieEl(d, i) {
     var el = document.createElement("button"); el.type = "button"; el.className = "die idle"; tint(el, i);
     el.innerHTML =
       '<div class="stage"><div class="cube"><div class="spin">' +
-        '<div class="f front"><i class="pip c1"></i><i class="pip c2"></i><i class="pip c3"></i><i class="pip c4"></i><span class="txt">?</span></div>' +
-        pipFace("back", 6) + pipFace("right", 2) + pipFace("left", 5) + pipFace("top", 3) + pipFace("bottom", 4) +
+        ["back", "right", "left", "top", "bottom", "front"].map(face).join("") +
       '</div></div><div class="burst"></div></div><span class="cap"></span>';
+    setTxt(el, "?"); dressSides(el, d.options, 0);
     var name = d.label || "Die " + (i + 1);
     el.querySelector(".cap").textContent = name;
     el.setAttribute("aria-label", "Roll " + name);
     el.addEventListener("click", function () { roll([i]); });
     return el;
   }
-  function setTxt(el, s) {
-    el.querySelector(".txt").textContent = s;
+  function setFace(f, s) {
+    f.querySelector(".txt").textContent = s;
     var w = Math.max.apply(null, s.split(/\s+/).map(function (x) { return x.length; }));
-    el.classList.remove("long", "xlong");
-    if (s.length > 22 || w > 13) el.classList.add("xlong"); else if (s.length > 11 || w > 8) el.classList.add("long");
+    f.classList.remove("long", "xlong");
+    if (s.length > 22 || w > 13) f.classList.add("xlong"); else if (s.length > 11 || w > 8) f.classList.add("long");
+  }
+  function setTxt(el, s) { setFace(el.querySelector(".f.front"), s); }
+  /* the five hidden sides carry real options too, so the tumble shows choices flying past */
+  function dressSides(el, opts, shift) {
+    var sides = el.querySelectorAll(".f:not(.front)");
+    for (var k = 0; k < sides.length; k++) setFace(sides[k], opts[(k + shift) % opts.length]);
+  }
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = rand(i + 1), t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
   }
   function roll(idx) {
     if (inFlight) return;
@@ -370,15 +380,16 @@
     inFlight++;
     var delay = k * 110, dur = 1050 + k * 120 + rand(200), done = false;
     var spin = el.querySelector(".spin"); spin.style.setProperty("--dur", dur + "ms");
+    var deck = shuffle(d.options), shift = 0;
     setTimeout(function () {
-      el.classList.add("rolling"); buzz(12);
+      el.classList.add("rolling"); buzz(12); dressSides(el, deck, 0);
       var start = performance.now(), last = -1, n = 0;
       (function flick() {
         if (done) return;
         var p = (performance.now() - start) / dur;
         if (p >= 0.86) { setTxt(el, d.options[pick]); return; }
         var j; do { j = rand(d.options.length); } while (d.options.length > 1 && j === last); last = j;
-        setTxt(el, d.options[j]); if (n++ % 2 === 0) tick();
+        setTxt(el, d.options[j]); dressSides(el, deck, ++shift); if (n++ % 2 === 0) tick();
         setTimeout(flick, 45 + p * p * 260);
       })();
       var land = function () {
@@ -420,10 +431,20 @@
     verdict.scrollIntoView({ block: "end", behavior: reduced ? "auto" : "smooth" });
   }
   rollBtn.addEventListener("click", function () { roll(cur.map(function (_, i) { return i; })); });
+  /* wordle-style verdict: text and emoji only, no link — one square per die, in its colour */
+  var SQUARES = ["🟨", "🟩", "🟥", "🟦", "🟪", "🟧", "🟩", "🟪"];
+  function verdictText() {
+    var lines = cur.map(function (d, i) {
+      if (results[i] == null) return null;
+      return SQUARES[i % SQUARES.length] + " " + (d.label || "Die " + (i + 1)) + " · " + d.options[results[i]];
+    }).filter(Boolean);
+    return "🎲 Roll for it\n" + lines.join("\n");
+  }
+  function canShare() { return !!navigator.share && matchMedia("(pointer: coarse)").matches; }
   $("share-res").addEventListener("click", function () {
-    var msg = "🎲 The dice say: " + lastParts.join(" · ");
-    if (navigator.share) navigator.share({ text: msg, url: location.href }).catch(function () {});
-    else copyText(msg + "\n" + location.href, "Verdict copied");
+    var msg = verdictText();
+    if (canShare()) navigator.share({ text: msg }).catch(function () {});
+    else copyText(msg, "Copied, paste it anywhere");
   });
   $("edit").addEventListener("click", function () { draft = clone(cur); save(); goSetup(); });
   $("own").addEventListener("click", goSetup);
