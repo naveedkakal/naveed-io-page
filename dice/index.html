@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Roll for it — naveed.io</title>
+<meta name="description" content="Can't decide? Load a few dice with your options, send the link, and let the dice decide. Nobody argues with dice." />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#08090c" />
+<meta name="apple-mobile-web-app-title" content="Dice" />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="icon.png" />
+<link rel="canonical" href="https://naveed.io/dice/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/dice/" />
+<meta property="og:site_name" content="naveed.io" />
+<meta property="og:title" content="Roll for it 🎲" />
+<meta property="og:description" content="Somebody couldn't decide. Tap the link, roll the dice, and that's that. Nobody argues with dice." />
+<meta property="og:image" content="https://naveed.io/dice/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Three candy-colored dice labeled Who, What, Where — Roll for it" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Roll for it 🎲" />
+<meta name="twitter:description" content="Somebody couldn't decide. Tap the link, roll the dice, and that's that." />
+<meta name="twitter:image" content="https://naveed.io/dice/og.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="dice.css" />
+</head>
+<body data-mode="setup">
+<div id="glow"></div>
+
+<div class="strip">
+  <a href="../">← naveed.io</a>
+  <span class="r">
+    <span id="strip-t">dice · seed &amp; send</span>
+    <button id="snd" class="iconbtn" type="button" aria-label="Turn sound on" aria-pressed="false">🔇</button>
+  </span>
+</div>
+
+<div class="wrap">
+
+  <!-- ── setup: seed the dice, get a link ─────────────── -->
+  <section id="setup" hidden>
+    <div class="kicker">§ For the chronically undecided</div>
+    <h1 class="title">Roll for it<em>.</em></h1>
+    <p class="standfirst">Load a few dice with your options, send the link, and let the dice decide. <b>Nobody argues with dice.</b></p>
+
+    <div class="presets" id="presets"><span class="lab">Start from</span></div>
+
+    <div id="cards"></div>
+    <button class="add-die" id="add" type="button">+ Add a die</button>
+
+    <div class="share">
+      <div class="lab">Your link</div>
+      <p>Send this to whoever needs to make a decision. It opens straight to the dice, nothing to install.</p>
+      <div class="urlbox">
+        <input id="url" type="text" readonly spellcheck="false" placeholder="Give a die at least two options…" aria-label="Shareable link" />
+        <span class="len" id="len"></span>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="share-btn" type="button">Share</button>
+        <button class="btn" id="copy-btn" type="button">Copy link</button>
+        <button class="btn accent" id="try-btn" type="button">Roll it →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── roll: what the link opens to ─────────────────── -->
+  <section id="roll" hidden>
+    <div class="kicker">§ Somebody couldn't decide</div>
+    <h1 class="title small">Roll for it<em>.</em></h1>
+
+    <div class="dice" id="dice"></div>
+    <div class="hint">Tap a single die to roll just that one</div>
+
+    <div class="verdict" id="verdict" aria-live="polite">
+      <div class="lab">The dice say</div>
+      <div class="vt" id="vt"></div>
+      <div class="actions center"><button class="btn" id="share-res" type="button">Share the verdict</button></div>
+    </div>
+
+    <div class="links">
+      <button type="button" id="edit">Edit these dice</button>
+      <button type="button" id="own">Make your own</button>
+    </div>
+  </section>
+
+</div>
+
+<div class="footer">
+  <a href="../">← naveed.io</a>
+  <span>naveed.io/dice · nobody argues with dice</span>
+</div>
+
+<div class="rollbar" id="rollbar" hidden>
+  <button class="shake" id="shake" type="button" aria-pressed="false" hidden>📳 Shake to roll</button>
+  <button class="rollbtn" id="rollbtn" type="button"><span class="ico">🎲</span><span id="roll-t">Roll</span></button>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="../assets/app.js" defer></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var HUES = [[44, 62], [160, 58], [340, 70], [200, 66], [268, 74], [22, 66], [95, 60], [300, 72]];
+  var LS_DRAFT = "dice.draft", LS_SOUND = "dice.sound";
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var PRESETS = [
+    { key: "dinner", name: "Dinner plans", dice: [
+      { label: "Who", options: ["Neighbors", "Family", "Biryani", "Just us", "Bohri"] },
+      { label: "Food", options: ["BBQ", "Pizza", "Tacos", "Order in"] },
+      { label: "Where", options: ["Our place", "The park", "Their place", "City", "Library", "Mall"] } ] },
+    { key: "movie", name: "Movie night", dice: [
+      { label: "Genre", options: ["Comedy", "Action", "Scary", "Animated", "Rom-com"] },
+      { label: "Snack", options: ["Popcorn", "Ice cream", "Nachos", "We're being good"] },
+      { label: "Who picks", options: ["Me", "You", "The kids", "Whatever's trending"] } ] },
+    { key: "weekend", name: "Weekend", dice: [
+      { label: "Morning", options: ["Sleep in", "Pancakes out", "Farmers market", "Gym, apparently"] },
+      { label: "Afternoon", options: ["Bike ride", "Museum", "The mall", "Couch"] },
+      { label: "Night", options: ["Board games", "Movie", "Friends over", "Early bed"] } ] },
+    { key: "coin", name: "Coin flip", dice: [ { label: "Well?", options: ["Yes", "No"] } ] },
+    { key: "blank", name: "Blank", dice: [ { label: "", options: [] } ] }
+  ];
+  var PLACE = ["Who?", "What?", "Where?", "When?", "Why not?", "And…"];
+
+  /* ── url ↔ dice ────────────────────────────────────────
+     #Who=Neighbors,Family,Poker+friends&What=BBQ,Pizza,Park
+     Each label/option is percent-encoded, so , = & are safe delimiters. */
+  function enc(s) { return encodeURIComponent(s).replace(/%20/g, "+"); }
+  function dec(s) { try { return decodeURIComponent(s.replace(/\+/g, " ")); } catch (e) { return s; } }
+  function toHash(dice) {
+    return dice.map(function (d) { return enc(d.label) + "=" + d.options.map(enc).join(","); }).join("&");
+  }
+  function fromHash(h) {
+    if (!h) return null;
+    var dice = h.split("&").map(function (part) {
+      var i = part.indexOf("=");
+      var label = i < 0 ? "" : dec(part.slice(0, i));
+      var opts = (i < 0 ? part : part.slice(i + 1)).split(",").map(function (o) { return dec(o).trim(); }).filter(Boolean);
+      return { label: label.trim(), options: opts };
+    }).filter(function (d) { return d.options.length; });
+    return dice.some(function (d) { return d.options.length >= 2; }) ? dice : null;
+  }
+  function currentHash() { var i = location.href.indexOf("#"); return i < 0 ? "" : location.href.slice(i + 1); }
+  function shareUrl(dice) { return location.origin + location.pathname + "#" + toHash(dice); }
+
+  /* ── utils ────────────────────────────────────────────── */
+  function rand(n) {
+    if (n <= 1) return 0;
+    var buf = new Uint32Array(1), lim = Math.floor(4294967296 / n) * n;
+    do { crypto.getRandomValues(buf); } while (buf[0] >= lim);
+    return buf[0] % n;
+  }
+  function load(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+  function store(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function clone(x) { return JSON.parse(JSON.stringify(x)); }
+  function buzz(p) { try { navigator.vibrate && navigator.vibrate(p); } catch (e) {} }
+  function isEnter(e) { return e.key === "Enter" || e.code === "Enter" || e.code === "NumpadEnter" || e.keyCode === 13; }
+  function tint(el, i) { var h = HUES[i % HUES.length]; el.style.setProperty("--h", h[0]); el.style.setProperty("--l", h[1] + "%"); }
+
+  var toastEl = $("toast"), toastT;
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 1600);
+  }
+  function copyText(t, msg) {
+    var ok = function () { toast(msg || "Copied"); };
+    var fallback = function () {
+      var ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", "");
+      ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); ok(); } catch (e) { toast("Long-press the link to copy"); }
+      document.body.removeChild(ta);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, fallback);
+    else fallback();
+  }
+
+  /* ── sound (off by default, remembered) ───────────────── */
+  var soundOn = load(LS_SOUND) === true, actx = null, sndBtn = $("snd");
+  function ctx() {
+    var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+    if (!actx) actx = new AC(); if (actx.state === "suspended") actx.resume(); return actx;
+  }
+  function blip(freq, dur, type, vol) {
+    if (!soundOn) return;
+    try {
+      var c = ctx(); if (!c) return;
+      var o = c.createOscillator(), g = c.createGain(); o.type = type; o.frequency.value = freq;
+      g.gain.setValueAtTime(vol, c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + dur);
+      o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime + dur + 0.02);
+    } catch (e) {}
+  }
+  function tick() { blip(700 + Math.random() * 600, 0.045, "square", 0.035); }
+  function thud() { blip(150, 0.16, "triangle", 0.22); }
+  function paintSound() {
+    sndBtn.textContent = soundOn ? "🔊" : "🔇"; sndBtn.setAttribute("aria-pressed", String(soundOn));
+    sndBtn.setAttribute("aria-label", soundOn ? "Turn sound off" : "Turn sound on");
+  }
+  sndBtn.addEventListener("click", function () { soundOn = !soundOn; store(LS_SOUND, soundOn); paintSound(); if (soundOn) { ctx(); tick(); } });
+  paintSound();
+
+  /* ══ setup mode ═══════════════════════════════════════════ */
+  var draft = load(LS_DRAFT);
+  if (!Array.isArray(draft) || !draft.length) draft = clone(PRESETS[0].dice);
+  draft = draft.map(function (d) {
+    return { label: String(d && d.label || ""), options: Array.isArray(d && d.options) ? d.options.map(String) : [] };
+  });
+  function save() { store(LS_DRAFT, draft); }
+
+  var cards = $("cards"), urlIn = $("url"), lenEl = $("len");
+  var shareBtn = $("share-btn"), copyBtn = $("copy-btn"), tryBtn = $("try-btn");
+
+  function renderSetup() {
+    document.body.dataset.mode = "setup";
+    $("setup").hidden = false; $("roll").hidden = true; $("rollbar").hidden = true;
+    $("strip-t").textContent = "dice · seed & send";
+    document.title = "Roll for it — naveed.io";
+    renderCards();
+    window.scrollTo(0, 0);
+  }
+  function renderCards() {
+    cards.innerHTML = "";
+    if (!draft.length) draft.push({ label: "", options: [] });
+    draft.forEach(function (d, i) { cards.appendChild(card(d, i)); });
+    updateLink();
+  }
+  function card(d, i) {
+    var el = document.createElement("div"); el.className = "dc"; tint(el, i);
+    el.innerHTML =
+      '<div class="dc-head"><span class="dc-num">Die ' + (i + 1) + '</span>' +
+      '<input class="dc-label" type="text" maxlength="30" autocomplete="off" autocapitalize="words" aria-label="Name of die ' + (i + 1) + '" />' +
+      '<button class="dc-del" type="button" aria-label="Remove die ' + (i + 1) + '">✕</button></div>' +
+      '<div class="chips"></div><div class="dc-hint"></div>';
+    var lab = el.querySelector(".dc-label"); lab.placeholder = PLACE[i] || "Label"; lab.value = d.label;
+    lab.addEventListener("input", function () { d.label = lab.value; save(); updateLink(); });
+    lab.addEventListener("keydown", function (e) { if (isEnter(e)) { e.preventDefault(); el.querySelector(".chip-in").focus(); } });
+    el.querySelector(".dc-del").addEventListener("click", function () {
+      var at = draft.indexOf(d); if (at >= 0) draft.splice(at, 1); save(); renderCards();
+    });
+    chips(el, d);
+    return el;
+  }
+  function chips(el, d) {
+    var box = el.querySelector(".chips"); box.innerHTML = "";
+    var rerender = function (focus) { save(); chips(el, d); updateLink(); if (focus) el.querySelector(".chip-in").focus(); };
+    d.options.forEach(function (o, j) {
+      var c = document.createElement("span"); c.className = "chip";
+      var t = document.createElement("span"); t.textContent = o;
+      var x = document.createElement("button"); x.type = "button"; x.textContent = "×"; x.setAttribute("aria-label", "Remove " + o);
+      x.addEventListener("click", function () { d.options.splice(j, 1); rerender(false); });
+      c.appendChild(t); c.appendChild(x); box.appendChild(c);
+    });
+    var inp = document.createElement("input"); inp.className = "chip-in"; inp.type = "text";
+    inp.autocomplete = "off"; inp.autocapitalize = "words"; inp.enterKeyHint = "done"; inp.maxLength = 60;
+    inp.placeholder = d.options.length ? "Add another…" : "Type an option, hit enter";
+    inp.setAttribute("aria-label", "Add an option to " + (d.label || "this die"));
+    function commit(refocus) {
+      var raw = inp.value; if (!raw.trim()) { inp.value = ""; return; }
+      inp.value = "";
+      raw.split(",").map(function (s) { return s.trim(); }).filter(Boolean)
+         .forEach(function (s) { if (d.options.indexOf(s) < 0) d.options.push(s); });
+      rerender(refocus);
+    }
+    inp.addEventListener("keydown", function (e) {
+      if (isEnter(e) || e.key === ",") { e.preventDefault(); commit(true); }
+      else if (e.key === "Backspace" && !inp.value && d.options.length) { e.preventDefault(); d.options.pop(); rerender(true); }
+    });
+    inp.addEventListener("input", function () { if (inp.value.indexOf(",") >= 0) commit(true); });
+    inp.addEventListener("blur", function () { commit(false); });
+    box.appendChild(inp);
+
+    var h = el.querySelector(".dc-hint"), n = d.options.length;
+    if (n === 0) { h.textContent = "Add at least two options to roll this one"; h.className = "dc-hint"; }
+    else if (n === 1) { h.textContent = "One more, or it's not much of a die"; h.className = "dc-hint warn"; }
+    else { h.textContent = n + " sides"; h.className = "dc-hint"; }
+  }
+
+  function shareable() {
+    return draft.map(function (d) { return { label: d.label.trim(), options: d.options.slice() }; })
+                .filter(function (d) { return d.options.length; });
+  }
+  function updateLink() {
+    var dice = shareable(), ok = dice.some(function (d) { return d.options.length >= 2; });
+    var url = ok ? shareUrl(dice) : "";
+    urlIn.value = url; lenEl.textContent = ok ? url.length + " chars" : "";
+    [shareBtn, copyBtn, tryBtn].forEach(function (b) { b.disabled = !ok; });
+  }
+  if (!navigator.share) shareBtn.hidden = true;
+  urlIn.addEventListener("focus", function () { urlIn.select(); });
+  copyBtn.addEventListener("click", function () { copyText(urlIn.value, "Link copied"); });
+  shareBtn.addEventListener("click", function () {
+    navigator.share({ title: "Roll for it", text: "Can't decide? Roll for it 🎲", url: urlIn.value }).catch(function () {});
+  });
+  tryBtn.addEventListener("click", function () { location.hash = toHash(shareable()); });
+
+  function pristine() {
+    var j = JSON.stringify(draft);
+    return PRESETS.some(function (p) { return JSON.stringify(p.dice) === j; }) ||
+           draft.every(function (d) { return !d.label && !d.options.length; });
+  }
+  var presetsEl = $("presets");
+  PRESETS.forEach(function (p) {
+    var b = document.createElement("button"); b.type = "button"; b.className = "preset"; b.textContent = p.name;
+    b.addEventListener("click", function () {
+      if (!pristine() && !confirm("Replace your current dice with “" + p.name + "”?")) return;
+      draft = clone(p.dice); save(); renderCards();
+      if (p.key === "blank") { var l = cards.querySelector(".dc-label"); if (l) l.focus(); }
+    });
+    presetsEl.appendChild(b);
+  });
+  $("add").addEventListener("click", function () {
+    draft.push({ label: "", options: [] }); save(); renderCards();
+    var all = cards.querySelectorAll(".dc-label"); all[all.length - 1].focus();
+  });
+
+  /* ══ roll mode ════════════════════════════════════════════ */
+  var diceEl = $("dice"), verdict = $("verdict"), vt = $("vt");
+  var rollBtn = $("rollbtn"), rollT = $("roll-t"), shakeBtn = $("shake");
+  var cur = [], els = [], results = [], lastParts = [], inFlight = 0;
+  var PIPS = { 2: [1, 9], 3: [1, 5, 9], 4: [1, 3, 7, 9], 5: [1, 3, 5, 7, 9], 6: [1, 3, 4, 6, 7, 9] };
+
+  function renderRoll(dice) {
+    cur = dice; els = []; results = []; lastParts = []; inFlight = 0;
+    document.body.dataset.mode = "roll";
+    $("setup").hidden = true; $("roll").hidden = false; $("rollbar").hidden = false;
+    $("strip-t").textContent = dice.length + (dice.length === 1 ? " die" : " dice") + " · loaded";
+    document.title = dice.map(function (d) { return d.label || "?"; }).join(" · ") + " — Roll for it";
+    diceEl.innerHTML = "";
+    dice.forEach(function (d, i) { var e = dieEl(d, i); els.push(e); diceEl.appendChild(e); });
+    verdict.classList.remove("show"); rollT.textContent = "Roll"; rollBtn.classList.remove("busy");
+    shakeBtn.hidden = shakeOn || !(("DeviceMotionEvent" in window) && matchMedia("(pointer: coarse)").matches);
+    window.scrollTo(0, 0);
+  }
+  function pipFace(cls, n) {
+    var cells = ""; for (var k = 1; k <= 9; k++) cells += PIPS[n].indexOf(k) >= 0 ? '<i class="pip"></i>' : "<i></i>";
+    return '<div class="f ' + cls + '">' + cells + "</div>";
+  }
+  function dieEl(d, i) {
+    var el = document.createElement("button"); el.type = "button"; el.className = "die idle"; tint(el, i);
+    el.innerHTML =
+      '<div class="stage"><div class="cube">' +
+        '<div class="f front"><i class="pip c1"></i><i class="pip c2"></i><i class="pip c3"></i><i class="pip c4"></i><span class="txt">?</span></div>' +
+        pipFace("back", 6) + pipFace("right", 2) + pipFace("left", 5) + pipFace("top", 3) + pipFace("bottom", 4) +
+      '</div><div class="burst"></div></div><span class="cap"></span>';
+    var name = d.label || "Die " + (i + 1);
+    el.querySelector(".cap").textContent = name;
+    el.setAttribute("aria-label", "Roll " + name);
+    el.addEventListener("click", function () { roll([i]); });
+    return el;
+  }
+  function setTxt(el, s) {
+    el.querySelector(".txt").textContent = s;
+    var w = Math.max.apply(null, s.split(/\s+/).map(function (x) { return x.length; }));
+    el.classList.remove("long", "xlong");
+    if (s.length > 22 || w > 13) el.classList.add("xlong"); else if (s.length > 11 || w > 8) el.classList.add("long");
+  }
+  function roll(idx) {
+    if (inFlight) return;
+    verdict.classList.remove("show"); rollBtn.classList.add("busy");
+    idx.forEach(function (i, k) { spin(i, k); });
+  }
+  function spin(i, k) {
+    var el = els[i], d = cur[i], pick = rand(d.options.length);
+    el.classList.remove("idle", "landed");
+    if (reduced) { setTxt(el, d.options[pick]); results[i] = pick; finish(); return; }
+    inFlight++;
+    var delay = k * 110, dur = 1050 + k * 120 + rand(200), done = false;
+    var cube = el.querySelector(".cube"); cube.style.setProperty("--dur", dur + "ms");
+    setTimeout(function () {
+      el.classList.add("rolling"); buzz(12);
+      var start = performance.now(), last = -1, n = 0;
+      (function flick() {
+        if (done) return;
+        var p = (performance.now() - start) / dur;
+        if (p >= 0.86) { setTxt(el, d.options[pick]); return; }
+        var j; do { j = rand(d.options.length); } while (d.options.length > 1 && j === last); last = j;
+        setTxt(el, d.options[j]); if (n++ % 2 === 0) tick();
+        setTimeout(flick, 45 + p * p * 260);
+      })();
+      var land = function () {
+        if (done) return; done = true;
+        el.classList.remove("rolling"); el.classList.add("landed");
+        setTxt(el, d.options[pick]); results[i] = pick;
+        thud(); buzz([18, 30, 24]); burst(el);
+        inFlight--; finish();
+      };
+      cube.addEventListener("animationend", function onEnd(e) {
+        if (e.target !== cube) return; cube.removeEventListener("animationend", onEnd); land();
+      });
+      setTimeout(land, dur + 250);
+    }, delay);
+  }
+  function burst(el) {
+    var b = el.querySelector(".burst"); b.innerHTML = "";
+    for (var k = 0; k < 16; k++) {
+      var s = document.createElement("i"), a = (k / 16) * Math.PI * 2 + Math.random() * .4, r = 52 + Math.random() * 48;
+      s.style.setProperty("--tx", (Math.cos(a) * r).toFixed(0) + "px");
+      s.style.setProperty("--ty", (Math.sin(a) * r).toFixed(0) + "px");
+      s.style.setProperty("--rot", (Math.random() * 360 | 0) + "deg");
+      s.style.setProperty("--pc", k % 3 === 0 ? "#fff" : k % 3 === 1 ? "var(--c)" : "var(--gold)");
+      s.style.animationDelay = (Math.random() * 70 | 0) + "ms";
+      b.appendChild(s);
+    }
+    setTimeout(function () { b.innerHTML = ""; }, 950);
+  }
+  function finish() {
+    if (inFlight) return;
+    rollBtn.classList.remove("busy"); rollT.textContent = "Roll again";
+    lastParts = cur.map(function (d, i) { return results[i] == null ? null : d.options[results[i]]; }).filter(Boolean);
+    vt.innerHTML = "";
+    lastParts.forEach(function (p, k) {
+      if (k) { var s = document.createElement("i"); s.textContent = "·"; vt.appendChild(s); }
+      vt.appendChild(document.createTextNode(p));
+    });
+    verdict.classList.add("show");
+    verdict.scrollIntoView({ block: "end", behavior: reduced ? "auto" : "smooth" });
+  }
+  rollBtn.addEventListener("click", function () { roll(cur.map(function (_, i) { return i; })); });
+  $("share-res").addEventListener("click", function () {
+    var msg = "🎲 The dice say: " + lastParts.join(" · ");
+    if (navigator.share) navigator.share({ text: msg, url: location.href }).catch(function () {});
+    else copyText(msg + "\n" + location.href, "Verdict copied");
+  });
+  $("edit").addEventListener("click", function () { draft = clone(cur); save(); goSetup(); });
+  $("own").addEventListener("click", goSetup);
+  function goSetup() { history.pushState(null, "", location.pathname + location.search); route(); }
+
+  /* shake to roll — needs a tap first on iOS for motion permission */
+  var shakeOn = false, lastShake = 0;
+  function onMotion(e) {
+    if (document.body.dataset.mode !== "roll") return;
+    var a = e.acceleration, g = e.accelerationIncludingGravity, m = 0;
+    if (a && a.x != null) m = Math.hypot(a.x, a.y, a.z);
+    else if (g && g.x != null) m = Math.abs(Math.hypot(g.x, g.y, g.z) - 9.81);
+    if (m > 14 && Date.now() - lastShake > 1500) { lastShake = Date.now(); rollBtn.click(); }
+  }
+  shakeBtn.addEventListener("click", function () {
+    if (shakeOn) return;
+    var arm = function () {
+      shakeOn = true; addEventListener("devicemotion", onMotion);
+      shakeBtn.textContent = "📳 Shake is on"; shakeBtn.setAttribute("aria-pressed", "true"); toast("Give it a shake");
+    };
+    var DME = window.DeviceMotionEvent;
+    if (DME && typeof DME.requestPermission === "function") {
+      DME.requestPermission().then(function (s) { if (s === "granted") arm(); else toast("Motion access was denied"); })
+                             .catch(function () { toast("Motion access was denied"); });
+    } else arm();
+  });
+
+  /* ── routing: no hash → setup, hash → roll ────────────── */
+  var lastKey = null;
+  function route() {
+    var h = currentHash(), dice = fromHash(h), key = dice ? "roll:" + h : "setup";
+    if (key === lastKey) return; lastKey = key;
+    if (dice) renderRoll(dice); else renderSetup();
+  }
+  addEventListener("hashchange", route);
+  addEventListener("popstate", route);
+  route();
+})();
+</script>
+</body>
+</html>

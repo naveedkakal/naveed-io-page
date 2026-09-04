@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0c12"/><stop offset="1" stop-color="#07080b"/>
+    </linearGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0v64" fill="none" stroke="#20242e" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow" cx="0.78" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#f0b429" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#f0b429" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.1" cy="0.9" r="0.6">
+      <stop offset="0" stop-color="#5bc8ff" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#5bc8ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset="0.55" stop-color="#f6c343"/><stop offset="1" stop-color="#d99a12"/></linearGradient>
+    <linearGradient id="mint" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9df5cf"/><stop offset="0.55" stop-color="#3ddc9a"/><stop offset="1" stop-color="#1fa873"/></linearGradient>
+    <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc2d6"/><stop offset="0.55" stop-color="#ff8fb3"/><stop offset="1" stop-color="#e4568a"/></linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.5"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+    <text x="80" y="118" fill="#5bc8ff" font-size="20" font-weight="600" letter-spacing="4.2">§ FOR THE CHRONICALLY UNDECIDED</text>
+    <text x="74" y="300" fill="#eef0f4" font-size="150" font-weight="700" letter-spacing="-7">Roll for it<tspan fill="#f0b429">.</tspan></text>
+    <text x="80" y="372" fill="#a2a8b4" font-size="27">Somebody couldn't decide. Tap the link,</text>
+    <text x="80" y="410" fill="#a2a8b4" font-size="27">roll the dice, and that's that.</text>
+
+    <rect x="80" y="530" width="220" height="38" rx="19" fill="#101319" stroke="#2b303c"/>
+    <text x="102" y="555" fill="#a2a8b4" font-size="18" letter-spacing="1.5">naveed.io/dice</text>
+    <rect x="314" y="530" width="300" height="38" rx="19" fill="#1a160c" stroke="#5a4a1c"/>
+    <text x="336" y="555" fill="#f0b429" font-size="18" letter-spacing="1.5">NOBODY ARGUES WITH DICE</text>
+  </g>
+
+  <!-- shadows -->
+  <ellipse cx="960" cy="470" rx="150" ry="22" fill="#f0b429" opacity="0.25" filter="url(#soft)"/>
+
+  <!-- pink die, back -->
+  <g transform="translate(1010 250) rotate(14)">
+    <rect x="-95" y="-95" width="190" height="190" rx="34" fill="url(#pink)"/>
+    <rect x="-95" y="-95" width="190" height="190" rx="34" fill="none" stroke="#ffe3ec" stroke-opacity="0.5" stroke-width="2"/>
+    <circle cx="-62" cy="-62" r="9" fill="#0b0d12" opacity="0.2"/><circle cx="62" cy="-62" r="9" fill="#0b0d12" opacity="0.2"/>
+    <circle cx="-62" cy="62" r="9" fill="#0b0d12" opacity="0.2"/><circle cx="62" cy="62" r="9" fill="#0b0d12" opacity="0.2"/>
+    <text x="0" y="14" text-anchor="middle" fill="#0b0d12" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="40" font-weight="700" letter-spacing="-1">WHERE</text>
+  </g>
+  <!-- mint die, middle -->
+  <g transform="translate(850 330) rotate(-11)">
+    <rect x="-95" y="-95" width="190" height="190" rx="34" fill="url(#mint)"/>
+    <rect x="-95" y="-95" width="190" height="190" rx="34" fill="none" stroke="#d4fff0" stroke-opacity="0.5" stroke-width="2"/>
+    <circle cx="-62" cy="-62" r="9" fill="#0b0d12" opacity="0.2"/><circle cx="62" cy="-62" r="9" fill="#0b0d12" opacity="0.2"/>
+    <circle cx="-62" cy="62" r="9" fill="#0b0d12" opacity="0.2"/><circle cx="62" cy="62" r="9" fill="#0b0d12" opacity="0.2"/>
+    <text x="0" y="14" text-anchor="middle" fill="#0b0d12" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="44" font-weight="700" letter-spacing="-1">WHAT</text>
+  </g>
+  <!-- gold die, front -->
+  <g transform="translate(1000 445) rotate(6)">
+    <rect x="-100" y="-100" width="200" height="200" rx="36" fill="url(#gold)"/>
+    <rect x="-100" y="-100" width="200" height="200" rx="36" fill="none" stroke="#fff3c4" stroke-opacity="0.6" stroke-width="2"/>
+    <circle cx="-66" cy="-66" r="9" fill="#0b0d12" opacity="0.2"/><circle cx="66" cy="-66" r="9" fill="#0b0d12" opacity="0.2"/>
+    <circle cx="-66" cy="66" r="9" fill="#0b0d12" opacity="0.2"/><circle cx="66" cy="66" r="9" fill="#0b0d12" opacity="0.2"/>
+    <text x="0" y="16" text-anchor="middle" fill="#0b0d12" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="52" font-weight="700" letter-spacing="-1.5">WHO</text>
+  </g>
+</svg>
