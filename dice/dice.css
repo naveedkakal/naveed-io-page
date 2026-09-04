@@ -192,7 +192,10 @@ h1.title.small { font-size: clamp(30px, 8.5vw, 46px); margin-bottom: 22px; }
   background: radial-gradient(closest-side, hsl(var(--h) 90% 50% / .5), transparent); filter: blur(5px);
   transition: transform .3s, opacity .3s;
 }
-.cube { position: absolute; inset: 0; transform-style: preserve-3d; }
+/* the cube sits 50cqw behind the page so the resting front face renders at true size,
+   not perspective-enlarged into the gap and the caption */
+.cube { position: absolute; inset: 0; transform-style: preserve-3d; transform: translateZ(-50cqw); }
+.spin { position: absolute; inset: 0; transform-style: preserve-3d; }
 .f {
   position: absolute; inset: 0; border-radius: 16%; backface-visibility: hidden; -webkit-backface-visibility: hidden;
   background: linear-gradient(155deg, var(--c-hi), var(--c) 55%, var(--c-lo));
@@ -243,10 +246,10 @@ h1.title.small { font-size: clamp(30px, 8.5vw, 46px); margin-bottom: 22px; }
   55%  { transform: scale(.965) translateY(3px); }
   100% { transform: none; }
 }
-.die.rolling .cube { animation: tumble var(--dur, 1.1s) cubic-bezier(.22,.68,.25,1) both; }
+.die.rolling .spin { animation: tumble var(--dur, 1.1s) cubic-bezier(.22,.68,.25,1) both; }
 .die.rolling .stage::after { animation: shadow var(--dur, 1.1s) cubic-bezier(.22,.68,.25,1) both; }
-.die.landed .cube { animation: land .42s cubic-bezier(.34,1.56,.64,1) both; }
-.die:not(.rolling):active .cube { transform: scale(.96); transition: transform .1s; }
+.die.landed .spin { animation: land .42s cubic-bezier(.34,1.56,.64,1) both; }
+.die:not(.rolling):active .spin { transform: scale(.96); transition: transform .1s; }
 
 /* confetti */
 .burst { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
@@ -343,7 +346,7 @@ body[data-mode="roll"] .footer { padding-bottom: calc(150px + var(--sab)); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   #glow { display: none; }
-  .die.rolling .cube, .die.rolling .stage::after, .die.landed .cube, .rollbtn.busy .ico { animation: none; }
+  .die.rolling .spin, .die.rolling .stage::after, .die.landed .spin, .rollbtn.busy .ico { animation: none; }
   .burst { display: none; }
   .verdict { transition: none; }
 }

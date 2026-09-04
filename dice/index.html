@@ -342,10 +342,10 @@
   function dieEl(d, i) {
     var el = document.createElement("button"); el.type = "button"; el.className = "die idle"; tint(el, i);
     el.innerHTML =
-      '<div class="stage"><div class="cube">' +
+      '<div class="stage"><div class="cube"><div class="spin">' +
         '<div class="f front"><i class="pip c1"></i><i class="pip c2"></i><i class="pip c3"></i><i class="pip c4"></i><span class="txt">?</span></div>' +
         pipFace("back", 6) + pipFace("right", 2) + pipFace("left", 5) + pipFace("top", 3) + pipFace("bottom", 4) +
-      '</div><div class="burst"></div></div><span class="cap"></span>';
+      '</div></div><div class="burst"></div></div><span class="cap"></span>';
     var name = d.label || "Die " + (i + 1);
     el.querySelector(".cap").textContent = name;
     el.setAttribute("aria-label", "Roll " + name);
@@ -369,7 +369,7 @@
     if (reduced) { setTxt(el, d.options[pick]); results[i] = pick; finish(); return; }
     inFlight++;
     var delay = k * 110, dur = 1050 + k * 120 + rand(200), done = false;
-    var cube = el.querySelector(".cube"); cube.style.setProperty("--dur", dur + "ms");
+    var spin = el.querySelector(".spin"); spin.style.setProperty("--dur", dur + "ms");
     setTimeout(function () {
       el.classList.add("rolling"); buzz(12);
       var start = performance.now(), last = -1, n = 0;
@@ -388,8 +388,8 @@
         thud(); buzz([18, 30, 24]); burst(el);
         inFlight--; finish();
       };
-      cube.addEventListener("animationend", function onEnd(e) {
-        if (e.target !== cube) return; cube.removeEventListener("animationend", onEnd); land();
+      spin.addEventListener("animationend", function onEnd(e) {
+        if (e.target !== spin) return; spin.removeEventListener("animationend", onEnd); land();
       });
       setTimeout(land, dur + 250);
     }, delay);
