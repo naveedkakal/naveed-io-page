@@ -194,6 +194,8 @@
       o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime + dur + 0.02);
     } catch (e) {}
   }
+  /* iOS only starts/resumes audio inside a tap; the blips fire from timers, so warm it up here */
+  function primeAudio() { if (soundOn) ctx(); }
   function tick() { blip(700 + Math.random() * 600, 0.045, "square", 0.035); }
   function thud() { blip(150, 0.16, "triangle", 0.22); }
   function paintSound() {
@@ -348,7 +350,7 @@
     var name = d.label || "Die " + (i + 1);
     el.querySelector(".cap").textContent = name;
     el.setAttribute("aria-label", "Roll " + name);
-    el.addEventListener("click", function () { roll([i]); });
+    el.addEventListener("click", function () { primeAudio(); roll([i], false); });
     return el;
   }
   function setFace(f, s) {
@@ -368,8 +370,10 @@
     for (var i = a.length - 1; i > 0; i--) { var j = rand(i + 1), t = a[i]; a[i] = a[j]; a[j] = t; }
     return a;
   }
-  function roll(idx) {
+  var scrollAfter = false;
+  function roll(idx, toVerdict) {
     if (inFlight) return;
+    scrollAfter = !!toVerdict;
     verdict.classList.remove("show"); rollBtn.classList.add("busy");
     idx.forEach(function (i, k) { spin(i, k); });
   }
@@ -428,9 +432,12 @@
       vt.appendChild(document.createTextNode(p));
     });
     verdict.classList.add("show");
-    verdict.scrollIntoView({ block: "end", behavior: reduced ? "auto" : "smooth" });
+    if (scrollAfter) {   /* full roll only: nudge just enough to clear the fixed roll bar, never on a single-die tap */
+      var over = verdict.getBoundingClientRect().bottom + $("rollbar").getBoundingClientRect().height + 8 - innerHeight;
+      if (over > 0) window.scrollBy({ top: over, behavior: reduced ? "auto" : "smooth" });
+    }
   }
-  rollBtn.addEventListener("click", function () { roll(cur.map(function (_, i) { return i; })); });
+  rollBtn.addEventListener("click", function () { primeAudio(); roll(cur.map(function (_, i) { return i; }), true); });
   /* wordle-style verdict: text and emoji only, no link — one square per die, in its colour */
   var SQUARES = ["🟨", "🟩", "🟥", "🟦", "🟪", "🟧", "🟩", "🟪"];
   function verdictText() {
@@ -460,6 +467,7 @@
     if (m > 14 && Date.now() - lastShake > 1500) { lastShake = Date.now(); rollBtn.click(); }
   }
   shakeBtn.addEventListener("click", function () {
+    primeAudio();
     if (shakeOn) return;
     var arm = function () {
       shakeOn = true; addEventListener("devicemotion", onMotion);
