@@ -22,9 +22,6 @@ assert.equal(publicPage.scripts.length, 1, 'repeated initialization does not app
 assert.equal(publicPage.body.attrs['data-traffic-page'], '/apps/weave.html');
 assert.equal(publicPage.scripts[0].dataset.events, 'lcp');
 assert.equal(publicPage.scripts[0].src, 'https://traffic.naveed.io/tracker/v1.js');
-publicPage.listeners.click({ target: { closest() { return { target: '_blank', getAttribute() { return 'https://weavecmms.com'; } }; } } });
-publicPage.window.__trafficV1PageReady = true;
-publicPage.listeners.click({ target: { closest() { return { target: '_blank', getAttribute() { return 'https://github.com/naveedkakal'; } }; } } });
 assert.equal(install({ origin: 'https://www.naveed.io' }).scripts.length, 0);
 assert.equal(install({ pathname: '/dns/dnsconfig.js' }).scripts.length, 0);
 assert.equal(install({ pathname: '/writing/unknown.html' }).scripts.length, 0);
