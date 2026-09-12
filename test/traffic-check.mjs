@@ -11,7 +11,7 @@ function install({ origin = 'https://naveed.io', pathname = '/', ready = false }
     createElement() { return { dataset: {} }; }, addEventListener(name, listener) { listeners[name] = listener; }
   };
   const window = { location: { origin, pathname }, __trafficV1PageReady: ready, addEventListener(name, listener) { listeners[name] = listener; } };
-  const context = { window, document, JSON, RegExp };
+  const context = { window, document, JSON, RegExp, URL };
   vm.runInNewContext(source, context);
   return { scripts, listeners, body, window, context };
 }
@@ -30,6 +30,8 @@ publicPage.listeners['traffic:page']();
 assert.equal(calls.length, 1);
 assert.equal(calls[0].method, 'event');
 assert.equal(calls[0].options.name, 'outbound_app_opened');
+publicPage.listeners.click({ target: { closest() { return { target: '_blank', getAttribute() { return 'https://github.com/naveedkakal'; } }; } } });
+assert.equal(calls.length, 1, 'unrelated external links are not reported as app opens');
 assert.equal(install({ origin: 'https://www.naveed.io' }).scripts.length, 0);
 assert.equal(install({ pathname: '/dns/dnsconfig.js' }).scripts.length, 0);
 assert.equal(install({ pathname: '/writing/unknown.html' }).scripts.length, 0);

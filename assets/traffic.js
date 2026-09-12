@@ -23,6 +23,17 @@
     "/optioneers/": "/optioneers/"
   };
   var queue = [];
+  var appHosts = {
+    "carwash.naveed.io": true,
+    "hushbin.naveed.io": true,
+    "mhbuildstudio.com": true,
+    "miscolored.naveed.io": true,
+    "mispronounced.io": true,
+    "misra.naveed.io": true,
+    "petalpost.io": true,
+    "tv.naveed.io": true,
+    "weavecmms.com": true
+  };
 
   function page() {
     return window.location.origin === origin ? pages[window.location.pathname] || null : null;
@@ -47,7 +58,15 @@
     if (!link) return;
     var href = link.getAttribute("href") || "";
     if (href.indexOf("mailto:") === 0) return emit("contact_started");
-    if (link.target === "_blank" && /^https:\/\//.test(href)) emit("outbound_app_opened");
+    if (link.target === "_blank" && appHost(href)) emit("outbound_app_opened");
+  }
+
+  function appHost(href) {
+    try {
+      return appHosts[new URL(href).hostname] === true;
+    } catch (_) {
+      return false;
+    }
   }
 
   var label = page();
