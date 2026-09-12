@@ -77,7 +77,7 @@
 
   var script = document.createElement("script");
   script.async = true;
-  script.src = "https://traffic.naveed.io/assets/tracker_v1-dc626149.js";
+  script.src = "https://traffic.naveed.io/assets/tracker_v1-a23796c9.js";
   script.dataset.site = "naveed-io";
   script.dataset.endpoint = "https://traffic.naveed.io";
   script.dataset.page = label;

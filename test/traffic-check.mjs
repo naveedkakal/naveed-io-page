@@ -21,7 +21,7 @@ vm.runInNewContext(source, publicPage.context);
 assert.equal(publicPage.scripts.length, 1, 'repeated initialization does not append another collector');
 assert.equal(publicPage.body.attrs['data-traffic-page'], '/apps/weave.html');
 assert.equal(publicPage.scripts[0].dataset.events, 'contact_started,outbound_app_opened,lcp');
-assert.equal(publicPage.scripts[0].src, 'https://traffic.naveed.io/assets/tracker_v1-dc626149.js');
+assert.equal(publicPage.scripts[0].src, 'https://traffic.naveed.io/assets/tracker_v1-a23796c9.js');
 const calls = [];
 publicPage.listeners.click({ target: { closest() { return { target: '_blank', getAttribute() { return 'https://weavecmms.com'; } }; } } });
 publicPage.window.traffic = (method, options) => calls.push({ method, options });
