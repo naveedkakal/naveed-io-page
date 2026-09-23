@@ -4,8 +4,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Naveed Kakal — Software, mostly for machines that don't sleep</title>
-<meta name="description" content="Naveed Kakal — Director of Software Development. Twenty years building software for the commercial laundry floor. And a few apps for fun." />
+<meta name="description" content="Naveed Kakal — Director of Software Development at Kannegiesser ETECH. Twenty years building the software that runs industrial laundry plants, 10,000+ commits on the record, and a few apps for fun." />
+<meta name="theme-color" content="#07090e" />
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="canonical" href="https://naveed.io/" />
 <link rel="alternate" type="application/atom+xml" title="naveed.io — On record" href="/feed.xml" />
 <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 <meta property="og:type" content="website" />
@@ -17,25 +19,60 @@
 <meta name="twitter:title" content="Naveed Kakal — software, and a few apps for fun" />
 <meta name="twitter:description" content="Twenty years building software for the people who wash the world — plus a small pile of apps." />
 <meta name="twitter:image" content="https://naveed.io/assets/og.png" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "url": "https://naveed.io/",
+  "dateModified": "2026-09-23",
+  "mainEntity": {
+    "@type": "Person",
+    "@id": "https://naveed.io/#naveed",
+    "name": "Naveed Kakal",
+    "url": "https://naveed.io",
+    "image": "https://naveed.io/assets/portrait-900.jpg",
+    "jobTitle": "Director of Software Development",
+    "worksFor": { "@type": "Organization", "name": "Kannegiesser ETECH" },
+    "homeLocation": { "@type": "Place", "name": "Naperville, Illinois" },
+    "description": "Naveed Kakal has spent twenty years building the software that runs industrial laundry plants — machine and PLC communications, plant-floor state management, telemetry — at ETECH (Kannegiesser ETECH since 2017). His version-control record on one product line runs from March 2009 to today: more than 10,000 commits.",
+    "knowsAbout": [
+      "industrial laundry automation",
+      "PLC and machine communications",
+      "plant-floor state management",
+      "Ruby on Rails",
+      "Elixir",
+      "AI-assisted software development",
+      "technical leadership"
+    ],
+    "sameAs": [
+      "https://www.linkedin.com/in/naveed-kakal-b7416417/",
+      "https://github.com/naveedkakal"
+    ]
+  }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/site.css" />
-<link rel="stylesheet" href="assets/home.css" />
+<link rel="stylesheet" href="assets/site.css?v=20260923" />
+<link rel="stylesheet" href="assets/home.css?v=20260923" />
 <script src="assets/traffic.js" defer></script>
+<script src="assets/home.js?v=20260923" defer></script>
 </head>
-<body>
+<body class="home">
+<a class="skip" href="#story">Skip to the story</a>
 <div id="glow"></div>
 
 <!-- ── nav ─────────────────────────────────────────────── -->
-<nav class="nav">
+<nav class="nav" aria-label="Primary">
   <div class="nav-in">
     <a class="brand" href="#top"><span class="mk">nk</span><span>naveed<span style="color:var(--acid)">.io</span></span></a>
     <div class="nav-links">
-      <a href="#brief" class="hide-sm">./brief</a>
+      <a href="#story">./story</a>
+      <a href="#rules" class="hide-sm">./rules</a>
       <a href="#work">./work</a>
-      <a href="#notes" class="hide-sm">./notes</a>
-      <span class="status"><span class="status-dot"></span>open to good problems</span>
+      <a href="#notes" class="hide-sm">./record</a>
+      <button class="kbd-hint hide-sm" type="button" data-focus-term aria-label="Focus the terminal"><kbd>/</kbd>terminal</button>
     </div>
   </div>
 </nav>
@@ -43,82 +80,201 @@
 <!-- ── hero ────────────────────────────────────────────── -->
 <header class="hero wrap" id="top">
   <div class="hero-grid">
-    <div>
-      <div class="kicker"><span class="acc">§</span> Director of Software Development · since 2006</div>
+    <div class="hero-copy">
+      <div class="kicker"><span class="acc">§</span> Director of Software Development · Kannegiesser ETECH</div>
       <h1 class="rise in">naveed<span class="l2 stroke">kakal</span></h1>
-      <p class="hero-sub">I write software for the people who wash the world — <b>plant-ops, automation, telemetry</b> — and, after hours, a small pile of apps I built because they were fun.</p>
+      <p class="hero-sub">I've spent twenty years teaching software to run industrial laundries — <b>the rails overhead, the sort below, the machines that never sleep.</b> Now I'm pointing everything that taught me at AI, with a fleet of agents and a firm opinion about what's worth building.</p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="#work">See the apps <span aria-hidden="true">↓</span></a>
-        <a class="btn" href="#brief">Read the brief</a>
+        <a class="btn btn-primary" href="#story">Read the story <span aria-hidden="true">↓</span></a>
+        <a class="btn" href="#work">See the work</a>
       </div>
+      <dl class="hero-meta">
+        <div><dt>based</dt><dd>Naperville, IL</dd></div>
+        <div><dt>on the floor</dt><dd>since 2006</dd></div>
+        <div><dt>on the record</dt><dd>10,134 commits</dd></div>
+      </dl>
     </div>
 
-    <!-- boot terminal -->
-    <div class="term rise" aria-hidden="true">
+    <!-- interactive terminal -->
+    <div class="term rise" id="terminal">
       <div class="term-bar">
         <span class="dot"></span><span class="dot"></span><span class="dot"></span>
         <span class="ttl">nk@naveed.io — zsh</span>
+        <span class="live"><span class="status-dot"></span>interactive</span>
       </div>
-      <div class="term-body" id="term"></div>
+      <div class="term-body" id="term" role="log" aria-live="polite" aria-label="Terminal output"></div>
+      <form class="term-in" id="term-form" autocomplete="off">
+        <label for="term-input"><span class="pr">nk@naveed.io</span> <span class="v">~ %</span></label>
+        <input id="term-input" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="go" aria-label="Type a command, or help" />
+      </form>
+      <div class="term-chips" aria-label="Try a command">
+        <span class="lbl">try</span>
+        <button type="button" data-cmd="whoami">whoami</button>
+        <button type="button" data-cmd="neofetch">neofetch</button>
+        <button type="button" data-cmd="ls apps">ls apps</button>
+        <button type="button" data-cmd="tape">tape</button>
+        <button type="button" data-cmd="help">help</button>
+      </div>
     </div>
   </div>
 </header>
 
-<!-- ── brief ───────────────────────────────────────────── -->
-<section class="brief wrap sec-rule" id="brief">
-  <div class="sec-head"><div class="kicker"><span class="acc">§ 01</span> — the brief</div><div class="kicker">20 yrs</div></div>
+<!-- ── story ───────────────────────────────────────────── -->
+<section class="story wrap sec-rule" id="story">
+  <div class="sec-head"><div class="kicker"><span class="acc">§ 01</span> — the story</div><div class="kicker">2006 → now</div></div>
   <p class="brief-lead rise">Twenty years in one industry, <span class="dim">by choice.</span> I make laundry plants <span class="acc">legible</span> to the people who run them.</p>
 
-  <div class="brief-cols">
-    <div class="rise">
-      <p>Started at <b>ETECH</b> in Minneapolis in 2006 — one Rails app, a wall of serial-line PLCs, and a thousand Excel files holding the whole operation together. When Kannegiesser acquired the team in 2017, those tools went to plants around the world.</p>
-      <p>Most of the last decade as <b>Director of Software Development</b>. My teams ship plant-ops software, machine-control automation, and remote-management surfaces to industrial laundries globally.</p>
-    </div>
-    <div class="rise" style="transition-delay:.1s">
-      <p>These days the job is less about writing every line and more about <b>judgment</b> — setting direction, reviewing what a fleet of agents produces, and making sure twenty years of laundry-floor pattern-matching ends up in the software.</p>
-      <p>The apps below are the after-hours stuff: a maintenance system that's the distillation of that whole career, and a few smaller things I made because I wanted them to exist.</p>
+  <div class="bio">
+    <figure class="portrait rise">
+      <div class="ph"><img src="assets/portrait-900.jpg" alt="Naveed Kakal, in a navy knit sweater, looking at the camera" width="675" height="900" loading="lazy" /></div>
+      <figcaption><span>fig. 01 — Naveed Kakal</span><span>QA dept. (Zoya &amp; Maya) not pictured</span></figcaption>
+    </figure>
+    <div class="bio-text rise" style="transition-delay:.08s">
+      <p>Before laundry, there was a car wash — nine years at Royal Oaks in Shoreview, Minnesota, learning how chemistry, machines and a line of customers share one schedule. In August 2006 ETECH hired me on a hunch that car washes have <b>spiritual similarities to laundry controls.</b> The hunch held.</p>
+      <p>An industrial laundry happens in three dimensions: bags of linen riding rails overhead, a sort below, machines that never stop. The software's job is to keep an honest picture of all of it — and to help people fix the picture when it lies. I've spent my career on that picture: <b>the machine comms, the plant state, the tools the floor uses to set things right.</b></p>
+      <p>Today I'm Director of Software Development at Kannegiesser ETECH, seeing several hundred plants through their daily problems and growth ideas. I'm an IC at heart, so the job is mostly judgment: <b>what's worth building, what survives contact with the floor,</b> and what a fleet of AI agents should do with twenty years of pattern-matching.</p>
     </div>
   </div>
 
-  <!-- eras -->
-  <div class="eras">
-    <div class="era rise">
-      <div class="yr"><span>Era 01</span><span>2006 — 2017</span></div>
-      <div class="n">01</div>
-      <h3>Learning the industry</h3>
-      <p>Started at ETECH in Minneapolis — Rails, serial-line PLCs, and a lot of hours on the laundry floor. The first stretch was less about code than about learning how a plant actually runs.</p>
+  <!-- the tape -->
+  <figure class="tape-fig rise" id="tape" aria-labelledby="tape-title">
+    <div class="tape-head">
+      <div>
+        <div class="kicker"><span class="acc">fig. 02</span> — the tape</div>
+        <h2 class="tape-title display" id="tape-title">Seventeen years of commits, hung from one rail.</h2>
+      </div>
+      <div class="tape-sum">
+        <div class="big" data-count="10134" data-sep="1">10,134</div>
+        <div class="kicker">commits · Mar 2009 → Sep 2026</div>
+      </div>
     </div>
-    <div class="era rise" style="transition-delay:.1s">
-      <div class="yr"><span>Era 02</span><span>2017 — 2024</span></div>
-      <div class="n">02</div>
-      <h3>A wider footprint</h3>
-      <p>Kannegiesser acquired the team and the scope widened — from one shop's tools to plant-ops, automation, and remote-management surfaces built into full laundry solutions shipping worldwide.</p>
+    <p class="tape-note">Every line is one month of my commits to a single product line, hung like a sling from the rail. Longer line, busier month. Hover or tap to read it; the dots are where the stories are.</p>
+
+    <div class="tape" id="tape-plot" tabindex="0" role="group" aria-roledescription="timeline" aria-label="Monthly commits, August 2006 to September 2026. Use the left and right arrow keys to move month by month." aria-describedby="tape-readout">
+      <div class="tape-pins" id="tape-pins"></div>
+      <div class="tape-rail"></div>
+      <div class="tape-bars" id="tape-bars">
+        <div class="tape-pre"><span>before the tape</span></div>
+        <div class="tape-gap"><span>the gap</span></div>
+      </div>
+      <div class="tape-bands" id="tape-bands"></div>
+      <div class="tape-head-line" id="tape-playhead" hidden></div>
     </div>
-    <div class="era now rise" style="transition-delay:.2s">
-      <div class="yr"><span>Era 03</span><span>2025 — now ●</span></div>
-      <div class="n">03</div>
-      <h3>Knowledge into AI product</h3>
-      <p>Two decades of laundry-floor pattern-matching, pointed at high-quality, AI-driven product. The edge isn't the model — it's knowing exactly what's worth building.</p>
+    <div class="tape-axis" id="tape-axis" aria-hidden="true"></div>
+    <div class="tape-readout" id="tape-readout" aria-live="polite">
+      <span class="when">Aug 2006 → Sep 2026</span>
+      <span class="what">Hover the tape, or focus it and use ← → to scrub month by month.</span>
     </div>
-  </div>
+    <figcaption class="tape-legend">
+      <span><i class="sw svn"></i>Subversion · 3,209</span>
+      <span><i class="sw git"></i>git · 6,925</span>
+      <span><i class="sw pre"></i>before version control saw me</span>
+      <span class="src">source: my own history, merges excluded · through Sep 22, 2026</span>
+    </figcaption>
+  </figure>
+
+  <!-- chapters, linked to regions of the tape -->
+  <ol class="chapters">
+    <li class="ch rise" data-from="0" data-to="30">
+      <div class="yr"><span>Ch. 01</span><span>2006 — 2009</span></div>
+      <h3>Before the tape</h3>
+      <p>GE 90-30s on the floor, Cimplicity screens above them, and a per-seat license that made every terminal a line item. While Larry Erickson prototyped a heresy — what if the HMI were just a web page? — I pushed the condemned system further than anyone thought it would go. Its real limits became the new platform's spec.</p>
+      <a class="cf" href="writing/teaching-the-condemned.html">case file · Teaching the condemned new tricks <span class="arw">→</span></a>
+    </li>
+    <li class="ch rise" data-from="31" data-to="96" style="transition-delay:.06s">
+      <div class="yr"><span>Ch. 02</span><span>2009 — 2014</span></div>
+      <h3>The tape starts</h3>
+      <p>First week on the record: <q>sorting is working?</q> Then the final 10% on nearly every feature, a Los Angeles go-live where we slept in our cars, and one afternoon in Ottawa when I dropped a running plant's production database. We kept the customer. I brought the coffee.</p>
+      <a class="cf" href="writing/seventeen-years-same-problem.html">case file · Seventeen years in the same problem <span class="arw">→</span></a>
+    </li>
+    <li class="ch rise" data-from="97" data-to="126" style="transition-delay:.12s">
+      <div class="yr"><span>Ch. 03</span><span>2014 — 2017</span></div>
+      <h3>The gap</h3>
+      <p>Chicago tech, at Centro. I wrote better software and solved fewer problems per developer dollar. I got promoted to engineering manager and learned I'm an IC at heart. Then a prank phone call brought me home.</p>
+      <a class="cf" href="writing/prank-that-brought-him-back.html">case file · The prank that brought him back <span class="arw">→</span></a>
+    </li>
+    <li class="ch rise" data-from="127" data-to="220" style="transition-delay:.18s">
+      <div class="yr"><span>Ch. 04</span><span>2017 — 2024</span></div>
+      <h3>Better armed</h3>
+      <p>Back just as Kannegiesser acquired ETECH. We rebuilt the platform one technical area at a time — tests, telemetry, PLC comms moved to an Elixir service in 2019 — and grew the department into a product team shipping plant-ops, automation and remote management worldwide.</p>
+    </li>
+    <li class="ch now rise" data-from="221" data-to="241" style="transition-delay:.24s">
+      <div class="yr"><span>Ch. 05</span><span>2025 — now ●</span></div>
+      <h3>The fleet</h3>
+      <p>Twenty years of floor knowledge, pointed at AI. I set direction, agents architect and build, I decide what ships. November 2025 was 434 commits. Commit ten thousand landed in August 2026: a cursor that wouldn't land in a password field. The job, mostly, is that.</p>
+    </li>
+  </ol>
 
   <!-- stats -->
   <div class="stats">
-    <div class="stat"><div class="num" data-count="20">0</div><div class="lab">yrs · industrial laundry</div></div>
-    <div class="stat"><div class="num" data-count="400" data-suffix="+">0</div><div class="lab">plants running eVue</div></div>
-    <div class="stat"><div class="num" data-count="1">0</div><div class="lab">industry, by choice</div></div>
+    <div class="stat"><div class="num" data-count="20">20</div><div class="lab">yrs · industrial laundry</div></div>
+    <div class="stat"><div class="num" data-count="400" data-suffix="+">400+</div><div class="lab">plants running eVue</div></div>
+    <div class="stat"><div class="num" data-count="10134" data-sep="1">10,134</div><div class="lab">commits on the record</div></div>
     <div class="stat"><div class="num range">I/O&nbsp;→&nbsp;ERP</div><div class="lab">every layer · sensor to org data</div></div>
+  </div>
+</section>
+
+<!-- ── rules ───────────────────────────────────────────── -->
+<section class="rules wrap sec-rule" id="rules">
+  <div class="sec-head"><div class="kicker"><span class="acc">§ 02</span> — field rules</div><div class="kicker">learned the hard way</div></div>
+  <h2 class="sec-title display">What twenty years on the floor taught me.</h2>
+
+  <ol class="rule-grid">
+    <li class="rule rise">
+      <span class="rn">R-01</span>
+      <h3>Count problems solved per developer dollar.</h3>
+      <p>Well-run teams can still produce a flotilla of blah. The ledger that matters is what the floor stopped suffering.</p>
+      <a class="src" href="writing/prank-that-brought-him-back.html">from · The prank that brought him back</a>
+    </li>
+    <li class="rule rise" style="transition-delay:.06s">
+      <span class="rn">R-02</span>
+      <h3>Remove the seams.</h3>
+      <p>Responsibility leaks out through the joints between specialists. Fewer hand-offs, fewer places for the obvious fix to die.</p>
+      <a class="src" href="writing/seventeen-years-same-problem.html">from · Seventeen years in the same problem</a>
+    </li>
+    <li class="rule rise" style="transition-delay:.12s">
+      <span class="rn">R-03</span>
+      <h3>Speak the floor's language.</h3>
+      <p>Sling. Rail. Batch. When the software uses the floor's words, the people on the floor can tell when it's wrong — and help it get right.</p>
+      <a class="src" href="writing/seventeen-years-same-problem.html">from · Seventeen years in the same problem</a>
+    </li>
+    <li class="rule rise">
+      <span class="rn">R-04</span>
+      <h3>Let reality win.</h3>
+      <p>The plant and its picture will drift. When they do, ask a human what actually happened, and offer only answers that can physically occur.</p>
+      <a class="src" href="writing/seventeen-years-same-problem.html">from · Seventeen years in the same problem</a>
+    </li>
+    <li class="rule rise" style="transition-delay:.06s">
+      <span class="rn">R-05</span>
+      <h3>Trust is the infrastructure.</h3>
+      <p>If they trust you, they'll leave you alone to fix it right. If they don't, you'll never have a peaceful project. Showing up, coffee in hand, is a deliverable.</p>
+      <a class="src" href="writing/teaching-the-condemned.html">from · Teaching the condemned new tricks</a>
+    </li>
+    <li class="rule rise" style="transition-delay:.12s">
+      <span class="rn">R-06</span>
+      <h3>Improve the condemned.</h3>
+      <p>Push a dying system as far as it will go. Its real limits — not the rumored ones — become the spec for whatever replaces it.</p>
+      <a class="src" href="writing/teaching-the-condemned.html">from · Teaching the condemned new tricks</a>
+    </li>
+  </ol>
+
+  <div class="next rise">
+    <div class="kicker"><span class="acc">→</span> where this is going</div>
+    <p class="next-q">One person who knows the floor. A fleet of agents that knows the code. I think that's the next shape of a software team — <span class="acc">and I've been rehearsing for it for twenty years.</span></p>
   </div>
 </section>
 
 <!-- ── work / apps ─────────────────────────────────────── -->
 <section class="showcase wrap sec-rule" id="work">
-  <div class="sec-head"><div class="kicker"><span class="acc">§ 02</span> — things I've built</div><div class="kicker">13 projects</div></div>
-  <h2 class="sec-title display">The after-hours pile.</h2>
+  <div class="sec-head"><div class="kicker"><span class="acc">§ 03</span> — things I've built</div><div class="kicker">13 projects</div></div>
+  <div class="sec-intro">
+    <h2 class="sec-title display">The after-hours pile.</h2>
+    <p>Built after bedtime — products, experiments, and a few sites for people I like.</p>
+  </div>
 
   <div class="cards">
     <!-- Weave -->
-    <a class="card tilt rise" style="--hue: var(--weave)" href="apps/weave.html">
+    <a class="card spot rise" style="--hue: var(--weave)" href="apps/weave.html">
       <div class="poster logo">
         <img src="assets/apps/weave-logo.svg" alt="Weave logo" loading="lazy" />
         <span class="tag">cmms · pm · parts · ai</span>
@@ -132,7 +288,7 @@
     </a>
 
     <!-- PetalPost -->
-    <a class="card tilt rise" style="--hue: var(--petal); transition-delay:.06s" href="apps/petalpost.html">
+    <a class="card spot rise" style="--hue: var(--petal); transition-delay:.06s" href="apps/petalpost.html">
       <div class="poster shot">
         <img src="assets/apps/petalpost-og.jpg" alt="PetalPost — doodle a bouquet, send it as a postcard" loading="lazy" />
         <span class="tag">real mail · lob · stripe</span>
@@ -146,7 +302,7 @@
     </a>
 
     <!-- PicPost -->
-    <a class="card tilt rise" style="--hue: var(--pic); transition-delay:.12s" href="apps/picpost.html">
+    <a class="card spot rise" style="--hue: var(--pic); transition-delay:.12s" href="apps/picpost.html">
       <div class="poster shot">
         <img src="assets/apps/picpost-og.jpg" alt="PicPost — your photo, in the mail" loading="lazy" />
         <span class="tag">photos → mailbox</span>
@@ -160,7 +316,7 @@
     </a>
 
     <!-- Mispronounced -->
-    <a class="card tilt rise" style="--hue: var(--mis)" href="apps/mispronounced.html">
+    <a class="card spot rise" style="--hue: var(--mis)" href="apps/mispronounced.html">
       <div class="poster shot">
         <img src="assets/apps/mispronounced-og.jpg" alt="Mispronounced — an accent, decoded" loading="lazy" />
         <span class="tag">record · analyze · roast</span>
@@ -174,7 +330,7 @@
     </a>
 
     <!-- Miscolored -->
-    <a class="card tilt rise" style="--hue: var(--miscolored); transition-delay:.06s" href="apps/miscolored.html">
+    <a class="card spot rise" style="--hue: var(--miscolored); transition-delay:.06s" href="apps/miscolored.html">
       <div class="poster shot">
         <img src="assets/apps/miscolored-og.png" alt="Miscolored — find your colors" loading="lazy" />
         <span class="tag">selfies → seasonal palette</span>
@@ -188,7 +344,7 @@
     </a>
 
     <!-- Hushbin -->
-    <a class="card tilt rise" style="--hue: var(--hushbin); transition-delay:.12s" href="apps/hushbin.html">
+    <a class="card spot rise" style="--hue: var(--hushbin); transition-delay:.12s" href="apps/hushbin.html">
       <div class="poster logo tile">
         <img src="assets/apps/hushbin-logo.svg" alt="Hushbin logo" loading="lazy" />
         <span class="tag">aes-256 · client-side · zero-knowledge</span>
@@ -202,7 +358,7 @@
     </a>
 
     <!-- OurWorkshop -->
-    <a class="card tilt rise" style="--hue: var(--ourworkshop)" href="apps/ourworkshop.html">
+    <a class="card spot rise" style="--hue: var(--ourworkshop)" href="apps/ourworkshop.html">
       <div class="poster logo">
         <img src="assets/apps/ourworkshop-icon.svg" alt="OurWorkshop logo" loading="lazy" />
         <span class="tag">lead → quote → build → deliver</span>
@@ -216,7 +372,7 @@
     </a>
 
     <!-- TV Cal -->
-    <a class="card tilt rise" style="--hue: var(--tvcal); transition-delay:.06s" href="apps/tvcal.html">
+    <a class="card spot rise" style="--hue: var(--tvcal); transition-delay:.06s" href="apps/tvcal.html">
       <div class="poster shot">
         <img src="assets/apps/tvcal-og.jpg" alt="TV Cal — a better picture in 15 minutes" loading="lazy" />
         <span class="tag">phone-guided · camera assist</span>
@@ -230,7 +386,7 @@
     </a>
 
     <!-- Naperville Car Wash Reviews -->
-    <a class="card tilt rise" style="--hue: var(--carwash); transition-delay:.12s" href="apps/carwash.html">
+    <a class="card spot rise" style="--hue: var(--carwash); transition-delay:.12s" href="apps/carwash.html">
       <div class="poster shot">
         <img src="assets/apps/carwash-card.jpg" alt="A car wash review page showing The Operator's Scorecard — six LED meters and an overall out of five" loading="lazy" />
         <span class="tag">local seo · e-e-a-t · ai funnel</span>
@@ -244,7 +400,7 @@
     </a>
 
     <!-- MH Build Studio -->
-    <a class="card tilt rise" style="--hue: var(--mhbuild)" href="apps/mhbuild.html">
+    <a class="card spot rise" style="--hue: var(--mhbuild)" href="apps/mhbuild.html">
       <div class="poster cover">
         <img src="assets/apps/mhbuild-card.jpg" alt="A black-and-red branded photo wall built by MH Build Studio for a G.H. Mumm charity event" loading="lazy" />
         <span class="tag">catalog feed · relays · no db</span>
@@ -258,7 +414,7 @@
     </a>
 
     <!-- Misra -->
-    <a class="card tilt rise" style="--hue: var(--misra); transition-delay:.06s" href="apps/misra.html">
+    <a class="card spot rise" style="--hue: var(--misra); transition-delay:.06s" href="apps/misra.html">
       <div class="poster shot">
         <img src="assets/apps/misra-card.jpg" alt="The Misra homepage — a Mir Taqi Mir couplet glowing in rose Nastaliq on a near-black lattice, with the Roman Urdu beneath it" loading="lazy" />
         <span class="tag">three scripts · glossed · recited</span>
@@ -272,7 +428,7 @@
     </a>
 
     <!-- Glow Garden (client site) -->
-    <a class="card tilt rise" style="--hue: var(--glow); transition-delay:.12s" href="https://glowgardenusa.com" target="_blank" rel="noopener">
+    <a class="card spot rise" style="--hue: var(--glow); transition-delay:.12s" href="https://glowgardenusa.com" target="_blank" rel="noopener">
       <div class="poster cover">
         <img src="assets/apps/glow-garden-og.jpg" alt="Glow Garden Studio" loading="lazy" />
         <span class="tag">client site · live</span>
@@ -286,7 +442,7 @@
     </a>
 
     <!-- M&F Laundry (client site) -->
-    <a class="card tilt rise" style="--hue: var(--mf)" href="https://mflaundry.com" target="_blank" rel="noopener">
+    <a class="card spot rise" style="--hue: var(--mf)" href="https://mflaundry.com" target="_blank" rel="noopener">
       <div class="poster shot">
         <img src="assets/apps/mf-home.png" alt="M&amp;F Laundry — chic editorial redesign" loading="lazy" />
         <span class="tag">client site · live</span>
@@ -303,33 +459,35 @@
 
 <!-- ── notes / writing ─────────────────────────────────── -->
 <section class="writing wrap sec-rule" id="notes">
-  <div class="sec-head"><div class="kicker"><span class="acc">§ 03</span> — notes on record</div><div class="kicker">case files · field notes</div></div>
-  <h2 class="sec-title display">Stories from the record.</h2>
-  <p class="rise" style="max-width:660px;margin-top:18px;font-size:15px;line-height:1.7;color:var(--fg-2)">A note on method, because the method is half the point: I don't type these. I built an <b style="color:var(--fg)">interview skill</b> for Claude Code — it digs through twenty years of my version-control history for receipts, then interviews me about what it finds. I answer out loud, it writes the piece in a chosen style (the styles will rotate as the series grows), and I check every number and edit what comes back before it ships. The same tools I use to see several hundred plants through their daily problems and growth ideas, pointed at getting my own story on the record.</p>
+  <div class="sec-head"><div class="kicker"><span class="acc">§ 04</span> — on record</div><div class="kicker">case files · field notes</div></div>
+  <div class="sec-intro">
+    <h2 class="sec-title display">Stories from the record.</h2>
+    <p>A note on method, because the method is half the point: I don't type these. I built an <b>interview skill</b> for Claude Code — it digs through twenty years of my version-control history for receipts, then interviews me about what it finds. I answer out loud, it writes the piece in a chosen style (the styles will rotate as the series grows), and I check every number and edit what comes back before it ships. The same tools I use to see several hundred plants through their daily problems and growth ideas, pointed at getting my own story on the record.</p>
+  </div>
 
   <div class="wlist">
     <a class="wrow rise" href="writing/prank-that-brought-him-back.html">
-      <span class="d">2026 · 07</span><span class="kind">case file</span>
+      <span class="no">No. 03</span><span class="d">2026 · 08</span>
       <span class="ttl">The prank that brought him back<small>The 2014–2017 gap in the tape: the eight-year itch, a Chicago tech detour, a flotilla of blah — and the fake service call that un-quit a career.</small></span>
-      <span class="rd">8 min →</span>
+      <span class="rd">8 min <span class="arw">→</span></span>
     </a>
     <a class="wrow rise" href="writing/teaching-the-condemned.html">
-      <span class="d">2026 · 07</span><span class="kind">case file</span>
+      <span class="no">No. 02</span><span class="d">2026 · 07</span>
       <span class="ttl">Teaching the condemned new tricks<small>Before the tape starts: a car-wash hunch, a licensing-fee villain, and the strange art of improving a system everyone had agreed to kill.</small></span>
-      <span class="rd">8 min →</span>
+      <span class="rd">8 min <span class="arw">→</span></span>
     </a>
     <a class="wrow rise" href="writing/seventeen-years-same-problem.html">
-      <span class="d">2026 · 07</span><span class="kind">case file</span>
+      <span class="no">No. 01</span><span class="d">2026 · 07</span>
       <span class="ttl">Seventeen years in the same problem<small>On concentrated experience — two god models, a deleted production database, and a pot of apology coffee in Ottawa.</small></span>
-      <span class="rd">8 min →</span>
+      <span class="rd">8 min <span class="arw">→</span></span>
     </a>
   </div>
 </section>
 
 <!-- ── footer ──────────────────────────────────────────── -->
 <footer class="foot" id="contact">
-  <div class="wrap" style="padding-top:38px"><div class="kicker"><span class="acc">§ 04</span> — open a line</div>
-    <h2 class="sec-title display" style="margin-bottom:34px">Got a plant, a product, or a problem?</h2>
+  <div class="wrap foot-head"><div class="kicker"><span class="acc">§ 05</span> — open a line</div>
+    <h2 class="sec-title display">Got a plant, a product, or a problem?</h2>
   </div>
   <div class="foot-grid">
     <a href="mailto:naveed.kakal@gmail.com">
@@ -343,93 +501,9 @@
     </a>
   </div>
   <div class="foot-bar">
-    <span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span>
+    <span>© <span id="yr">2026</span> · Naveed Kakal · naveed.io</span>
     <span>Set in Bricolage Grotesque, Instrument Sans &amp; JetBrains Mono · private first-party analytics</span>
   </div>
 </footer>
-
-<script>
-(function () {
-  "use strict";
-  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  document.getElementById("yr").textContent = new Date().getFullYear();
-
-  /* cursor spotlight */
-  if (!reduced) {
-    addEventListener("pointermove", function (e) {
-      document.documentElement.style.setProperty("--mx", e.clientX + "px");
-      document.documentElement.style.setProperty("--my", e.clientY + "px");
-    }, { passive: true });
-  }
-
-  /* boot terminal */
-  var lines = [
-    { t: '<span class="pr">nk@naveed.io</span> <span class="v">~ %</span> whoami', d: 0 },
-    { t: '<span class="k">Naveed Kakal — Laundry Software Assassin</span>', d: 60 },
-    { t: '<span class="cm"># twenty years, one industry, on purpose</span>', d: 60 },
-    { t: '', d: 30 },
-    { t: '<span class="pr">nk@naveed.io</span> <span class="v">~ %</span> cat status.txt', d: 0 },
-    { t: '<span class="k">day job  </span> <span class="v">→ making laundry plants legible</span>', d: 50 },
-    { t: '<span class="k">nights   </span> <span class="v">→ shipping small apps for fun</span>', d: 50 },
-    { t: '<span class="k">crew     </span> <span class="v">→ Zoya &amp; Maya, ruthless QA</span>', d: 50 },
-    { t: '<span class="k">deploys  </span> <span class="v">→ after bedtime, mostly</span>', d: 50 },
-    { t: '', d: 30 },
-    { t: '<span class="pr">nk@naveed.io</span> <span class="v">~ %</span> ls ./apps', d: 0 },
-    { t: '<span class="ok">weave</span>  <span class="ok">petalpost</span>  <span class="ok">picpost</span>  <span class="ok">mispronounced</span>  <span class="ok">miscolored</span>  <span class="ok">hushbin</span>  <span class="ok">ourworkshop</span>  <span class="ok">tvcal</span>  <span class="ok">carwash</span>  <span class="ok">mh-build-studio</span>  <span class="ok">misra</span>  <span class="ok">glow-garden</span>  <span class="ok">mf-laundry</span>', d: 60 },
-    { t: '<span class="cm"># scroll down — they\'re all playable ↓</span>', d: 40 },
-    { t: '<span class="pr">nk@naveed.io</span> <span class="v">~ %</span> <span class="caret"></span>', d: 0, hold: true }
-  ];
-  var term = document.getElementById("term");
-  if (reduced) {
-    term.innerHTML = lines.map(function (l) { return '<div class="ln">' + l.t + '</div>'; }).join("");
-  } else {
-    var i = 0;
-    (function next() {
-      if (i >= lines.length) return;
-      var l = lines[i++], div = document.createElement("div");
-      div.className = "ln"; div.innerHTML = l.t || "&nbsp;";
-      term.appendChild(div);
-      term.scrollTop = term.scrollHeight;
-      setTimeout(next, (l.d || 40) + 180);
-    })();
-  }
-
-  /* reveal + count-up */
-  function countUp(el) {
-    var target = +el.getAttribute("data-count"), suffix = el.getAttribute("data-suffix") || "",
-        start = null, dur = 1400;
-    function tick(t) {
-      if (!start) start = t;
-      var p = Math.min(1, (t - start) / dur);
-      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + (p >= 1 ? suffix : "");
-      if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-  var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) {
-      if (!e.isIntersecting) return;
-      e.target.classList.add("in");
-      e.target.querySelectorAll && e.target.querySelectorAll(".num[data-count]").forEach(function (n) {
-        if (!reduced) countUp(n); else n.textContent = n.getAttribute("data-count") + (n.getAttribute("data-suffix") || "");
-      });
-      io.unobserve(e.target);
-    });
-  }, { rootMargin: "-8% 0px" });
-  document.querySelectorAll(".rise, .stats").forEach(function (el) { io.observe(el); });
-
-  /* 3D tilt on cards */
-  if (!reduced && matchMedia("(pointer:fine)").matches) {
-    document.querySelectorAll(".tilt").forEach(function (card) {
-      card.addEventListener("pointermove", function (e) {
-        var r = card.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5;
-        card.style.transform = "perspective(900px) rotateX(" + (-py * 4).toFixed(2) + "deg) rotateY(" + (px * 5).toFixed(2) + "deg) translateY(-4px)";
-      });
-      card.addEventListener("pointerleave", function () { card.style.transform = ""; });
-    });
-  }
-})();
-</script>
 </body>
 </html>

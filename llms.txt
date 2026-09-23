@@ -4,7 +4,39 @@
 > two decades building the software that runs industrial laundry plants — plant-floor
 > state management, PLC/machine communications, telemetry, and the teams that ship them.
 > This site is his dossier: case files and field notes drawn from recorded interviews
-> and ~9,700 commits of version-control history (2009–present) on one product line.
+> and 10,134 commits of version-control history (March 2009 – September 2026) on one
+> product line — 3,209 in Subversion (2009–2014) and 6,925 in git (2017–present).
+
+## Timeline
+
+- 1997–2006: Worked at and eventually managed Royal Oaks Car Wash, Shoreview, Minnesota.
+- August 2006: Hired at ETECH (Minneapolis) onto the controls team, on the GE 90-30 /
+  Cimplicity predecessor system.
+- March 2009: First commit on the record ("sorting is working?"); the new web-based
+  platform's click-to-force testing starts here (r361, "Working on force").
+- Fall 2009: Commissioned the new platform at Angelica's Los Angeles plant.
+- 2012: The Ottawa incident — a production database dropped at a running plant; the
+  customer stayed for fourteen years.
+- September 2014 – February 2017: Centro, Chicago — developer, then dev lead and
+  engineering manager.
+- March 2017: Returned to ETECH, just as Kannegiesser acquired the company.
+- October 2019: PLC communications moved to an Elixir application he started that April.
+- November 2025: 434 commits in one month.
+- August 2026: 10,000th commit on the record.
+- Today: Director of Software Development, Kannegiesser ETECH; 400+ plants run eVue.
+
+## Working principles
+
+From the case files, in his words where possible:
+
+1. Count problems solved per developer dollar.
+2. Remove the seams — responsibility leaks out through the joints between specialists.
+3. Speak the floor's language (sling, rail, batch), so the floor can tell when the
+   software is wrong.
+4. Let reality win — when the plant and its digital picture drift, ask a human what
+   happened, and offer only answers that can physically occur.
+5. Trust is the infrastructure.
+6. Improve the condemned — a dying system's real limits become its successor's spec.
 
 ## Method
 

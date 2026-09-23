@@ -51,7 +51,11 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+/* page-to-page cross-fades where the browser supports them */
+@view-transition { navigation: auto; }
+::selection { background: color-mix(in oklab, var(--acid) 32%, transparent); color: var(--fg); }
+:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; border-radius: 4px; }
 html, body { margin: 0; }
 body {
   font-family: var(--font-body);
@@ -129,6 +133,17 @@ section { position: relative; z-index: 2; }
 .nav-links { display: flex; gap: 6px; align-items: center; }
 .nav-links a { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .04em; color: var(--fg-2); padding: 8px 12px; border-radius: 8px; }
 .nav-links a:hover { color: var(--fg); background: var(--surface); }
+.nav-links a[aria-current="true"] { color: var(--acid); background: color-mix(in oklab, var(--acid) 8%, transparent); }
+/* reading progress: a hairline under the nav, driven by page scroll */
+@supports (animation-timeline: scroll()) {
+  .nav::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+    background: linear-gradient(90deg, var(--acid-dim), var(--acid));
+    transform-origin: 0 50%; transform: scaleX(0);
+    animation: nav-progress linear both; animation-timeline: scroll(root);
+  }
+  @keyframes nav-progress { to { transform: scaleX(1); } }
+}
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--acid); box-shadow: 0 0 0 0 var(--acid); animation: ping 2s infinite; }
 .status {
   display: inline-flex; align-items: center; gap: 8px;

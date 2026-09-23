@@ -16,6 +16,7 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+@view-transition { navigation: auto; }
 html, body { margin: 0; }
 body {
   font-family: var(--font-body);
