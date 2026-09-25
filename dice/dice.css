@@ -35,24 +35,26 @@ button { cursor: pointer; touch-action: manipulation; }
 .bgc { position: fixed; inset: 0; z-index: 0; display: block; pointer-events: none; }
 .fgc { position: fixed; inset: 0; z-index: 2; display: block; pointer-events: none; }
 
-/* ── shared chrome: hud bar, title, panels, buttons ───── */
-.hudbar {
-  position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  height: 44px; padding: 0 16px; font: 500 10.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--dim);
+/* ── the site's own top strip, same as every naveed.io page ── */
+.strip {
+  position: relative; z-index: 3; border-bottom: 1px solid #20242e;
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); background: color-mix(in oklab, #08090c 72%, transparent);
+  padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; gap: 10px 20px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #6b7280;
 }
-.hudbar .back { color: var(--dim); text-decoration: none; transition: color .16s; }
-.hudbar .back:hover { color: var(--cyan); }
-.hb-mid { display: inline-flex; align-items: center; gap: 7px; color: var(--faint); }
-.hb-mid .clock { color: var(--dim); }
-.rec { width: 6px; height: 6px; border-radius: 50%; background: var(--mag); box-shadow: 0 0 8px var(--mag); animation: rec 1.6s steps(2) infinite; }
-@keyframes rec { 50% { opacity: .2; } }
-.snd {
-  background: none; border: 1px solid rgba(255,42,109,.4); padding: 7px 9px 6px; border-radius: 0;
-  font: 700 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--text);
+.strip a { color: #a2a8b4; text-decoration: none; transition: color .16s; }
+.strip a:hover { color: #5bc8ff; }
+.strip .r { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.strip .r span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.iconbtn {
+  flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  background: none; border: 1px solid #2b303c; color: #a2a8b4; font-size: 15px; line-height: 1;
+  transition: border-color .16s, color .16s;
 }
-.snd b { color: var(--mag); text-shadow: 0 0 8px rgba(255,42,109,.7); }
-.snd[aria-pressed="false"] b { color: var(--faint); text-shadow: none; }
+.iconbtn:hover { border-color: #5bc8ff; }
+.iconbtn[aria-pressed="true"] { border-color: rgba(91,200,255,.5); }
 
+/* ── shared chrome: title, panels, buttons ───── */
 .kick {
   display: flex; align-items: center; gap: 10px; font: 700 10px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase;
   color: var(--cyan); text-shadow: 0 0 10px rgba(5,217,232,.5); white-space: nowrap; overflow: hidden;
@@ -207,7 +209,7 @@ body[data-mode="setup"] .toast { bottom: calc(28px + var(--sab)); }
 /* ══ roll view ════════════════════════════════════════════ */
 body[data-mode="roll"] { overflow: hidden; height: 100dvh; overscroll-behavior: none; }
 .app { position: fixed; inset: 0; display: flex; flex-direction: column; padding-top: var(--sat); }
-.app > .hudbar { flex: none; }
+.app > .strip { flex: none; }
 .head { flex: none; position: relative; z-index: 3; padding: 4px 18px 0; }
 .app .title { font-size: clamp(50px, 15vw, 118px); }
 .zone { flex: 1; min-height: 0; position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 10px 14px calc(8vh); }
@@ -254,6 +256,7 @@ body[data-mode="roll"] { overflow: hidden; height: 100dvh; overscroll-behavior: 
   box-shadow: 0 -10px 30px rgba(255,42,109,.08); font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; overflow: hidden;
 }
 .ticker .tl { flex: none; display: flex; align-items: center; gap: 8px; padding: 0 13px; background: var(--mag); color: #19000a; font-weight: 700; letter-spacing: .2em; }
+@keyframes rec { 50% { opacity: .2; } }
 .ticker .tl i { width: 6px; height: 6px; border-radius: 50%; background: #19000a; animation: rec 1.2s steps(2) infinite; }
 .trun { flex: 1; overflow: hidden; display: flex; align-items: center; -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
 .trun span { display: inline-block; white-space: nowrap; padding-left: 100%; color: var(--dim); animation: run var(--dur, 60s) linear infinite; }
@@ -265,8 +268,7 @@ body[data-mode="roll"] { overflow: hidden; height: 100dvh; overscroll-behavior: 
 /* ══ setup view ═══════════════════════════════════════════ */
 .setup { position: relative; z-index: 1; min-height: 100dvh; }
 .setup::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(180deg, rgba(5,1,15,.35), rgba(5,1,15,.72) 40%, rgba(5,1,15,.84)); }
-.setup .hudbar { padding-top: var(--sat); height: calc(44px + var(--sat)); }
-.hb-r { color: var(--faint); }
+.setup .strip { padding-top: calc(12px + var(--sat)); }
 .wrap { max-width: 720px; margin: 0 auto; padding: 36px 18px 40px; }
 .standfirst { font: 400 14.5px/1.7 var(--mono); color: var(--dim); margin: 18px 0 24px; text-wrap: pretty; }
 .standfirst b { color: var(--text); font-weight: 700; }
@@ -345,7 +347,7 @@ body[data-mode="roll"] { overflow: hidden; height: 100dvh; overscroll-behavior: 
 
 @media (min-width: 900px) {
   .kick { font-size: 10.5px; letter-spacing: .26em; }
-  .hudbar { padding: 0 28px; height: 52px; }
+  .strip { padding: 14px 32px; }
   .head { padding: 8px 32px 0; }
   .zone { padding-bottom: 6vh; }
   .street { flex-direction: row; align-items: flex-end; gap: 22px; padding: 16px 28px 14px; }
@@ -361,7 +363,7 @@ body[data-mode="roll"] { overflow: hidden; height: 100dvh; overscroll-behavior: 
   .links { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .title::before, .title::after, .beam, .rec, .ticker .tl i, .phone, .shakehint .phone, .shk, .mini .spin, .mini.hop { animation: none !important; }
+  .title::before, .title::after, .beam, .ticker .tl i, .phone, .shakehint .phone, .shk, .mini .spin, .mini.hop { animation: none !important; }
   .trun span { animation-duration: calc(var(--dur, 60s) * 2); }
   .die.lit .fc.k4 .op, .die.stutter .fc.k4 .op, .die.lit .halo, .die.lit .pud { animation: none; }
 }

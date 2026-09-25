@@ -290,12 +290,6 @@
     deck.splice(at < 0 ? 0 : at, 1);
     return shuffle(deck);
   }
-  function clock() {
-    var d = new Date(), p = function (n) { return (n < 10 ? "0" : "") + n; };
-    var s = p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
-    [].forEach.call(document.querySelectorAll(".clock"), function (c) { c.textContent = s; });
-  }
-  clock(); setInterval(clock, 1000);
 
   /* ══ setup view ═══════════════════════════════════════════ */
   var draft = load(LS_DRAFT);
@@ -661,8 +655,8 @@
 
   function paintSound() {
     var on = Sfx.isOn();
-    sndBtn.setAttribute("aria-pressed", String(on));
-    sndBtn.innerHTML = "Sound <b>" + (on ? "on" : "off") + "</b>";
+    sndBtn.textContent = on ? "🔊" : "🔇"; sndBtn.setAttribute("aria-pressed", String(on));
+    sndBtn.setAttribute("aria-label", on ? "Turn sound off" : "Turn sound on");
   }
   sndBtn.addEventListener("click", function () { Sfx.set(!Sfx.isOn()); paintSound(); });
   paintSound();
@@ -746,6 +740,7 @@
     document.body.dataset.mode = "roll";
     $("setup").hidden = true; $("roll").hidden = false;
     document.title = dice.map(function (d) { return d.label || "?"; }).join(" · ") + " — Roll for it";
+    $("strip-t").textContent = dice.length + (dice.length === 1 ? " die" : " dice") + " · loaded";
     T.rolls = 0; T.lastSig = ""; T.headlines = [];
     buildDice(dice);
     vhT.textContent = "D9 · Standby"; vhR.textContent = "Roll 00";
