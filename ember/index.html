@@ -109,19 +109,20 @@ input, textarea { -webkit-user-select: text; user-select: text; }
 #setup { overflow-y: auto; -webkit-overflow-scrolling: touch; transition: opacity .9s ease, transform .9s ease; }
 #setup.leaving { opacity: 0; transform: translateY(-18px); pointer-events: none; }
 .setup-in {
-  width: min(560px, 100%); margin: 0 auto; padding: clamp(26px, 6.5vh, 70px) 20px calc(40px + var(--sab));
-  display: flex; flex-direction: column; align-items: center; text-align: center;
+  width: min(560px, 100%); margin: 0 auto; padding: clamp(16px, 3.6vh, 64px) 20px calc(22px + var(--sab));
+  min-height: calc(100dvh - 44px - var(--sat)); display: flex; flex-direction: column; align-items: center; text-align: center;
 }
+.setup-in .spacer { flex: 1 0 var(--fireRoom, 170px); }
 .wordmark {
-  font-family: var(--serif); font-weight: 400; font-size: clamp(92px, 29vw, 176px); line-height: .92; letter-spacing: -.04em;
-  margin: .1em 0 .06em; padding: 0 .06em .06em;
+  font-family: var(--serif); font-weight: 400; font-size: clamp(84px, 25vw, 168px); line-height: .92; letter-spacing: -.04em;
+  margin: .08em 0 .04em; padding: 0 .06em .06em;
   background: linear-gradient(180deg, #fff8ea 0%, #ffe3b0 34%, #ffb35a 62%, #ff6a1f 88%, #c93d0b 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
   filter: drop-shadow(0 0 calc(16px + 20px*var(--flick)) rgba(255,110,30,calc(.26 + .22*var(--flick))));
 }
-.lede { font-family: var(--serif); font-style: italic; font-size: clamp(18px, 4.9vw, 21px); line-height: 1.42; color: var(--cream2); max-width: 30ch; text-wrap: balance; }
+.lede { font-family: var(--serif); font-style: italic; font-size: clamp(17px, 4.6vw, 21px); line-height: 1.4; color: var(--cream2); max-width: 30ch; text-wrap: balance; }
 .panel {
-  width: 100%; margin-top: 30px; text-align: left; padding: 18px 16px 16px; border-radius: 22px; border: 1px solid var(--line);
+  width: 100%; margin-top: 22px; text-align: left; padding: 16px 14px 14px; border-radius: 22px; border: 1px solid var(--line);
   background: linear-gradient(180deg, rgba(32,20,15,.55), rgba(12,8,8,.66));
   -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3);
   box-shadow: 0 30px 70px -34px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,225,190,.07);
@@ -147,10 +148,10 @@ input, textarea { -webkit-user-select: text; user-select: text; }
 @keyframes chip { from { opacity: 0; transform: scale(.7); } }
 .hint { font-size: 13.5px; line-height: 1.45; color: var(--dim); margin-top: 12px; padding: 0 4px; }
 .pack-note { margin-top: 12px; padding: 10px 12px; border-radius: 12px; border: 1px dashed rgba(217,201,143,.35); color: var(--sage); font-size: 13.5px; }
-.go { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.go { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .go .cta { min-width: 250px; font-size: 17px; }
 .textbtn { color: var(--dim); font-size: 14px; text-decoration: underline; text-decoration-color: var(--line2); text-underline-offset: 4px; }
-.fine { margin-top: 30px; font-size: 12.5px; line-height: 1.6; color: var(--faint); max-width: 36ch; }
+.fine { font-size: 12.5px; line-height: 1.6; color: var(--faint); max-width: 36ch; }
 .fine b { color: var(--dim); font-weight: 550; }
 
 /* ── play ──────────────────────────────────────────────── */
@@ -199,7 +200,10 @@ input, textarea { -webkit-user-select: text; user-select: text; }
 .card {
   position: relative; width: min(100%, 540px); max-height: 100%; overflow: hidden; pointer-events: auto;
   padding: 20px 22px 18px; border-radius: 26px; border: 1px solid rgba(255,190,130,.17);
-  background: linear-gradient(180deg, rgba(28,17,13,.62) 0%, rgba(10,7,7,.8) 100%);
+  background:
+    radial-gradient(120% 70% at 50% 125%, rgba(255,110,30,calc(.1 + .1*var(--flick))), transparent 62%),
+    radial-gradient(80% 50% at 0% 0%, rgba(255,210,160,.05), transparent 70%),
+    linear-gradient(180deg, rgba(28,17,13,.62) 0%, rgba(10,7,7,.8) 100%);
   -webkit-backdrop-filter: blur(20px) saturate(1.4); backdrop-filter: blur(20px) saturate(1.4);
   box-shadow:
     0 40px 90px -40px rgba(0,0,0,.95),
@@ -404,6 +408,7 @@ input, textarea { -webkit-user-select: text; user-select: text; }
       <button class="textbtn" id="fresh" type="button" hidden>Start a new night instead</button>
     </div>
 
+    <div class="spacer" aria-hidden="true"></div>
     <p class="fine" id="fine">Kindling, then logs, then embers. <b>Works offline</b> once it's loaded, and the names stay on this phone.</p>
   </div>
 </section>
@@ -687,6 +692,7 @@ const FS = `
 precision highp float;
 uniform vec2 uRes; uniform float uTime, uHeat, uCoal, uFlick, uScale, uPx, uHalfW, uCx;
 uniform vec2 uFire;
+uniform vec4 uMet; uniform float uMetT;
 float h12(vec2 p){vec3 p3=fract(vec3(p.xyx)*.1031);p3+=dot(p3,p3.yzx+33.33);return fract((p3.x+p3.y)*p3.z);}
 vec2 h22(vec2 p){vec3 p3=fract(vec3(p.xyx)*vec3(.1031,.1030,.0973));p3+=dot(p3,p3.yzx+33.33);return fract((p3.xx+p3.yz)*p3.zy);}
 float h11(float p){p=fract(p*.1031);p*=p+33.33;p*=p+p;return fract(p);}
@@ -846,6 +852,14 @@ void main(){
   col+=vec3(.36,.4,.56)*band*dust*.12*(.35+1.1*smoothstep(.36,.62,lanes));
   float skyMask=smoothstep(.05,.2,pb.y);
   col+=(stars(q,62.,.24+band*.45)+stars(q+17.,150.,.1+band*.4)*.6)*skyMask;
+  if(uMetT>0.){                                   // a shooting star, now and then
+    vec2 dir=normalize(uMet.zw); vec2 head=uMet.xy+uMet.zw*uMetT;
+    float len=.16*smoothstep(0.,.25,uMetT);
+    vec2 rel=q-head; float along=clamp(-dot(rel,dir)/len,0.,1.);
+    float d=length(rel+dir*along*len)*uRes.y;
+    float life=smoothstep(0.,.12,uMetT)*smoothstep(.95,.55,uMetT);
+    col+=vec3(.85,.9,1.)*exp(-d*d/(uPx*uPx*1.6))*pow(1.-along,2.2)*life*skyMask*1.3;
+  }
   float gd=length((pb-vec2(0.,.14*heat))*vec2(.85,1.));
   col+=warm*light*(.09*exp(-gd*2.3)+.035*exp(-gd*.75));
 
@@ -929,7 +943,17 @@ function layout() {
   }
 }
 
-const F = { heat: 0, heatT: .3, coal: .2, coalT: .45, flare: 0, flick: .5 };   // the fire's state
+const F = { heat: 0, heatT: .58, coal: .2, coalT: .55, flare: 0, flick: .5 };   // the fire's state
+const M = { x: 0, y: 0, vx: 0, vy: 0, age: 9, next: rnd(6, 14) };             // shooting star, in sky units
+function meteorStep(dt) {
+  M.age += dt; M.next -= dt;
+  if (M.next > 0 || MODE !== 'app') return;
+  const asp = L.W / L.H, left = Math.random() < .5;
+  M.x = left ? rnd(.05, .45) * asp : rnd(.55, .95) * asp; M.y = rnd(.78, .97);
+  const a = rnd(.35, .7), sp = rnd(.55, .85);
+  M.vx = (left ? 1 : -1) * Math.cos(a) * sp; M.vy = -Math.sin(a) * sp;
+  M.age = 0; M.next = rnd(14, 38);
+}
 
 const scene = (() => {
   const cv = $('#gl');
@@ -947,7 +971,7 @@ const scene = (() => {
     const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     const loc = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    for (const n of ['uRes', 'uTime', 'uHeat', 'uCoal', 'uFlick', 'uScale', 'uPx', 'uHalfW', 'uCx', 'uFire']) U[n] = gl.getUniformLocation(prog, n);
+    for (const n of ['uRes', 'uTime', 'uHeat', 'uCoal', 'uFlick', 'uScale', 'uPx', 'uHalfW', 'uCx', 'uFire', 'uMet', 'uMetT']) U[n] = gl.getUniformLocation(prog, n);
     return true;
   }
   cv.addEventListener('webglcontextlost', e => { e.preventDefault(); ok = false; });
@@ -969,6 +993,8 @@ const scene = (() => {
     gl.uniform1f(U.uHalfW, (L.W / 2) / L.S);
     gl.uniform1f(U.uCx, (L.W / 2 - L.fx) / L.S);
     gl.uniform2f(U.uFire, L.fx * rs, (L.H - L.fy) * rs);
+    gl.uniform4f(U.uMet, M.x, M.y, M.vx, M.vy);
+    gl.uniform1f(U.uMetT, M.age < 1 ? M.age : -1);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
   ok = init();
@@ -1076,7 +1102,7 @@ const fx = (() => {
     }
     ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
   }
-  return { resize, step, burst, fromRect, ash, flight, ember };
+  return { resize, step, burst, fromRect, ash, flight, ember, busy: () => FL.length > 0 };
 })();
 
 /* ════════════════════════════════════════════════════════
@@ -1089,7 +1115,12 @@ function flickStep(dt) {
   F.flick += (flT - F.flick) * Math.min(1, dt * 13);
 }
 function frame(now) {
+  requestAnimationFrame(frame);
+  // idle, the fire draws at ~30fps to spare a phone that's out all night; sparks in flight get full rate
+  const busy = fx.busy() || F.flare > .05 || M.age < 1 || G.phase === 'reveal' || G.phase === 'burning' || G.phase === 'drawing';
+  if (!busy && MODE === 'app' && now - last < 30) return;
   const dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now; T += dt;
+  meteorStep(dt);
   const target = F.heatT + F.flare;
   F.heat += (target - F.heat) * Math.min(1, dt * (target > F.heat ? 3.2 : 1.1));
   F.flare *= Math.exp(-dt * 1.7);
@@ -1099,7 +1130,7 @@ function frame(now) {
   fx.step(dt, T);
   if ((frameN++ & 1) === 0) root.style.setProperty('--flick', F.flick.toFixed(3));
   // if the phone is struggling, render the fire at a lower resolution (it's soft anyway)
-  if (MODE === 'app') {
+  if (MODE === 'app' && busy) {
     perf.warm -= dt;
     if (perf.warm < 0) {
       perf.acc += dt; perf.n++;
@@ -1109,7 +1140,6 @@ function frame(now) {
       }
     }
   }
-  requestAnimationFrame(frame);
 }
 function onResize() {
   layout(); scene.resize(); fx.resize();
@@ -1120,6 +1150,7 @@ function onResize() {
     root.style.setProperty('--deckH', Math.max(240, Math.min(L.H * .56, flameTop - top + 60)) + 'px');
   }
   if (G.phase === 'reveal') placeNames();
+  root.style.setProperty('--fireRoom', Math.round(Math.max(120, (L.H - L.fy) * .15 + .28 * L.S)) + 'px');
 }
 
 /* ════════════════════════════════════════════════════════
@@ -1336,7 +1367,7 @@ function fillCard(c) {
   const label = { q: `${st} · for ${who.me}`, a: 'Around the fire', v: 'Secret ballot', h: `Hot seat · ${who.me}`, r: 'New house rule' }[c.t];
   els.ckind.textContent = c.src ? `${c.src} · ${c.t === 'q' ? 'for ' + who.me : label}` : label;
   els.cno.textContent = 'No. ' + String(c.no).padStart(2, '0');
-  const text = c.t === 'a' ? c.x.replace(/^Around the fire:\s*/i, '') : c.x;
+  const text = c.t === 'a' ? c.x.replace(/^Around the fire:\s*(.)/i, (_, ch) => ch.toUpperCase()) : c.x;
   els.ctext.innerHTML = wordsHTML(text, who);
   els.cfoot.textContent = {
     q: `Answer it, then pass the phone to ${who.left}.`,
@@ -1543,7 +1574,7 @@ $('#wadd').onclick = () => {
 $('#editcircle').onclick = () => {
   els.sheet.hidden = true; G.phase = 'setup';
   els.play.classList.remove('on', 'away'); els.play.hidden = true; els.setup.hidden = false; els.reveal.hidden = true; els.vote.hidden = true;
-  F.heatT = .3; F.coalT = .45; renderNames();
+  F.heatT = .58; F.coalT = .55; renderNames();
 };
 $('#reshuffle').onclick = () => { newNight(); els.sheet.hidden = true; showAwait(); toast('Fresh deck. New night.'); F.flare = .9; };
 
@@ -1552,7 +1583,7 @@ $('#reshuffle').onclick = () => { newNight(); els.sheet.hidden = true; showAwait
    ════════════════════════════════════════════════════════ */
 addEventListener('resize', onResize);
 addEventListener('orientationchange', () => setTimeout(onResize, 250));
-layout(); scene.resize(); fx.resize();
+onResize();
 
 if (MODE !== 'app') {
   // share-card renders: a lit fire, no controls
@@ -1575,7 +1606,7 @@ if (MODE !== 'app') {
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 requestAnimationFrame(t => { last = t; frame(t); });
-window.__ember = { F, G, L, scene };
+window.__ember = { F, G, L, M, scene };
 })();
 </script>
 </body>
