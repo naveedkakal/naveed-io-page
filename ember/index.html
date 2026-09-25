@@ -1148,9 +1148,9 @@ const seat = i => G.names[((i % n()) + n()) % n()];
 const stage = () => (G.lock ?? (G.drawn < 8 ? 0 : G.drawn < 20 ? 1 : 2));
 
 // a private deck can arrive in the link's #fragment (never sent to the server)
-(function importPack() {
+function importPack() {
   const m = location.hash.match(/deck=([A-Za-z0-9_-]+)/);
-  if (!m) return;
+  if (!m) return false;
   try {
     const b64 = m[1].replace(/-/g, '+').replace(/_/g, '/');
     const bytes = Uint8Array.from(atob(b64 + '==='.slice((b64.length + 3) % 4)), c => c.charCodeAt(0));
@@ -1160,7 +1160,9 @@ const stage = () => (G.lock ?? (G.drawn < 8 ? 0 : G.drawn < 20 ? 1 : 2));
     if (cards.length) { G.pack = { n: name, c: cards }; store.set('pack', G.pack); G.packFresh = true; }
   } catch (e) { console.warn('deck link unreadable', e); }
   history.replaceState(null, '', location.pathname + location.search);
-})();
+  return G.packFresh;
+}
+importPack();
 
 const allCards = () => [...DECK, ...G.custom, ...(G.pack ? G.pack.c : [])];
 function okType(t) {
@@ -1565,6 +1567,11 @@ if (MODE !== 'app') {
 } else {
   renderNames();
   if (G.packFresh) toast(`${G.pack.n} deck loaded: ${G.pack.c.length} house cards.`, 4000);
+  // tapping a deck link while Ember is already open only changes the hash
+  addEventListener('hashchange', () => {
+    G.packFresh = false;
+    if (importPack()) { renderNames(); toast(`${G.pack.n} deck loaded: ${G.pack.c.length} house cards.`, 4000); }
+  });
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 requestAnimationFrame(t => { last = t; frame(t); });
