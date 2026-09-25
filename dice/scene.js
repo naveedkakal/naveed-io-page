@@ -166,7 +166,8 @@
 
   /* ── frame ─────────────────────────────────────────────── */
   function frame(now) {
-    var dt = Math.min(0.05, (now - S.last) / 1000 || 0.016); S.last = now;
+    if (!reduced) requestAnimationFrame(frame);                    // book the next frame first: one bad frame can't stop the city
+    var dt = clamp((now - S.last) / 1000, 0, 0.05); S.last = now;   // rAF can hand back a time just before init's clock
     if (!reduced) S.t += dt;
     S.energy = Math.max(0, S.energy - dt * 0.55);
     S.look[0] += (S.lookT[0] - S.look[0]) * Math.min(1, dt * 4); S.look[1] += (S.lookT[1] - S.look[1]) * Math.min(1, dt * 4);
@@ -175,7 +176,6 @@
     S.signs.forEach(function (sg) { stepSign(sg, dt); });
     if (S.flash > 0) S.flash = Math.max(0, S.flash - dt * 1.9);
     drawBg(dt); drawFg(dt);
-    if (!reduced) requestAnimationFrame(frame);
   }
 
   function flashLevel() {                                         // lightning comes in a double-strike
@@ -279,7 +279,7 @@
       if (r.life > r.dur) { S.rings.splice(i, 1); continue; }
       var p = r.life / r.dur; r.r = r.max * (1 - Math.pow(1 - p, 2));
       g.globalAlpha = (1 - p) * (r.c ? 0.85 : 0.45); g.strokeStyle = r.c || "rgba(200,215,255,1)"; g.lineWidth = r.c ? 1.4 : 1;
-      g.beginPath(); g.ellipse(r.x, r.y, r.r, r.r * 0.28, 0, 0, 6.29); g.stroke();
+      g.beginPath(); g.ellipse(r.x, r.y, Math.max(0.01, r.r), Math.max(0.01, r.r * 0.28), 0, 0, 6.29); g.stroke();
     }
     g.globalAlpha = 1;
     for (var j = S.sparks.length - 1; j >= 0; j--) {             // neon sparks when a die powers on

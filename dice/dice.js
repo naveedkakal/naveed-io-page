@@ -150,9 +150,9 @@
   function currentHash() { var i = location.href.indexOf("#"); return i < 0 ? "" : location.href.slice(i + 1); }
   function shareUrl(dice) { return location.origin + location.pathname + "#" + toHash(dice); }
 
-  /* ── sound: rain, thunder, holograms — all synthesized ── */
+  /* ── sound: thunder, holograms, neon — all synthesized, and silent between rolls ── */
   var Sfx = (function () {
-    var ctx = null, out = null, noise = null, rainG = null, on = load(LS_SOUND) !== false;
+    var ctx = null, out = null, noise = null, on = load(LS_SOUND) !== false;
     function make() {
       var AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
@@ -164,16 +164,11 @@
       noise = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 2), ctx.sampleRate);
       var d = noise.getChannelData(0);
       for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-      var src = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter();
-      src.buffer = noise; src.loop = true; hp.type = "highpass"; hp.frequency.value = 500; lp.type = "lowpass"; lp.frequency.value = 3200;
-      rainG = ctx.createGain(); rainG.gain.value = 0;
-      src.connect(hp); hp.connect(lp); lp.connect(rainG); rainG.connect(out); src.start();
     }
     function prime() {
       try {
         if (!ctx) make();
         if (ctx && ctx.state !== "running") ctx.resume();
-        if (rainG && rainG.gain.value < 0.01) rainG.gain.setTargetAtTime(0.028, ctx.currentTime, 1.2);
       } catch (e) {}
     }
     function ready() { return on && !!ctx && ctx.state === "running"; }
@@ -202,7 +197,6 @@
         on = v; store(LS_SOUND, v); prime();
         if (out) out.gain.setTargetAtTime(v ? 0.9 : 0, ctx.currentTime, 0.05);
       },
-      rain: function (e) { if (rainG && ctx) rainG.gain.setTargetAtTime(0.028 + e * 0.11, ctx.currentTime, 0.25); },
       thunder: function () {                                  // a crack, then the rumble rolls in
         if (!ready()) return; var t = now();
         hiss(t, "highpass", 2200, 0.7, 0.28, 0.004, 0.16);
@@ -504,7 +498,7 @@
   /* ── the animation loop: idle holograms, rolls, rest, and the rattle while you shake ── */
   function frame(now) {
     if (document.body.dataset.mode !== "roll") { T.raf = 0; return; }
-    var dt = Math.min(0.05, (now - T.last) / 1000 || 0.016); T.last = now; T.t += dt;
+    var dt = clamp((now - T.last) / 1000, 0, 0.05); T.last = now; T.t += dt;
     T.tilt[0] += (T.tiltT[0] - T.tilt[0]) * Math.min(1, dt * 5); T.tilt[1] += (T.tiltT[1] - T.tilt[1]) * Math.min(1, dt * 5);
     T.shakeE *= Math.pow(0.12, dt);
     var busy = false;
@@ -695,7 +689,7 @@
       T.dice.forEach(function (x) { x.el.classList.add("rolling"); });   // the neon splits and the beams surge while you shake
     }
     T.shakeE = Math.min(1, Math.max(T.shakeE, (mag - 9) / 20));
-    Scene.pump(0.06 + T.shakeE * 0.08); Sfx.rain(Scene.energy());
+    Scene.pump(0.06 + T.shakeE * 0.08);
     if (Math.random() < 0.35) Sfx.crackle(T.shakeE);
     vhR.textContent = "▮▮▮▮▮".slice(0, 1 + Math.round(T.shakeE * 4)) + "▯▯▯▯▯".slice(0, 4 - Math.round(T.shakeE * 4));
     clearTimeout(T.relT); T.relT = setTimeout(endShake, 360);
@@ -704,7 +698,6 @@
     if (!T.shaking) return;
     T.shaking = false; T.busy = false;
     T.dice.forEach(function (x) { x.el.classList.remove("rolling"); });
-    Sfx.rain(0);
     rollAll(true);
   }
   function onTilt(e) {
