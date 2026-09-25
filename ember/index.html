@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Ember — a campfire deck · naveed.io</title>
+<meta name="description" content="One phone, passed hand to hand around the fire. The questions start light and burn down to the good stuff." />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#070608" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Ember" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23120a08'/%3E%3Cpath d='M32 8c3 10 14 16 14 29a14 14 0 0 1-28 0c0-7 4-11 7-15 0 5 2 8 5 9-2-9 0-16 2-23z' fill='%23ff7a2a'/%3E%3Cpath d='M32 30c2 5 7 8 7 14a7 7 0 0 1-14 0c0-4 3-6 4-9 1 3 2 4 3 4-1-3-1-6 0-9z' fill='%23ffd9a0'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="icon-180.png?v=1" />
+<link rel="canonical" href="https://naveed.io/ember/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/ember/" />
+<meta property="og:site_name" content="naveed.io" />
+<meta property="og:title" content="Ember — pull up a log 🔥" />
+<meta property="og:description" content="One phone, passed around the fire. The questions start light and burn down to the good stuff." />
+<meta property="og:image" content="https://naveed.io/ember/og.jpg?v=1" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="A campfire under the stars beside the word Ember" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Ember — pull up a log 🔥" />
+<meta name="twitter:description" content="One phone, passed around the fire. The questions start light and burn down to the good stuff." />
+<meta name="twitter:image" content="https://naveed.io/ember/og.jpg?v=1" />
+<style>
+/* ══════════════════════════════════════════════════════════
+   naveed.io/ember — a campfire deck
+   one file: a WebGL fire, a canvas of sparks, a deck of cards.
+   no fonts, no libraries, no network once it has loaded.
+   ══════════════════════════════════════════════════════════ */
+:root {
+  --ink: #070608;
+  --cream: #f7ead5; --cream2: rgba(247,234,213,.78); --dim: rgba(247,234,213,.52); --faint: rgba(247,234,213,.3);
+  --amber: #ffb454; --ember: #ff6b24; --coal: #d9480f; --gold: #ffd479; --sage: #d9c98f;
+  --line: rgba(255,196,140,.15); --line2: rgba(255,196,140,.3);
+  --serif: ui-serif, "New York", "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --flick: .5;
+  --sat: env(safe-area-inset-top, 0px); --sab: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--ink); color: var(--cream); }
+body {
+  font-family: var(--sans); -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%;
+  overflow: hidden; overscroll-behavior: none; -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none; user-select: none;
+}
+body.nogl { background: radial-gradient(60% 45% at 50% 78%, #6b2208 0%, #241008 35%, #070608 75%); }
+[hidden] { display: none !important; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; touch-action: manipulation; background: none; border: 0; }
+input, textarea { -webkit-user-select: text; user-select: text; }
+:focus-visible { outline: 1px solid var(--amber); outline-offset: 3px; }
+
+.layer { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+#gl { z-index: 0; }
+#fx { z-index: 3; pointer-events: none; }
+.screen { position: fixed; inset: 0; z-index: 2; }
+
+/* ── the site's own top strip ───────────────────────────── */
+.strip {
+  display: flex; justify-content: space-between; align-items: center; gap: 10px 20px;
+  padding: calc(12px + var(--sat)) 20px 12px; border-bottom: 1px solid rgba(255,196,140,.09);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); background: rgba(8,6,7,.42);
+  font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: rgba(247,234,213,.38);
+}
+.strip a { color: rgba(247,234,213,.66); text-decoration: none; transition: color .16s; }
+.strip a:hover { color: var(--amber); }
+
+/* ── shared pieces ─────────────────────────────────────── */
+.kick {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  font: 600 10.5px/1 var(--sans); letter-spacing: .34em; text-transform: uppercase; color: var(--amber);
+}
+.kick::before, .kick::after { content: ""; width: 26px; height: 1px; background: linear-gradient(90deg, transparent, var(--amber)); opacity: .8; }
+.kick::after { transform: scaleX(-1); }
+.cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 17px 30px; border-radius: 999px; font-weight: 650; font-size: 16px; letter-spacing: .01em; color: #1d0c04;
+  background: linear-gradient(180deg, #ffc978 0%, #ff9a3c 48%, #ff6b24 100%);
+  box-shadow: 0 14px 34px -10px rgba(255,107,36,calc(.45 + .3*var(--flick))), 0 0 0 1px rgba(255,210,150,.35) inset, 0 1px 0 rgba(255,255,255,.45) inset;
+  transition: transform .15s, opacity .2s, filter .2s;
+}
+.cta:active { transform: scale(.97); }
+.cta:disabled { opacity: .35; filter: saturate(.4); pointer-events: none; }
+.cta b { font-weight: 400; font-family: var(--serif); font-size: 19px; line-height: 0; }
+.ghost {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 16px 20px; border-radius: 999px; border: 1px solid var(--line2); color: var(--cream2);
+  background: rgba(14,9,8,.42); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  font-size: 15px; font-weight: 550; transition: border-color .2s, color .2s, transform .15s;
+}
+.ghost:active { transform: scale(.97); }
+.ghost:hover { border-color: rgba(255,180,100,.55); color: var(--cream); }
+.iconbtn {
+  width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  border: 1px solid var(--line); background: rgba(10,7,7,.4); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: var(--cream2);
+}
+.iconbtn svg { width: 18px; height: 18px; }
+
+/* ── setup ─────────────────────────────────────────────── */
+#setup { overflow-y: auto; -webkit-overflow-scrolling: touch; transition: opacity .9s ease, transform .9s ease; }
+#setup.leaving { opacity: 0; transform: translateY(-18px); pointer-events: none; }
+.setup-in {
+  width: min(560px, 100%); margin: 0 auto; padding: clamp(26px, 6.5vh, 70px) 20px calc(40px + var(--sab));
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.wordmark {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(92px, 29vw, 176px); line-height: .92; letter-spacing: -.04em;
+  margin: .1em 0 .06em; padding: 0 .06em .06em;
+  background: linear-gradient(180deg, #fff8ea 0%, #ffe3b0 34%, #ffb35a 62%, #ff6a1f 88%, #c93d0b 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 calc(16px + 20px*var(--flick)) rgba(255,110,30,calc(.26 + .22*var(--flick))));
+}
+.lede { font-family: var(--serif); font-style: italic; font-size: clamp(18px, 4.9vw, 21px); line-height: 1.42; color: var(--cream2); max-width: 30ch; text-wrap: balance; }
+.panel {
+  width: 100%; margin-top: 30px; text-align: left; padding: 18px 16px 16px; border-radius: 22px; border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(32,20,15,.55), rgba(12,8,8,.66));
+  -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3);
+  box-shadow: 0 30px 70px -34px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,225,190,.07);
+}
+.panel-h { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px; font: 600 10.5px/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--dim); }
+.panel-h b { font: 500 11px/1 var(--mono); letter-spacing: .06em; color: var(--amber); }
+.addrow { display: flex; gap: 8px; margin-top: 14px; }
+.addrow input {
+  flex: 1; min-width: 0; padding: 14px 15px; border-radius: 14px; font-size: 17px; outline: none; color: var(--cream);
+  background: rgba(0,0,0,.34); border: 1px solid var(--line); transition: border-color .2s, box-shadow .2s;
+}
+.addrow input::placeholder { color: var(--faint); font-family: var(--serif); font-style: italic; }
+.addrow input:focus { border-color: rgba(255,160,80,.55); box-shadow: 0 0 0 3px rgba(255,120,40,.13); }
+.addrow button { padding: 0 18px; border-radius: 14px; border: 1px solid var(--line2); color: var(--amber); font-weight: 650; }
+.names { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; counter-reset: seat; min-height: 8px; }
+.names li {
+  display: flex; align-items: center; gap: 8px; padding: 7px 6px 7px 12px; border-radius: 999px; font-size: 16px;
+  background: rgba(255,150,70,.08); border: 1px solid var(--line); counter-increment: seat; animation: chip .4s cubic-bezier(.2,.9,.3,1.3);
+}
+.names li::before { content: counter(seat); font: 600 10px/1 var(--mono); color: var(--amber); opacity: .85; }
+.names li button { width: 26px; height: 26px; border-radius: 50%; color: var(--faint); font-size: 16px; line-height: 1; display: grid; place-items: center; }
+.names li button:hover { color: var(--cream); background: rgba(255,255,255,.06); }
+@keyframes chip { from { opacity: 0; transform: scale(.7); } }
+.hint { font-size: 13.5px; line-height: 1.45; color: var(--dim); margin-top: 12px; padding: 0 4px; }
+.pack-note { margin-top: 12px; padding: 10px 12px; border-radius: 12px; border: 1px dashed rgba(217,201,143,.35); color: var(--sage); font-size: 13.5px; }
+.go { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.go .cta { min-width: 250px; font-size: 17px; }
+.textbtn { color: var(--dim); font-size: 14px; text-decoration: underline; text-decoration-color: var(--line2); text-underline-offset: 4px; }
+.fine { margin-top: 30px; font-size: 12.5px; line-height: 1.6; color: var(--faint); max-width: 36ch; }
+.fine b { color: var(--dim); font-weight: 550; }
+
+/* ── play ──────────────────────────────────────────────── */
+#play { opacity: 0; transition: opacity 1.2s ease .25s; }
+#play.on { opacity: 1; }
+#play.away { opacity: 0; transition: opacity .4s ease; pointer-events: none; }
+.bar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 4; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: calc(12px + var(--sat)) 14px 0;
+}
+.stagepill {
+  display: flex; align-items: center; gap: 10px; padding: 0 15px 0 13px; height: 42px; border-radius: 999px;
+  border: 1px solid var(--line); background: rgba(10,7,7,.4); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  font: 600 10.5px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--cream2);
+}
+.dots { display: flex; gap: 5px; }
+.dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,180,120,.2); transition: background .6s, box-shadow .6s; }
+.dots i.on { background: var(--amber); box-shadow: 0 0 9px var(--ember); }
+.mark { font-family: var(--serif); font-size: 20px; letter-spacing: -.01em; color: var(--cream2); text-shadow: 0 0 18px rgba(255,120,40,.4); }
+.rulechip {
+  position: absolute; top: calc(64px + var(--sat)); left: 50%; transform: translateX(-50%); z-index: 4;
+  max-width: calc(100% - 28px); display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px;
+  border: 1px solid rgba(255,212,121,.3); background: rgba(24,16,6,.5); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  font-size: 12.5px; color: var(--gold); white-space: nowrap; animation: fadein .5s;
+}
+.rulechip span { overflow: hidden; text-overflow: ellipsis; }
+.rulechip b { font: 700 9.5px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; flex: none; }
+
+.deck {
+  position: absolute; left: 16px; right: 16px; top: calc(70px + var(--sat)); height: var(--deckH, 46vh);
+  display: grid; place-items: center; z-index: 2; pointer-events: none;
+}
+.deck > * { grid-area: 1 / 1; }
+.deck.hasrule { top: calc(104px + var(--sat)); }
+.prompt { text-align: center; transition: opacity .5s, transform .5s, filter .5s; }
+.prompt.gone { opacity: 0; transform: translateY(-10px); filter: blur(6px); }
+.p-kick { font: 600 10.5px/1 var(--sans); letter-spacing: .3em; text-transform: uppercase; color: var(--dim); }
+.p-name {
+  display: block; margin-top: 16px; font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: clamp(46px, 13.5vw, 76px); line-height: 1; letter-spacing: -.02em; color: var(--cream);
+  text-shadow: 0 0 34px rgba(255,120,40,calc(.3 + .25*var(--flick)));
+}
+.p-sub { display: block; margin-top: 12px; font-family: var(--serif); font-style: italic; font-size: clamp(22px, 6vw, 30px); color: var(--amber); animation: breathe 2.6s ease-in-out infinite; }
+@keyframes breathe { 50% { opacity: .5; } }
+
+.card {
+  position: relative; width: min(100%, 540px); max-height: 100%; overflow: hidden; pointer-events: auto;
+  padding: 20px 22px 18px; border-radius: 26px; border: 1px solid rgba(255,190,130,.17);
+  background: linear-gradient(180deg, rgba(28,17,13,.62) 0%, rgba(10,7,7,.8) 100%);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4); backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow:
+    0 40px 90px -40px rgba(0,0,0,.95),
+    0 calc(20px + 14px*var(--flick)) calc(70px + 40px*var(--flick)) -34px rgba(255,100,30,calc(.3 + .25*var(--flick))),
+    inset 0 1px 0 rgba(255,230,200,.08);
+  opacity: 0; transform: translateY(16px) scale(.93); filter: blur(12px);
+}
+.card.in { opacity: 1; transform: none; filter: none; transition: opacity .55s ease, transform .8s cubic-bezier(.18,.9,.25,1.12), filter .6s ease; }
+.card.out { opacity: 0; transform: translateY(-40px) scale(.96); filter: blur(10px); transition: opacity .6s ease, transform .7s ease, filter .6s ease; }
+.card::after {
+  content: ""; position: absolute; left: 10%; right: 10%; bottom: 0; height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255,170,90,calc(.45 + .45*var(--flick))), transparent);
+}
+.card.burning {
+  -webkit-mask-image: linear-gradient(to top, transparent var(--b, -10%), #000 calc(var(--b, -10%) + 9%));
+  mask-image: linear-gradient(to top, transparent var(--b, -10%), #000 calc(var(--b, -10%) + 9%));
+}
+.card.burning::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: linear-gradient(to top, transparent var(--b), rgba(255,150,50,.95) calc(var(--b) + 1.5%), rgba(190,60,10,.55) calc(var(--b) + 5%), rgba(40,12,4,.5) calc(var(--b) + 10%), transparent calc(var(--b) + 16%));
+  mix-blend-mode: screen;
+}
+.c-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; font: 650 10.5px/1.2 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--amber); }
+.c-kind { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.c-kind span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.c-kind i { flex: none; width: 7px; height: 7px; transform: rotate(45deg); background: currentColor; box-shadow: 0 0 10px currentColor; }
+.c-no { font: 500 11px/1 var(--mono); letter-spacing: .06em; color: var(--faint); flex: none; }
+.card[data-t="a"] .c-top { color: #ff9d6b; }
+.card[data-t="v"] .c-top { color: var(--gold); }
+.card[data-t="h"] .c-top { color: #ff6a4a; }
+.card[data-t="r"] .c-top { color: #f3d9b1; }
+.card[data-pack] .c-top { color: var(--sage); }
+.c-text {
+  font-family: var(--serif); font-weight: 400; font-size: var(--fs, clamp(25px, 6.7vw, 36px)); line-height: 1.2; letter-spacing: -.012em;
+  margin: 18px 0 16px; color: var(--cream); text-wrap: pretty;
+}
+.c-text .w { display: inline-block; opacity: 0; filter: blur(7px); transform: translateY(.22em); color: #ffb870; }
+.card.in .c-text .w { animation: word .8s cubic-bezier(.2,.8,.3,1) forwards; }
+@keyframes word { 55% { color: #ffd6a3; } 100% { opacity: 1; filter: blur(0); transform: none; color: var(--cream); } }
+.c-text em { font-style: italic; color: #ffcf8f; }
+.c-foot { display: flex; align-items: center; gap: 10px; padding-top: 14px; border-top: 1px solid var(--line); font-family: var(--serif); font-style: italic; font-size: 15.5px; line-height: 1.35; color: var(--dim); }
+
+.dock {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; display: flex; flex-direction: column; align-items: center; gap: 14px;
+  padding: 34px 16px calc(16px + var(--sab));
+  background: linear-gradient(0deg, rgba(5,4,5,.72) 0%, rgba(5,4,5,.4) 55%, rgba(5,4,5,0) 100%);
+}
+.seats { display: flex; gap: 6px; align-items: center; }
+.seats i { width: 20px; height: 3px; border-radius: 2px; background: rgba(255,190,130,.18); transition: all .5s; }
+.seats i.on { width: 30px; background: var(--amber); box-shadow: 0 0 10px var(--ember); }
+.holder { display: flex; align-items: baseline; gap: 10px; font: 600 10px/1 var(--sans); letter-spacing: .28em; text-transform: uppercase; color: var(--faint); }
+.holder b { font: italic 400 21px/1 var(--serif); letter-spacing: 0; text-transform: none; color: var(--cream2); }
+.acts { display: flex; gap: 10px; width: min(100%, 540px); }
+.acts .cta { flex: 1; }
+.acts .ghost { flex: none; }
+.acts.single { justify-content: center; }
+.acts.single .ghost { min-width: 200px; }
+
+/* ── overlays: vote, reveal, menu ─────────────────────── */
+.overlay {
+  position: fixed; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  padding: calc(24px + var(--sat)) 22px calc(24px + var(--sab));
+  background: radial-gradient(120% 70% at 50% 112%, rgba(110,34,6,.5), rgba(6,4,5,.9) 62%);
+  -webkit-backdrop-filter: blur(26px); backdrop-filter: blur(26px); animation: fadein .45s ease;
+}
+@keyframes fadein { from { opacity: 0; } }
+.v-step { display: flex; flex-direction: column; align-items: center; width: min(100%, 470px); animation: rise .5s cubic-bezier(.2,.9,.3,1); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } }
+.v-big { margin: 18px 0 8px; font: italic 400 clamp(46px, 13vw, 70px)/1.02 var(--serif); letter-spacing: -.02em; color: var(--cream); text-shadow: 0 0 40px rgba(255,120,40,.35); }
+.v-small { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--dim); max-width: 30ch; }
+.v-q { margin: 16px 0 24px; font: 400 clamp(23px, 6.2vw, 30px)/1.22 var(--serif); color: var(--cream); text-wrap: balance; }
+.v-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
+.v-grid button {
+  padding: 17px 10px; border-radius: 18px; border: 1px solid var(--line2); background: rgba(255,140,60,.06);
+  font: 400 20px/1.1 var(--serif); color: var(--cream); transition: background .15s, transform .15s, border-color .15s;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.v-grid button:active { transform: scale(.96); background: rgba(255,140,60,.2); border-color: var(--amber); }
+.v-grid button:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.v-prog { display: flex; gap: 6px; margin-top: 26px; }
+.v-prog i { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--line2); }
+.v-prog i.done { background: var(--amber); border-color: var(--amber); box-shadow: 0 0 8px var(--ember); }
+.v-step .cta { margin-top: 30px; min-width: 240px; }
+.v-lock { font: 600 11px/1 var(--sans); letter-spacing: .3em; text-transform: uppercase; color: var(--amber); }
+
+#reveal { background: rgba(4,3,4,.22); -webkit-backdrop-filter: none; backdrop-filter: none; justify-content: flex-start; padding-top: calc(22px + var(--sat)); }
+.r-head { position: relative; z-index: 2; width: min(100%, 520px); }
+.r-q { margin-top: 12px; font: 400 clamp(20px, 5.4vw, 26px)/1.25 var(--serif); color: var(--cream); text-wrap: balance; text-shadow: 0 2px 20px rgba(0,0,0,.8); }
+.r-name {
+  position: fixed; left: 0; top: 0; z-index: 1; transform: translate(-50%, -50%);
+  display: flex; align-items: center; gap: 9px; padding: 8px 10px 8px 14px; border-radius: 999px; white-space: nowrap;
+  border: 1px solid var(--line); background: rgba(12,8,8,.66); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  font: 400 18px/1 var(--serif); color: var(--cream); transition: transform .45s cubic-bezier(.2,.9,.3,1.4), opacity .6s, border-color .4s, box-shadow .4s;
+  animation: fadein .6s ease backwards;
+}
+.r-name b { min-width: 22px; height: 22px; border-radius: 11px; display: grid; place-items: center; padding: 0 6px; font: 600 11.5px/1 var(--mono); color: var(--faint); background: rgba(255,255,255,.05); transition: all .3s; }
+.r-name.has b { color: #1d0c04; background: var(--amber); box-shadow: 0 0 12px var(--ember); }
+.r-name.hit { animation: hit .42s ease; }
+@keyframes hit { 40% { transform: translate(-50%, -50%) scale(1.18); border-color: var(--amber); } }
+.r-name.win { transform: translate(-50%, -50%) scale(1.3); border-color: var(--gold); box-shadow: 0 0 40px rgba(255,150,50,.55), 0 0 0 1px rgba(255,212,121,.4) inset; z-index: 3; }
+.r-name.lose { opacity: .32; }
+.verdict { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 30px 22px calc(18px + var(--sab)); display: flex; flex-direction: column; align-items: center; background: linear-gradient(0deg, rgba(5,4,5,.75) 20%, rgba(5,4,5,0)); animation: rise .7s cubic-bezier(.2,.9,.3,1); }
+.verdict .cta { min-width: 250px; }
+.r-head .v-big { margin: 10px 0 4px; font-size: clamp(48px, 14vw, 72px); animation: rise .8s cubic-bezier(.2,.9,.3,1); }
+.r-head .v-small { margin: 0 auto; }
+.r-was { margin-top: 12px; font: italic 400 14.5px/1.4 var(--serif); color: var(--faint); }
+
+.sheet { position: fixed; inset: 0; z-index: 6; display: flex; align-items: flex-end; justify-content: center; background: rgba(0,0,0,.5); animation: fadein .3s; }
+.sheet-in {
+  width: min(100%, 560px); max-height: 90dvh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 10px 20px calc(24px + var(--sab)); border-radius: 28px 28px 0 0; border: 1px solid var(--line); border-bottom: 0;
+  background: linear-gradient(180deg, rgba(30,19,15,.94), rgba(11,8,8,.97)); -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px);
+  animation: up .42s cubic-bezier(.2,.9,.25,1);
+}
+@keyframes up { from { transform: translateY(40%); opacity: 0; } }
+.grab { width: 40px; height: 4px; border-radius: 2px; background: rgba(255,220,190,.2); margin: 0 auto 8px; }
+.sheet h2 { font: 400 28px/1.1 var(--serif); padding: 10px 0 14px; display: flex; justify-content: space-between; align-items: center; }
+.sec { padding: 16px 0; border-top: 1px solid var(--line); }
+.sec h3 { font: 650 10.5px/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--dim); margin-bottom: 12px; }
+.sec p { font-size: 14px; line-height: 1.5; color: var(--dim); }
+.seg { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line2); border-radius: 14px; overflow: hidden; }
+.seg button { padding: 12px 2px; font-size: 13.5px; color: var(--cream2); border-left: 1px solid var(--line); }
+.seg button:first-child { border-left: 0; }
+.seg button[aria-pressed="true"] { background: rgba(255,140,60,.18); color: var(--amber); }
+.tog { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 0; font-size: 16px; text-align: left; }
+.tog small { display: block; font-size: 13px; color: var(--dim); margin-top: 3px; }
+.sw { flex: none; width: 48px; height: 29px; border-radius: 15px; background: rgba(255,220,190,.14); position: relative; transition: background .2s; margin-left: 14px; }
+.sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 23px; height: 23px; border-radius: 50%; background: #efdfc8; transition: transform .22s cubic-bezier(.3,.9,.3,1.3); }
+.tog[aria-checked="true"] .sw { background: var(--ember); }
+.tog[aria-checked="true"] .sw::after { transform: translateX(19px); }
+.writebox textarea {
+  width: 100%; min-height: 84px; resize: vertical; padding: 13px 14px; border-radius: 14px; font: 17px/1.35 var(--serif); color: var(--cream);
+  background: rgba(0,0,0,.34); border: 1px solid var(--line); outline: none;
+}
+.writebox textarea:focus { border-color: rgba(255,160,80,.55); }
+.writebox .row { display: flex; gap: 8px; margin-top: 10px; }
+.writebox select { flex: 1; min-width: 0; padding: 12px; border-radius: 12px; background: rgba(0,0,0,.34); border: 1px solid var(--line); color: var(--cream); font-size: 15px; }
+.writebox .ghost { padding: 12px 18px; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; }
+.btnrow .ghost { padding: 12px 16px; font-size: 14px; }
+.credit { margin-top: 18px; text-align: center; font-size: 12.5px; line-height: 1.6; color: var(--faint); }
+.credit a { color: var(--dim); }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(150px + var(--sab)); z-index: 9; transform: translate(-50%, 10px); opacity: 0; pointer-events: none;
+  max-width: calc(100% - 40px); padding: 11px 18px; border-radius: 999px; font-size: 14px; text-align: center;
+  background: rgba(20,13,10,.85); border: 1px solid var(--line2); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  transition: opacity .3s, transform .3s;
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* ── share-card render modes (og image, icon) ─────────── */
+.og { position: fixed; z-index: 2; left: 78px; top: 0; bottom: 0; width: 560px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; text-align: left; }
+.og .kick { justify-content: flex-start; font-size: 14px; }
+.og .kick::before { display: none; }
+.og .wordmark { font-size: 210px; margin: 8px 0 6px -10px; }
+.og .lede { font-size: 29px; max-width: 22ch; text-wrap: balance; }
+.og .url { margin-top: 30px; font: 500 16px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(247,234,213,.45); }
+
+@media (max-height: 640px) {
+  .c-text { --fs: clamp(21px, 5.6vw, 28px); margin: 12px 0 12px; }
+  .dock { gap: 10px; padding-top: 22px; }
+  .cta, .ghost { padding-top: 14px; padding-bottom: 14px; }
+}
+@media (min-width: 900px) {
+  .deck { top: calc(84px + var(--sat)); }
+  .c-text { --fs: 38px; }
+  .card { padding: 26px 30px 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card, .card.in, .card.out, .prompt, #setup, #play { transition-duration: .01s !important; }
+  .c-text .w { opacity: 1; filter: none; transform: none; color: var(--cream); animation: none !important; }
+}
+</style>
+<script src="../assets/traffic.js" defer></script>
+</head>
+<body>
+<canvas id="gl" class="layer" aria-hidden="true"></canvas>
+<canvas id="fx" class="layer" aria-hidden="true"></canvas>
+
+<!-- ── setup: who's around the fire ───────────────────── -->
+<section class="screen" id="setup">
+  <div class="strip"><a href="../">← naveed.io</a><span>ember · a campfire deck</span></div>
+  <div class="setup-in">
+    <p class="kick">A deck for the fire</p>
+    <h1 class="wordmark">Ember</h1>
+    <p class="lede">One phone, passed hand to hand. The questions start light and burn down to the good stuff.</p>
+
+    <div class="panel">
+      <div class="panel-h"><span>Who's around the fire?</span><b id="count">0</b></div>
+      <form class="addrow" id="addform" autocomplete="off">
+        <input id="namein" type="text" maxlength="18" placeholder="Add a name…" enterkeyhint="done" autocapitalize="words" spellcheck="false" aria-label="Name" />
+        <button type="submit">Add</button>
+      </form>
+      <ol class="names" id="names"></ol>
+      <p class="hint" id="hint">Go around the circle in the order you're sitting. The phone moves to the left.</p>
+      <p class="pack-note" id="packnote" hidden></p>
+    </div>
+
+    <div class="go">
+      <button class="cta" id="light" type="button" disabled>Light the fire <b>→</b></button>
+      <button class="textbtn" id="fresh" type="button" hidden>Start a new night instead</button>
+    </div>
+
+    <p class="fine" id="fine">Kindling, then logs, then embers. <b>Works offline</b> once it's loaded, and the names stay on this phone.</p>
+  </div>
+</section>
+
+<!-- ── play ────────────────────────────────────────────── -->
+<section class="screen" id="play" hidden>
+  <header class="bar">
+    <button class="stagepill" id="stagebtn" type="button" aria-label="Change how deep the questions go"><span class="dots" id="dots"><i></i><i></i><i></i></span><span id="stagename">Kindling</span></button>
+    <span class="mark" aria-hidden="true">Ember</span>
+    <button class="iconbtn" id="menubtn" type="button" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 8h14M5 16h9"/></svg></button>
+  </header>
+  <div class="rulechip" id="rulechip" hidden><b>Rule</b><span id="ruletext"></span></div>
+
+  <div class="deck" id="deck">
+    <div class="prompt" id="prompt">
+      <p class="p-kick" id="pkick">Kindling</p>
+      <span class="p-name" id="pname">—</span>
+      <span class="p-sub">tap the fire.</span>
+    </div>
+    <article class="card" id="card" hidden aria-live="polite">
+      <div class="c-top"><span class="c-kind"><i></i><span id="ckind"></span></span><span class="c-no" id="cno"></span></div>
+      <p class="c-text" id="ctext"></p>
+      <div class="c-foot" id="cfoot"></div>
+    </article>
+  </div>
+
+  <div class="dock">
+    <div class="seats" id="seats" aria-hidden="true"></div>
+    <div class="holder" id="holder">Holding the fire <b id="holdername">—</b></div>
+    <div class="acts single" id="acts-await"><button class="ghost" id="draw" type="button">Tap the fire, or here</button></div>
+    <div class="acts" id="acts-card" hidden>
+      <button class="ghost" id="burn" type="button" aria-label="Skip this card">Burn it</button>
+      <button class="cta" id="pass" type="button"><span id="passlabel">Pass it on</span> <b>→</b></button>
+    </div>
+  </div>
+</section>
+
+<!-- ── secret ballot ───────────────────────────────────── -->
+<section class="overlay" id="vote" hidden></section>
+
+<!-- ── reveal ──────────────────────────────────────────── -->
+<section class="overlay" id="reveal" hidden>
+  <div class="r-head"></div>
+  <div id="rnames"></div>
+  <div class="verdict" id="verdict" hidden></div>
+</section>
+
+<!-- ── menu ────────────────────────────────────────────── -->
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-in" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="grab"></div>
+    <h2 id="sheet-title"><span>The fire</span><button class="iconbtn" id="sheetclose" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></h2>
+    <div class="sec">
+      <h3>How deep</h3>
+      <div class="seg" id="seg">
+        <button type="button" data-lock="auto">Auto</button>
+        <button type="button" data-lock="0">Kindling</button>
+        <button type="button" data-lock="1">Logs</button>
+        <button type="button" data-lock="2">Embers</button>
+      </div>
+      <p style="margin-top:10px">On Auto the deck moves by itself: light questions first, then stories, then the honest stuff after card 20.</p>
+    </div>
+    <div class="sec">
+      <h3>In the deck</h3>
+      <button class="tog" id="tog-votes" type="button" role="switch"><span>Secret ballots<small>“Who's most likely to…” with a hidden vote and a reveal</small></span><span class="sw"></span></button>
+      <button class="tog" id="tog-rules" type="button" role="switch"><span>House rules<small>Small standing rules that last until the next one</small></span><span class="sw"></span></button>
+    </div>
+    <div class="sec writebox">
+      <h3>Write a card</h3>
+      <textarea id="wtext" maxlength="220" placeholder="Ask the fire something only this group would get…"></textarea>
+      <div class="row">
+        <select id="wtype" aria-label="Card type">
+          <option value="q">For whoever holds the phone</option>
+          <option value="a">Everyone answers</option>
+          <option value="v">Secret ballot: who's most likely…</option>
+        </select>
+        <button class="ghost" id="wadd" type="button">Add</button>
+      </div>
+      <p style="margin-top:10px" id="wcount"></p>
+    </div>
+    <div class="sec">
+      <h3>The circle</h3>
+      <div class="btnrow">
+        <button class="ghost" id="editcircle" type="button">Edit the names</button>
+        <button class="ghost" id="reshuffle" type="button">New night</button>
+      </div>
+    </div>
+    <p class="credit">Ember is a single page: a fire drawn live in WebGL, a deck, no network needed once it's loaded.<br/>Made for <a href="../">naveed.io</a> with Claude Opus 5.5.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ════════════════════════════════════════════════════════
+   0 · small tools
+   ════════════════════════════════════════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const rnd = (a = 1, b) => (b === undefined ? Math.random() * a : a + Math.random() * (b - a));
+const pick = a => a[(Math.random() * a.length) | 0];
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const hash = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36); };
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('ember.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('ember.' + k, JSON.stringify(v)); } catch (e) {} }
+};
+const params = new URLSearchParams(location.search);
+const MODE = params.has('og') ? 'og' : params.has('icon') ? 'icon' : 'app';
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const root = document.documentElement;
+
+/* ════════════════════════════════════════════════════════
+   1 · the deck
+   s: 0 kindling · 1 logs · 2 embers
+   t: q holder answers · a everyone · v secret ballot · h hot seat · r house rule
+   {me} holds the phone · {left} is next · {right} is previous · {any} someone else
+   ════════════════════════════════════════════════════════ */
+const RAW = {
+0: [
+ ['q', "What's the most suburban thing you've done this year? Be specific."],
+ ['q', "What's a hill you'd die on that nobody at this fire would climb with you?"],
+ ['q', "What's the worst gift you've ever received — and did you regift it?"],
+ ['q', "What's a food you've pretended to like for years?"],
+ ['q', "What's the most useless skill you're weirdly good at? Demonstrations welcome."],
+ ['q', "Which chore would you pay almost anything to never do again?"],
+ ['q', "What's a word you mispronounced for way too long?"],
+ ['q', "What's the strangest thing in your garage right now?"],
+ ['q', "What's your most controversial kitchen opinion?"],
+ ['q', "If your house had a name, what would it be?"],
+ ['q', "What's the dumbest way you've ever hurt yourself?"],
+ ['q', "What did you get in trouble for the most as a kid?"],
+ ['q', "What do you own way too many of?"],
+ ['q', "What's the best thing you've ever rescued from a curb on garbage night?"],
+ ['q', "What's your worst camping story — before tonight?"],
+ ['q', "Which celebrity would you want as a neighbor — and which one would make you sell?"],
+ ['q', "What's the pettiest thing that still annoys you?"],
+ ['q', "What was your first email address or screen name? Say it out loud, with feeling."],
+ ['q', "What's your go-to karaoke song, and has anyone here actually heard it?"],
+ ['q', "What's the most money you've spent on something you used exactly once?"],
+ ['q', "Which trend did you fully commit to that you'd like to formally apologize for?"],
+ ['q', "If you could add one rule to the neighborhood, what would it be?"],
+ ['q', "Which house do you use for giving directions — and what's the landmark?"],
+ ['q', "What's the most unhinged neighborhood-app post you can remember? Perform it."],
+ ['q', "{left} picks any topic. {me} talks about it for thirty seconds without stopping."],
+ ['q', "What's your most irrational fear? Rank it against bears."],
+ ['a', "Around the fire: your first concert. No lying, no upgrading."],
+ ['a', "Around the fire: the first car you drove — make, model, and its fatal flaw."],
+ ['a', "Around the fire: s'mores, hot dogs, or foil packets. Defend your pick."],
+ ['a', "Around the fire: your worst job ever, in five words or fewer."],
+ ['a', "Around the fire: a movie you've seen more than ten times."],
+ ['a', "Around the fire: your pro-wrestling entrance song."],
+ ['a', "Around the fire: the app you use most and are least proud of."],
+ ['a', "Around the fire: the celebrity you've been told you look like. The group rules on it."],
+ ['a', "Around the fire: your useless superpower."],
+ ['v', "Who's most likely to survive a zombie apocalypse on this street?"],
+ ['v', "Who's most likely to get lost on a trail with the map in their hand?"],
+ ['v', "Who's most likely to be secretly running an Etsy empire?"],
+ ['v', "Who's most likely to befriend a raccoon before the night is over?"],
+ ['v', "Who's most likely to fall asleep first tonight?"],
+ ['v', "Who's most likely to still be at this fire at 3 a.m.?"],
+ ['v', "Who's most likely to end up on the local news — for a good reason?"],
+ ['v', "Who's most likely to win a game show?"],
+ ['v', "Who's most likely to know every neighbor's business by Monday?"],
+ ['v', "Who's most likely to win the Halloween decoration arms race?"],
+ ['v', "Who's most likely to call the city about someone's lawn?"],
+ ['v', "Who's most likely to have their doorbell camera footage go viral?"],
+ ['v', "Who's most likely to have packed way too much for this trip?"],
+ ['h', "Hot seat. Everyone gets one question for {me}. {me} may pass exactly once."],
+ ['h', "Lightning round: {left} fires five fast questions at {me}. No thinking allowed."],
+ ['r', "Nobody says “yeah” until the next rule card. Slip, and you feed the fire a stick."],
+ ['r', "Everyone addresses {me} as “Your Honor” until the next rule card."],
+ ['r', "Before answering anything, you must first say “Great question.”"],
+ ['r', "No pointing. Elbows only."]
+],
+1: [
+ ['q', "How did you end up on this street? The real story, not the realtor version."],
+ ['q', "What did you think of {left} the first time you met? Be honest — they can take it."],
+ ['q', "What's the best night this neighborhood has ever had?"],
+ ['q', "Tell the story you always tell at dinner parties. Anyone who's heard it may heckle."],
+ ['q', "What's your closest call?"],
+ ['q', "What's the most trouble you got into as a teenager?"],
+ ['q', "What's the most spontaneous thing you've ever done?"],
+ ['q', "Tell us about a time a stranger changed your day."],
+ ['q', "What's the worst date you've ever been on?"],
+ ['q', "What's the best advice you ever ignored?"],
+ ['q', "Who was your best friend at twelve, and where are they now?"],
+ ['q', "What's the story behind your name — or your kid's?"],
+ ['q', "What's a job you've had that nobody here knows about?"],
+ ['q', "What's the biggest risk you've taken that actually worked?"],
+ ['q', "Walk us through your perfect Saturday, hour by hour."],
+ ['q', "What would you ten years ago be most surprised by today?"],
+ ['q', "What's the strangest thing that's ever happened inside your house?"],
+ ['q', "If everyone at this fire started a business together, what would it be — and who would ruin it?"],
+ ['q', "What were you completely sure about at 25 that turned out to be wrong?"],
+ ['q', "Which house in the neighborhood have you always wanted to see inside?"],
+ ['q', "What's the neighborhood's best-kept secret?"],
+ ['q', "What's a family tradition you'd fight to keep?"],
+ ['q', "When did you last laugh so hard you couldn't breathe?"],
+ ['q', "What's the best trip you've ever taken — and what went wrong on it?"],
+ ['q', "{right} gets to ask {me} anything about their life before this neighborhood."],
+ ['a', "Around the fire: the best meal you've ever eaten. Where, when, with who."],
+ ['a', "Around the fire: a smell that takes you straight back to childhood."],
+ ['a', "Around the fire: a place you'd go back to tomorrow if you could."],
+ ['a', "Around the fire: something on your bucket list nobody here knows about."],
+ ['a', "Around the fire: your most-played song from high school."],
+ ['a', "Around the fire: the teacher you still think about."],
+ ['a', "Around the fire: your first impression of this neighborhood, in one sentence."],
+ ['a', "Around the fire: the worst haircut of your life. Year and description."],
+ ['v', "Who's most likely to have the best snack stash on this trip?"],
+ ['v', "Who's most likely to start a band at fifty?"],
+ ['v', "Who's most likely to throw the next party on the block?"],
+ ['v', "Who's most likely to cry at a commercial?"],
+ ['v', "Who's most likely to have been famous in another life?"],
+ ['v', "Who would you trust with your house key — and your browser history?"],
+ ['v', "Who's most likely to talk their way out of a speeding ticket?"],
+ ['v', "Who's most likely to have a secret talent none of us have seen?"],
+ ['v', "Who would you want in charge if the power went out for a week?"],
+ ['v', "Who's most likely to run for mayor?"],
+ ['h', "Hot seat. Everyone asks {me} the question they've always wondered about. {me} may pass once."],
+ ['h', "Two truths and a lie: {me} tells three stories. Everyone guesses the lie."],
+ ['r', "Every story must now begin with “So there I was…”"],
+ ['r', "{me} is the fire marshal. They alone decide when the next log goes on."],
+ ['r', "Whoever interrupts owes the group a s'more."]
+],
+2: [
+ ['q', "What's something you're quietly proud of?"],
+ ['q', "When did you last feel completely, fully happy?"],
+ ['q', "What's something you've changed your mind about in the last five years?"],
+ ['q', "What do you miss that you can't go back to?"],
+ ['q', "What's a question you wish people asked you more often?"],
+ ['q', "A paid year off, no obligations. What do you actually do with it?"],
+ ['q', "What's the kindest thing a neighbor has ever done for you?"],
+ ['q', "Who in your life do you owe a phone call?"],
+ ['q', "What does home mean to you now, compared to when you were a kid?"],
+ ['q', "What are you still trying to figure out?"],
+ ['q', "What did your parents get right?"],
+ ['q', "What's a lesson you learned the hard way?"],
+ ['q', "What's a dream you've let go of — or haven't, quite?"],
+ ['q', "One sentence to your eighteen-year-old self. What is it?"],
+ ['q', "What scares you more than you let on?"],
+ ['q', "What do you hope the people who look up to you remember about you?"],
+ ['q', "What small thing makes your life noticeably better?"],
+ ['q', "When have you felt most like yourself?"],
+ ['a', "Around the fire: one word for this year so far."],
+ ['a', "Around the fire: tell the person on your right one thing you admire about them."],
+ ['a', "Around the fire: something you're looking forward to."],
+ ['a', "Around the fire: a small thing someone here did that you never thanked them for. Thank them."],
+ ['a', "Around the fire: the best decision you ever made."],
+ ['a', "Around the fire: where you want to be in ten years, if nothing stood in the way."],
+ ['v', "Who would you want beside you in a real emergency?"],
+ ['v', "Who's most likely to show up with soup when you're sick?"],
+ ['v', "Who's the glue of this neighborhood?"],
+ ['v', "Who gives the best advice at this fire?"],
+ ['v', "Who's most likely to help someone and never mention it?"],
+ ['h', "Hot seat, gentle edition: everyone tells {me} one thing they appreciate about them. {me} just has to take it."],
+ ['h', "{me} answers one question from each person, honestly. Anything goes — kindly."],
+ ['r', "Phones face down for the next three cards. Except this one."],
+ ['r', "Before anyone heads to bed, everyone says one thing they'll remember about tonight."]
+]};
+const mk = (s, t, x, src) => ({ id: (src ? 'p' : '') + hash(t + x), s, t, x, src: src || null });
+const DECK = [];
+for (const s of [0, 1, 2]) for (const [t, x] of RAW[s]) DECK.push(mk(s, t, x));
+
+const STAGES = [
+  { name: 'Kindling', heat: .74, coal: .34 },
+  { name: 'Logs',     heat: 1.0, coal: .62 },
+  { name: 'Embers',   heat: .34, coal: 1.0 }
+];
+
+/* ════════════════════════════════════════════════════════
+   2 · the fire (WebGL)
+   everything is procedural: sky, trees, stones, logs, flame
+   ════════════════════════════════════════════════════════ */
+const FS = `
+precision highp float;
+uniform vec2 uRes; uniform float uTime, uHeat, uCoal, uFlick, uScale, uPx, uHalfW, uCx;
+uniform vec2 uFire;
+float h12(vec2 p){vec3 p3=fract(vec3(p.xyx)*.1031);p3+=dot(p3,p3.yzx+33.33);return fract((p3.x+p3.y)*p3.z);}
+vec2 h22(vec2 p){vec3 p3=fract(vec3(p.xyx)*vec3(.1031,.1030,.0973));p3+=dot(p3,p3.yzx+33.33);return fract((p3.xx+p3.yz)*p3.zy);}
+float h11(float p){p=fract(p*.1031);p*=p+33.33;p*=p+p;return fract(p);}
+float vn(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);
+  return mix(mix(h12(i),h12(i+vec2(1,0)),u.x),mix(h12(i+vec2(0,1)),h12(i+vec2(1,1)),u.x),u.y);}
+const mat2 R=mat2(1.6,1.2,-1.2,1.6);
+float fbm(vec2 p){float s=0.,a=.5;for(int i=0;i<5;i++){s+=a*vn(p);p=R*p;a*=.5;}return s;}
+float fbm3(vec2 p){float s=0.,a=.5;for(int i=0;i<3;i++){s+=a*vn(p);p=R*p;a*=.5;}return s;}
+
+vec3 fireRamp(float x){
+  return vec3(1.05,.26,.035)*smoothstep(0.,.28,x)
+       + vec3(.0,.40,.09)*smoothstep(.18,.62,x)
+       + vec3(.0,.24,.30)*smoothstep(.52,.98,x)
+       + vec3(.12,.12,.22)*smoothstep(.95,1.35,x);
+}
+vec3 emberRamp(float e){
+  return vec3(1.,.24,.04)*smoothstep(.04,.55,e)*e*1.5 + vec3(.35,.3,.08)*smoothstep(.55,1.1,e);
+}
+
+vec3 stars(vec2 q, float sc, float dens){
+  vec2 g=q*sc; vec2 id=floor(g); vec2 f=fract(g);
+  float h=h12(id);
+  if(h>dens) return vec3(0.);
+  vec2 o=h22(id*1.7+3.1)*.7+.15;
+  float d=length(f-o)*uRes.y/sc;
+  float b=pow(h12(id+11.3),2.2);
+  float tw=.62+.38*sin(uTime*(.7+2.4*h12(id+4.2))+h*60.);
+  float cw=max(.75,.8*uPx);
+  float core=exp(-d*d/(cw*cw));
+  float glow=exp(-d/(cw*2.6))*.16;
+  vec3 c=mix(vec3(1.,.84,.68),vec3(.74,.84,1.),h12(id+8.8));
+  return c*b*tw*(core+glow);
+}
+
+float pines(vec2 p, float w, float base, float hmin, float hmax, float seed, float frame){
+  float aa=1.3/uScale;
+  float cov=0.;
+  float ci=floor(p.x/w);
+  for(int k=-2;k<=2;k++){
+    float i=ci+float(k);
+    float r1=h11(i*.713+seed), r2=h11(i*1.931+seed*1.7), r3=h11(i*3.17+seed*2.3);
+    float cx=(i+.5+(r2-.5)*.8)*w;
+    float h=mix(hmin,hmax,r1);
+    if(frame>.5){ float e=abs(cx-uCx)/max(uHalfW,.05); h*=.25+1.35*smoothstep(.45,1.05,e); }
+    float y=p.y-base;
+    float rel=h-y;
+    if(rel<0.) continue;
+    float tiers=5.+floor(r3*4.);
+    float tf=fract(rel/h*tiers+r3);
+    float hw=rel*(.2+.07*r2)*(.58+.52*tf);
+    hw=min(hw,h*.28)+.0015;
+    float d=abs(p.x-cx)-hw;
+    cov=max(cov,smoothstep(aa,-aa,d));
+  }
+  return cov;
+}
+
+// the flame: a soft blob carved away by upward-scrolling noise, stronger the higher it
+// climbs, so it tears into tongues and loose licks. returns vec2(heat colour, opacity).
+vec2 flame(vec2 p, float heat, float t, float seed, float wide){
+  float H=.37*heat+.04;
+  vec2 u=vec2(p.x/(H*wide),p.y/H);              // u.x ±1 across the root, u.y 0→1 root→tip
+  if(abs(u.x)>1.7||u.y<-.3||u.y>1.45) return vec2(0.);
+  float y=max(u.y,0.);
+  float w1=fbm(vec2(u.x*2.1+seed,u.y*1.5-t*1.8));
+  float n=fbm(vec2(u.x*3.3+seed*1.3+w1*1.3,u.y*2.1-t*3.1+w1*.9));
+  n=(n-.47)*1.85+.5;
+  float shape=1.-abs(u.x)*(1.2+y*2.5)-y*1.05;
+  float f=(shape+(n-.5)*(.45+1.35*y)*smoothstep(-.6,.2,shape))*smoothstep(-.3,.1,u.y);
+  return vec2(clamp(f,0.,1.35),smoothstep(0.,.2,f));
+}
+
+vec4 stones(vec2 p, float front, float light){
+  vec4 acc=vec4(0.);
+  if(abs(p.x)>.34||p.y<-.13||p.y>.11) return acc;
+  vec3 warm=vec3(1.,.45,.16);
+  for(int i=0;i<14;i++){
+    float fi=float(i);
+    float a=fi/14.*6.2832+h11(fi*3.3)*.28;
+    float sa=sin(a);
+    if((sa<0.)!=(front>.5)) continue;
+    vec2 c=vec2(.26*cos(a),.064*sa-.006);
+    float sz=.034+.016*h11(fi*7.7);
+    vec2 d=(p-c)/vec2(sz,sz*.64);
+    float r=length(d)+(vn(d*2.3+fi*5.)-.5)*.3;
+    float m=smoothstep(1.,1.-2.5/(sz*uScale*.64),r);
+    if(m<=0.) continue;
+    float nz=sqrt(max(0.,1.-min(1.,r*r)));
+    vec3 N=normalize(vec3(d/max(r,.001)*.85,nz+.25));
+    // back stones face the fire; front stones only catch it along their tops
+    vec3 L=front>.5?normalize(vec3(-c.x*2.,1.,-.25)):normalize(vec3(-c.x*3.,(.1-c.y)*3.,sa*1.3));
+    float dif=max(0.,dot(N,L));
+    float tex=.65+.55*vn(d*5.+fi);
+    vec3 alb=mix(vec3(.17,.15,.14),vec3(.27,.23,.2),h11(fi*1.9))*tex;
+    vec3 col=alb*(vec3(.018,.022,.034)+warm*light*(dif*1.25+.16*front));
+    col*=1.-.55*smoothstep(.2,1.,d.y)*(1.-front); // soot on the tops of the back stones
+    acc=mix(acc,vec4(col,1.),m);
+  }
+  return acc;
+}
+
+vec4 logs(vec2 p, float light){
+  vec4 acc=vec4(0.);
+  if(abs(p.x)>.26||p.y<-.08||p.y>.24) return acc;
+  vec3 warm=vec3(1.,.45,.16);
+  for(int i=0;i<5;i++){
+    vec2 a,b; float r;
+    if(i==0){a=vec2(-.2,-.018);b=vec2(.07,.03);r=.021;}
+    else if(i==1){a=vec2(.21,-.022);b=vec2(-.05,.034);r=.023;}
+    else if(i==2){a=vec2(-.13,.0);b=vec2(-.005,.2);r=.015;}
+    else if(i==3){a=vec2(.135,-.004);b=vec2(.012,.195);r=.016;}
+    else {a=vec2(.02,-.042);b=vec2(.0,.185);r=.014;}
+    vec2 pa=p-a, ba=b-a; float L2=dot(ba,ba); float Ln=sqrt(L2);
+    float hh=clamp(dot(pa,ba)/L2,0.,1.);
+    vec2 q=pa-ba*hh; float d=length(q);
+    float rr=r*(i>=2?(1.-hh*.5):1.);
+    float m=smoothstep(rr,rr-1.5/uScale,d);
+    if(m<=0.) continue;
+    float side=d/rr;
+    float sgn=sign(q.x*(-ba.y)+q.y*ba.x);
+    float nz=sqrt(max(0.,1.-side*side));
+    float fi=float(i);
+    float bark=vn(vec2(hh*Ln*140.,side*sgn*3.+fi*7.));
+    float along=fbm3(vec2(hh*Ln*30.+fi*13.,sgn*side*2.3+fi));
+    vec3 alb=vec3(.075,.05,.038)*(.45+.8*bark);
+    float cracks=smoothstep(.56,.78,along)*(1.-.35*nz);
+    float bottom=(i>=2)?(1.-hh):1.;
+    float e=cracks*(uCoal*.95+uHeat*.28)*bottom*(.7+.3*sin(uTime*2.1+along*23.+fi));
+    vec3 col=alb*(.035+warm*light*.9*(.3+.7*nz))+emberRamp(e*1.25);
+    acc=mix(acc,vec4(col,1.),m);
+  }
+  return acc;
+}
+
+void main(){
+  vec2 fc=gl_FragCoord.xy;
+  vec2 p=(fc-uFire)/uScale;
+  float heat=uHeat;
+  float light=heat*(.74+.3*uFlick)+uCoal*.24;
+  vec3 warm=vec3(1.,.43,.13);
+  float H=.37*heat+.04;
+
+  // heat shimmer above the flames bends everything behind them
+  float shim=smoothstep(.3,.0,abs(p.x)/(.16+max(p.y,0.)*.35))*smoothstep(H*.45,H*1.05,p.y)*smoothstep(H*3.2,H*1.25,p.y);
+  vec2 dsp=(vec2(vn(p*vec2(26.,14.)-vec2(0.,uTime*5.)),vn(p*vec2(21.,12.)+vec2(7.,-uTime*4.3)))-.5)*.007*shim*heat;
+  vec2 pb=p+dsp; vec2 fcb=fc+dsp*uScale;
+
+  // sky
+  vec2 q=fcb/uRes.y; float sy=fcb.y/uRes.y;
+  vec3 col=mix(vec3(.032,.026,.042),vec3(.004,.006,.02),smoothstep(.1,1.,sy));
+  float asp=uRes.x/uRes.y;
+  vec2 m=q-vec2(asp*.5,.8);
+  float bd=m.y+m.x*.62;
+  float band=exp(-bd*bd/.02);
+  float dust=fbm3(q*4.6+vec2(1.3,7.1));
+  float lanes=fbm3(q*12.+vec2(4.,2.));
+  col+=vec3(.36,.4,.56)*band*dust*.12*(.35+1.1*smoothstep(.36,.62,lanes));
+  float skyMask=smoothstep(.05,.2,pb.y);
+  col+=(stars(q,62.,.24+band*.45)+stars(q+17.,150.,.1+band*.4)*.6)*skyMask;
+  float gd=length((pb-vec2(0.,.14*heat))*vec2(.85,1.));
+  col+=warm*light*(.09*exp(-gd*2.3)+.035*exp(-gd*.75));
+
+  // tree lines: far, mid, then ground, then the tall framing pines
+  float base=.092+.01*sin(pb.x*3.1)+.008*vn(vec2(pb.x*7.,.5));
+  float t1=pines(pb,.026,base+.013,.03,.085,1.,0.);
+  col=mix(col,vec3(.02,.022,.034)+warm*light*.03*exp(-abs(pb.x)*1.4),t1);
+  float t2=pines(pb,.048,base,.06,.19,7.,0.);
+  col=mix(col,vec3(.01,.01,.016)+warm*light*.07*exp(-length(pb*vec2(1.3,1.8))*1.7),t2);
+
+  float gy=max(base-p.y,0.);
+  vec2 gpp=vec2(p.x/(gy+.06),1./(gy+.06));
+  float tex=fbm3(gpp*vec2(1.3,.9))*.6+vn(gpp*vec2(6.,4.))*.4;
+  float pool=exp(-length(vec2(p.x*.85,(p.y+.005)*3.))*3.3);
+  float pool2=exp(-length(vec2(p.x*1.6,(p.y+.005)*5.))*7.);
+  vec3 g=vec3(.013,.011,.012)*(.6+.8*tex)+warm*light*(pool*.4+pool2*.34)*(.5+.65*tex);
+  col=mix(col,g,smoothstep(0.,-1.5/uScale,p.y-base));
+
+  float t3=pines(pb,.1,base-.06,.12,.62,13.,1.);
+  col=mix(col,vec3(.005,.004,.007)+warm*light*.06*exp(-abs(pb.x)*1.1)*smoothstep(.35,0.,pb.y-base),t3);
+
+  // fire ring (back half), coal bed, logs
+  vec4 sb=stones(p,0.,light); col=mix(col,sb.rgb,sb.a);
+  vec2 cq=p/vec2(.2,.046);
+  float ce=length(cq);
+  if(ce<1.25){
+    float cm=smoothstep(1.05,.72,ce+(vn(p*40.)-.5)*.3);
+    float cr=fbm3(p*vec2(55.,95.)+vec2(0.,uTime*.07));
+    float ridge=pow(1.-abs(vn(p*vec2(70.,140.)+3.)*2.-1.),6.);
+    float pulse=.72+.28*sin(uTime*1.6+cr*13.);
+    float e=cm*(cr*cr*1.5+ridge*.55)*pulse*(uCoal*1.1+heat*.22);
+    col=mix(col,vec3(.05,.042,.04)*(.5+cr)+warm*light*.07,cm*.88);
+    col+=emberRamp(e);
+  }
+  vec4 lg=logs(p,light); col=mix(col,lg.rgb,lg.a);
+
+  // the flame: a wide dim back layer for body, then the bright front one
+  float lit=smoothstep(.015,.1,heat);
+  if(abs(p.x)<.4&&p.y>-.16&&p.y<H*1.5+.06){
+    vec2 fb=flame(p*vec2(1.,1.1),heat*.92,uTime*.9,7.3,.52);
+    col=mix(col,fireRamp(fb.x*.8)*1.3,fb.y*.75*lit);
+    vec2 ff=flame(p,heat,uTime,0.,.36);
+    vec3 cf=fireRamp(ff.x)*(1.5+.25*uFlick);
+    col=mix(col,cf,ff.y*lit);
+    col+=cf*.25*ff.y*lit;
+  }
+  vec2 gq=(p-vec2(0.,H*.34))/vec2(.25,max(H,.1)*.95);
+  col+=vec3(1.,.36,.07)*exp(-dot(gq,gq)*1.4)*.2*heat*(.8+.4*uFlick);
+
+  // fire ring (front half) sits in front of the flames' base
+  vec4 sf=stones(p,1.,light); col=mix(col,sf.rgb,sf.a);
+
+  // smoke
+  float smy=p.y-H*.75;
+  if(smy>-.06){
+    float sx=p.x-sin(p.y*2.+uTime*.3)*.05*p.y-p.y*.07;
+    float spread=.07+max(smy,0.)*.5;
+    float sm=fbm(vec2(sx*5./(1.+max(smy,0.)*2.),p.y*3.-uTime*.5));
+    float a=smoothstep(.46,.86,sm)*exp(-sx*sx/(spread*spread))*smoothstep(-.06,.1,smy)*exp(-max(smy,0.)*1.5);
+    vec3 sc=mix(warm*.1*light,vec3(.055,.055,.07),smoothstep(0.,.4,smy));
+    col=mix(col,sc,a*(.22+.25*(1.-heat*.6)));
+  }
+
+  // grade: soft shoulder, vignette, dither
+  col=1.-exp(-col*1.32);
+  vec2 v=(fc/uRes-.5)*vec2(asp,1.);
+  col*=mix(.5,1.,smoothstep(1.2,.3,length(v*vec2(.9,1.1))));
+  col+=(h12(fc+fract(uTime)*91.7)-.5)/255.*1.6;
+  gl_FragColor=vec4(col,1.);
+}`;
+
+const L = { W: 0, H: 0, S: 1, fx: 0, fy: 0 };   // layout in CSS px: fire base at (fx, fy)
+function layout() {
+  L.W = innerWidth; L.H = innerHeight;
+  if (MODE === 'og') { L.S = L.H * 1.22; L.fx = L.W * .76; L.fy = L.H * .9; }
+  else if (MODE === 'icon') { L.S = L.W * 1.28; L.fx = L.W * .5; L.fy = L.H * .86; }
+  else {
+    L.S = Math.min(L.H * .78, L.W * 1.7);
+    L.fx = L.W / 2;
+    L.fy = L.H - Math.max(L.H * .25, 185);
+  }
+}
+
+const F = { heat: 0, heatT: .3, coal: .2, coalT: .45, flare: 0, flick: .5 };   // the fire's state
+
+const scene = (() => {
+  const cv = $('#gl');
+  let gl, prog, U = {}, rs = Math.min(devicePixelRatio || 1, 1.5), ok = false;
+  function init() {
+    gl = cv.getContext('webgl', { antialias: false, alpha: false, depth: false, stencil: false, powerPreference: 'high-performance', preserveDrawingBuffer: MODE !== 'app' });
+    if (!gl) return false;
+    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { console.error(gl.getShaderInfoLog(s)); return null; } return s; };
+    const vs = sh(gl.VERTEX_SHADER, 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}');
+    const fs = sh(gl.FRAGMENT_SHADER, FS);
+    if (!vs || !fs) return false;
+    prog = gl.createProgram(); gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { console.error(gl.getProgramInfoLog(prog)); return false; }
+    gl.useProgram(prog);
+    const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    for (const n of ['uRes', 'uTime', 'uHeat', 'uCoal', 'uFlick', 'uScale', 'uPx', 'uHalfW', 'uCx', 'uFire']) U[n] = gl.getUniformLocation(prog, n);
+    return true;
+  }
+  cv.addEventListener('webglcontextlost', e => { e.preventDefault(); ok = false; });
+  cv.addEventListener('webglcontextrestored', () => { ok = init(); resize(); });
+  function resize() {
+    if (!gl) return;
+    cv.width = Math.max(1, Math.round(L.W * rs)); cv.height = Math.max(1, Math.round(L.H * rs));
+    gl.viewport(0, 0, cv.width, cv.height);
+  }
+  function draw(t) {
+    if (!ok) return;
+    gl.uniform2f(U.uRes, cv.width, cv.height);
+    gl.uniform1f(U.uTime, t);
+    gl.uniform1f(U.uHeat, F.heat);
+    gl.uniform1f(U.uCoal, F.coal);
+    gl.uniform1f(U.uFlick, F.flick);
+    gl.uniform1f(U.uScale, L.S * rs);
+    gl.uniform1f(U.uPx, rs);
+    gl.uniform1f(U.uHalfW, (L.W / 2) / L.S);
+    gl.uniform1f(U.uCx, (L.W / 2 - L.fx) / L.S);
+    gl.uniform2f(U.uFire, L.fx * rs, (L.H - L.fy) * rs);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+  ok = init();
+  if (!ok) document.body.classList.add('nogl');
+  return { resize, draw, get rs() { return rs; }, set rs(v) { rs = v; resize(); } };
+})();
+
+/* ════════════════════════════════════════════════════════
+   3 · sparks (2D, additive)
+   ════════════════════════════════════════════════════════ */
+const fx = (() => {
+  const cv = $('#fx'), ctx = cv.getContext('2d');
+  let dpr = Math.min(devicePixelRatio || 1, 2);
+  const MAX = reduced ? 140 : 520;
+  const P = [], FL = [];
+  function sprite(r, g, b) {
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    const x = c.getContext('2d'); const gr = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, 'rgba(255,255,240,1)'); gr.addColorStop(.16, `rgba(${r},${g},${b},.95)`);
+    gr.addColorStop(.42, `rgba(${r},${g},${b},.22)`); gr.addColorStop(1, `rgba(${r},${g},${b},0)`);
+    x.fillStyle = gr; x.fillRect(0, 0, 64, 64); return c;
+  }
+  const SPR = [sprite(255, 214, 140), sprite(255, 146, 52), sprite(232, 72, 20)];
+  function add(o) { if (P.length >= MAX) P.shift(); P.push(o); }
+  function ember(x, y, o) {
+    add(Object.assign({ x, y, vx: rnd(-18, 18), vy: -rnd(.25, .62) * L.S, g: -40, drag: .55, life: 0, max: rnd(1.3, 3.4), size: rnd(.8, 2.1), seed: rnd(100), turb: 1 }, o));
+  }
+  function burst(x, y, n, o = {}) {
+    for (let i = 0; i < n; i++) {
+      const a = rnd(Math.PI * 2), sp = rnd(o.min || 60, o.max || 280);
+      add({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - (o.up || 60), g: o.g ?? 140, drag: 1.3, life: 0, max: rnd(.45, o.life || 1.3), size: rnd(.8, o.size || 2.2), seed: rnd(100), turb: .4 });
+    }
+  }
+  function fromRect(r, n, o = {}) {
+    for (let i = 0; i < n; i++) {
+      add({ x: rnd(r.left, r.right), y: rnd(r.top, r.bottom), vx: rnd(-30, 30), vy: -rnd(40, 160), g: -60, drag: .8, life: 0, max: rnd(.6, o.life || 1.6), size: rnd(.7, 1.9), seed: rnd(100), turb: 1.4 });
+    }
+  }
+  function ash(x, y) { add({ x, y, vx: rnd(-25, 25), vy: -rnd(30, 110), g: -40, drag: .9, life: 0, max: rnd(.5, 1.3), size: rnd(.9, 2.4), seed: rnd(100), turb: 1.6 }); }
+  function flight(x0, y0, x1, y1, dur, onArrive, o = {}) {
+    const dx = x1 - x0, dy = y1 - y0, dist = Math.hypot(dx, dy);
+    const side = (o.side ?? rnd(-1, 1)) * dist * .28;
+    const f = { x0, y0, x1, y1, x: x0, y: y0, cx: (x0 + x1) / 2 + side, cy: Math.min(y0, y1) - dist * (o.lift ?? .22), t: 0, dur, onArrive, trail: [], big: o.big ?? 1, done: false };
+    FL.push(f);
+    // if frames stall (hidden tab, low-power throttling) the spark still lands
+    setTimeout(() => land(f), dur * 1000 + 450);
+  }
+  function land(f) {
+    if (f.done) return;
+    f.done = true;
+    const i = FL.indexOf(f); if (i >= 0) FL.splice(i, 1);
+    f.onArrive && f.onArrive(f.x1, f.y1);
+  }
+  function resize() { dpr = Math.min(devicePixelRatio || 1, 2); cv.width = Math.round(L.W * dpr); cv.height = Math.round(L.H * dpr); }
+  let emitAcc = 0, popAt = 2;
+  function step(dt, t, draw = true) {
+    // ambient embers off the fire, and the occasional pop
+    const rate = (F.heat * 30 + F.coal * 7 + F.flare * 60) * (reduced ? .3 : 1);
+    emitAcc += rate * dt;
+    while (emitAcc > 1) {
+      emitAcc -= 1;
+      const w = (.05 + .09 * Math.min(F.heat, 1)) * L.S;
+      ember(L.fx + rnd(-w, w), L.fy - rnd(.03, .1 + .22 * F.heat) * L.S, { vy: -rnd(.22, .5 + .3 * F.heat) * L.S });
+    }
+    popAt -= dt;
+    if (popAt < 0) { popAt = rnd(1.2, 4.5) / (.4 + F.heat); burst(L.fx + rnd(-.1, .1) * L.S, L.fy - rnd(.02, .12) * L.S, (rnd(5, 14) | 0), { up: 220, g: 120, max: 260, life: 1.4, size: 1.8 }); }
+
+    for (let i = P.length - 1; i >= 0; i--) {
+      const p = P[i]; p.life += dt;
+      if (p.life >= p.max) { P.splice(i, 1); continue; }
+      const wx = (Math.sin(t * .6 + p.seed) * 14 + Math.sin(p.y * .018 + t * 1.8 + p.seed * 3) * 30) * p.turb;
+      p.vx += (wx - p.vx) * dt * 1.1 * p.drag; p.vy += p.g * dt; p.vy *= 1 - dt * .25 * p.drag;
+      p.x += p.vx * dt; p.y += p.vy * dt;
+    }
+    for (let i = FL.length - 1; i >= 0; i--) {
+      const f = FL[i]; f.t += dt / f.dur;
+      const k = Math.min(1, f.t), e = 1 - Math.pow(1 - k, 2.2), u = 1 - e;
+      const x = u * u * f.x0 + 2 * u * e * f.cx + e * e * f.x1, y = u * u * f.y0 + 2 * u * e * f.cy + e * e * f.y1;
+      f.trail.push(x, y); if (f.trail.length > 36) f.trail.splice(0, 2);
+      f.x = x; f.y = y;
+      if (Math.random() < .7) add({ x, y, vx: rnd(-30, 30), vy: rnd(-30, 30), g: 60, drag: 1, life: 0, max: rnd(.3, .8), size: rnd(.6, 1.4), seed: rnd(100), turb: .3 });
+      if (k >= 1) land(f);
+    }
+    if (!draw) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, L.W, L.H);
+    ctx.globalCompositeOperation = 'lighter';
+    for (const p of P) {
+      const k = p.life / p.max;
+      const fl = .62 + .38 * Math.sin(t * 22 + p.seed * 7);
+      const a = (1 - k) * Math.min(1, p.life * 10) * fl;
+      const s = p.size * (1 - k * .45) * 7;
+      ctx.globalAlpha = a;
+      ctx.drawImage(SPR[k < .28 ? 0 : k < .62 ? 1 : 2], p.x - s / 2, p.y - s / 2, s, s);
+    }
+    for (const f of FL) {
+      const tr = f.trail, n = tr.length / 2;
+      for (let j = 0; j < n; j++) {
+        const k = (j + 1) / n, s = (4 + 16 * k) * f.big;
+        ctx.globalAlpha = Math.pow(k, 1.6) * .75;
+        ctx.drawImage(SPR[k > .7 ? 0 : 1], tr[j * 2] - s / 2, tr[j * 2 + 1] - s / 2, s, s);
+      }
+      ctx.globalAlpha = .9; const s = 34 * f.big; ctx.drawImage(SPR[0], f.x - s / 2, f.y - s / 2, s, s);
+      ctx.globalAlpha = .35; const g = 110 * f.big; ctx.drawImage(SPR[1], f.x - g / 2, f.y - g / 2, g, g);
+    }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  }
+  return { resize, step, burst, fromRect, ash, flight, ember };
+})();
+
+/* ════════════════════════════════════════════════════════
+   4 · the loop
+   ════════════════════════════════════════════════════════ */
+let T = 0, last = performance.now(), frameN = 0, flT = .5;
+const perf = { acc: 0, n: 0, drops: 0, warm: 1.5 };
+function flickStep(dt) {
+  if (Math.random() < dt * 9) flT = .22 + Math.random() * .78;
+  F.flick += (flT - F.flick) * Math.min(1, dt * 13);
+}
+function frame(now) {
+  const dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now; T += dt;
+  const target = F.heatT + F.flare;
+  F.heat += (target - F.heat) * Math.min(1, dt * (target > F.heat ? 3.2 : 1.1));
+  F.flare *= Math.exp(-dt * 1.7);
+  F.coal += (F.coalT - F.coal) * Math.min(1, dt * .7);
+  flickStep(dt);
+  scene.draw(T);
+  fx.step(dt, T);
+  if ((frameN++ & 1) === 0) root.style.setProperty('--flick', F.flick.toFixed(3));
+  // if the phone is struggling, render the fire at a lower resolution (it's soft anyway)
+  if (MODE === 'app') {
+    perf.warm -= dt;
+    if (perf.warm < 0) {
+      perf.acc += dt; perf.n++;
+      if (perf.n >= 90) {
+        const avg = perf.acc / perf.n; perf.acc = 0; perf.n = 0;
+        if (avg > 1 / 45 && scene.rs > .6 && perf.drops < 4) { scene.rs = Math.max(.6, scene.rs * .78); perf.drops++; perf.warm = 1; }
+      }
+    }
+  }
+  requestAnimationFrame(frame);
+}
+function onResize() {
+  layout(); scene.resize(); fx.resize();
+  const deck = $('#deck');
+  if (deck) {
+    const top = deck.getBoundingClientRect().top || 70;
+    const flameTop = L.fy - (.37 + .04) * L.S * .7;
+    root.style.setProperty('--deckH', Math.max(240, Math.min(L.H * .56, flameTop - top + 60)) + 'px');
+  }
+  if (G.phase === 'reveal') placeNames();
+}
+
+/* ════════════════════════════════════════════════════════
+   5 · the game
+   ════════════════════════════════════════════════════════ */
+const G = {
+  names: store.get('names', []),
+  holder: store.get('holder', 0),
+  drawn: store.get('drawn', 0),
+  used: new Set(store.get('used', [])),
+  lock: store.get('lock', null),
+  votes: store.get('votes', true),
+  rules: store.get('rules', true),
+  rule: store.get('rule', null),
+  custom: store.get('custom', []),
+  pack: store.get('pack', null),
+  lastType: null, card: null, phase: 'setup', stageShown: null
+};
+function save() {
+  store.set('names', G.names); store.set('holder', G.holder); store.set('drawn', G.drawn);
+  store.set('used', [...G.used]); store.set('lock', G.lock); store.set('votes', G.votes); store.set('rules', G.rules);
+  store.set('rule', G.rule); store.set('custom', G.custom); store.set('pack', G.pack);
+}
+const n = () => G.names.length;
+const seat = i => G.names[((i % n()) + n()) % n()];
+const stage = () => (G.lock ?? (G.drawn < 8 ? 0 : G.drawn < 20 ? 1 : 2));
+
+// a private deck can arrive in the link's #fragment (never sent to the server)
+(function importPack() {
+  const m = location.hash.match(/deck=([A-Za-z0-9_-]+)/);
+  if (!m) return;
+  try {
+    const b64 = m[1].replace(/-/g, '+').replace(/_/g, '/');
+    const bytes = Uint8Array.from(atob(b64 + '==='.slice((b64.length + 3) % 4)), c => c.charCodeAt(0));
+    const d = JSON.parse(new TextDecoder().decode(bytes));
+    const name = String(d.n || 'House deck').slice(0, 40);
+    const cards = (d.c || []).filter(c => Array.isArray(c) && c.length >= 3).map(([s, t, x]) => mk(+s, String(t), String(x).slice(0, 300), name));
+    if (cards.length) { G.pack = { n: name, c: cards }; store.set('pack', G.pack); G.packFresh = true; }
+  } catch (e) { console.warn('deck link unreadable', e); }
+  history.replaceState(null, '', location.pathname + location.search);
+})();
+
+const allCards = () => [...DECK, ...G.custom, ...(G.pack ? G.pack.c : [])];
+function okType(t) {
+  if (t === 'v') return G.votes && n() >= 3;
+  if (t === 'h') return n() >= 3;
+  if (t === 'r') return G.rules;
+  return true;
+}
+function drawCard() {
+  const st = stage();
+  const fits = c => (c.s === st || c.s < 0) && okType(c.t);
+  let pool = allCards().filter(c => fits(c) && !G.used.has(c.id) && (!G.force || c.t === G.force));
+  if (!pool.length) { for (const c of allCards()) if (fits(c)) G.used.delete(c.id); pool = allCards().filter(fits); }
+  let c;
+  const house = pool.filter(c => c.src);
+  if (house.length && Math.random() < .34) c = pick(house);
+  else {
+    const W = { q: 1, a: .5, v: .42, h: .13, r: .1 };
+    const types = [...new Set(pool.map(c => c.t))];
+    const w = types.map(t => (W[t] || .5) * (t !== 'q' && t === G.lastType ? .12 : 1));
+    let r = Math.random() * w.reduce((a, b) => a + b, 0), ti = 0;
+    while (r > w[ti] && ti < w.length - 1) { r -= w[ti]; ti++; }
+    c = pick(pool.filter(c => c.t === types[ti]));
+  }
+  G.used.add(c.id); G.lastType = c.t; G.drawn++; G.force = null;
+  // names for this card, fixed once drawn
+  const others = G.names.map((_, i) => i).filter(i => i !== G.holder % n());
+  const who = { me: seat(G.holder), left: seat(G.holder + 1), right: seat(G.holder - 1), any: n() > 1 ? G.names[pick(others)] : seat(G.holder) };
+  G.card = { ...c, who, no: G.drawn, st };
+  save();
+  return G.card;
+}
+function wordsHTML(tpl, who) {
+  return tpl.split(/\s+/).map((w, i) => {
+    const h = esc(w).replace(/\{(me|left|right|any)\}/g, (_, k) => `<em>${esc(who[k])}</em>`);
+    return `<span class="w" style="animation-delay:${(80 + i * 42)}ms">${h}</span>`;
+  }).join(' ');
+}
+const plain = (tpl, who) => tpl.replace(/\{(me|left|right|any)\}/g, (_, k) => who[k]);
+
+/* ── DOM refs ── */
+const els = {
+  setup: $('#setup'), play: $('#play'), names: $('#names'), namein: $('#namein'), count: $('#count'), light: $('#light'), fresh: $('#fresh'),
+  packnote: $('#packnote'), card: $('#card'), ckind: $('#ckind'), cno: $('#cno'), ctext: $('#ctext'), cfoot: $('#cfoot'),
+  prompt: $('#prompt'), pkick: $('#pkick'), pname: $('#pname'), seats: $('#seats'), holdername: $('#holdername'),
+  actsAwait: $('#acts-await'), actsCard: $('#acts-card'), pass: $('#pass'), passlabel: $('#passlabel'), burn: $('#burn'),
+  dots: $('#dots'), stagename: $('#stagename'), rulechip: $('#rulechip'), ruletext: $('#ruletext'), deck: $('#deck'),
+  vote: $('#vote'), reveal: $('#reveal'), rnames: $('#rnames'), verdict: $('#verdict'),
+  sheet: $('#sheet'), toast: $('#toast')
+};
+let toastT;
+function toast(msg, ms = 2600) {
+  els.toast.textContent = msg; els.toast.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(() => els.toast.classList.remove('on'), ms);
+}
+
+/* ── setup ── */
+function renderNames() {
+  els.names.innerHTML = G.names.map((nm, i) => `<li>${esc(nm)}<button type="button" data-i="${i}" aria-label="Remove ${esc(nm)}">×</button></li>`).join('');
+  els.count.textContent = n() ? `${n()} around the fire` : '0';
+  els.light.disabled = n() < 2;
+  const resumable = G.drawn > 0 && n() >= 2;
+  els.light.innerHTML = resumable ? 'Back to the fire <b>→</b>' : 'Light the fire <b>→</b>';
+  els.fresh.hidden = !resumable;
+  if (G.pack) { els.packnote.hidden = false; els.packnote.textContent = `✦ ${G.pack.n}: ${G.pack.c.length} house cards are shuffled into tonight's deck.`; }
+}
+$('#addform').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = els.namein.value.replace(/\s+/g, ' ').trim();
+  if (!v) return;
+  if (G.names.some(x => x.toLowerCase() === v.toLowerCase())) { toast(`${v} is already by the fire.`); return; }
+  if (n() >= 16) { toast('Sixteen is a big circle. That\'s the limit.'); return; }
+  G.names.push(v); els.namein.value = ''; save(); renderNames();
+});
+els.names.addEventListener('click', e => {
+  const b = e.target.closest('button[data-i]'); if (!b) return;
+  G.names.splice(+b.dataset.i, 1); if (G.holder >= n()) G.holder = 0; save(); renderNames();
+});
+els.fresh.addEventListener('click', () => { newNight(); renderNames(); toast('Fresh deck. New night.'); });
+function newNight() { G.drawn = 0; G.used.clear(); G.holder = 0; G.rule = null; G.lock = null; G.card = null; save(); }
+els.light.addEventListener('click', () => {
+  if (els.namein.value.trim()) $('#addform').requestSubmit();
+  if (n() < 2) return;
+  if (G.holder >= n()) G.holder = 0;
+  startPlay();
+});
+
+/* ── play ── */
+function setFireForStage(flare) {
+  const s = STAGES[stage()];
+  F.heatT = s.heat; F.coalT = s.coal;
+  if (flare) F.flare = Math.max(F.flare, flare);
+}
+function renderStage() {
+  const st = stage();
+  [...els.dots.children].forEach((d, i) => d.classList.toggle('on', i <= st));
+  els.stagename.textContent = STAGES[st].name;
+  if (G.stageShown !== null && G.stageShown !== st && G.phase !== 'setup') {
+    toast(st > G.stageShown ? (st === 1 ? 'The kindling caught. On to the logs.' : "The fire's burning down to embers.") : 'Another log on the fire.');
+    setFireForStage(st < G.stageShown ? .7 : .2);
+    if (st < G.stageShown) fx.burst(L.fx, L.fy - .15 * L.S, 40, { up: 200, max: 320 });
+  } else setFireForStage();
+  G.stageShown = st;
+}
+function renderRule() {
+  els.rulechip.hidden = !G.rule;
+  els.deck.classList.toggle('hasrule', !!G.rule);
+  if (G.rule) els.ruletext.textContent = G.rule;
+}
+function renderSeats() {
+  els.seats.innerHTML = G.names.map((_, i) => `<i class="${i === G.holder ? 'on' : ''}"></i>`).join('');
+  els.holdername.textContent = seat(G.holder);
+}
+function showAwait() {
+  G.phase = 'await';
+  els.card.hidden = true; els.card.className = 'card';
+  els.prompt.classList.remove('gone');
+  els.pkick.textContent = `${STAGES[stage()].name} · card ${String(G.drawn + 1).padStart(2, '0')}`;
+  els.pname.textContent = seat(G.holder) + ',';
+  els.actsAwait.hidden = false; els.actsCard.hidden = true;
+  $('#holder').style.visibility = 'hidden';
+  renderSeats(); renderStage(); renderRule();
+}
+let wakeLock = null;
+async function keepAwake() {
+  try { if ('wakeLock' in navigator && document.visibilityState === 'visible' && !wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => { wakeLock = null; }); } } catch (e) {}
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && G.phase !== 'setup') keepAwake(); });
+
+function startPlay() {
+  els.setup.classList.add('leaving');
+  setTimeout(() => { els.setup.hidden = true; els.setup.classList.remove('leaving'); }, 900);
+  els.play.hidden = false; requestAnimationFrame(() => els.play.classList.add('on'));
+  G.stageShown = null;
+  showAwait();
+  onResize();
+  // the whoosh as the fire takes
+  F.flare = 1.05;
+  setTimeout(() => fx.burst(L.fx, L.fy - .12 * L.S, 70, { up: 260, max: 380, life: 1.8 }), 160);
+  keepAwake();
+}
+
+function stoke() {
+  if (G.phase !== 'await') return;
+  G.phase = 'drawing';
+  const c = drawCard();
+  const prevStage = G.stageShown;
+  F.flare = Math.max(F.flare, .5);
+  fx.burst(L.fx, L.fy - .18 * L.S * Math.max(F.heat, .4), 24, { up: 240, max: 300 });
+  els.prompt.classList.add('gone');
+  // build the card while invisible, so we know where the spark should fly
+  fillCard(c);
+  els.card.hidden = false; els.card.className = 'card';
+  if (c.src) els.card.dataset.pack = '1'; else delete els.card.dataset.pack;
+  els.card.dataset.t = c.t;
+  fitText();
+  const r = els.card.getBoundingClientRect();
+  const tx = r.left + r.width / 2, ty = r.top + r.height * .55;
+  fx.flight(L.fx + rnd(-8, 8), L.fy - .3 * L.S * Math.max(F.heat, .45), tx, ty, reduced ? .2 : .72, () => {
+    els.card.classList.add('in');
+    fx.burst(tx, ty, 46, { up: 20, g: 90, min: 40, max: 330, life: 1.1 });
+    fx.fromRect({ left: r.left + 10, right: r.right - 10, top: r.top + 10, bottom: r.bottom - 10 }, 14, { life: 1 });
+    G.phase = 'card';
+    showActs(c);
+  }, { lift: .12 });
+  if (c.t === 'r') { G.rule = plain(c.x, c.who); save(); setTimeout(renderRule, 900); }
+  if (stage() !== prevStage) setTimeout(renderStage, 500);
+}
+function fillCard(c) {
+  const who = c.who, st = STAGES[c.st].name;
+  const label = { q: `${st} · for ${who.me}`, a: 'Around the fire', v: 'Secret ballot', h: `Hot seat · ${who.me}`, r: 'New house rule' }[c.t];
+  els.ckind.textContent = c.src ? `${c.src} · ${c.t === 'q' ? 'for ' + who.me : label}` : label;
+  els.cno.textContent = 'No. ' + String(c.no).padStart(2, '0');
+  const text = c.t === 'a' ? c.x.replace(/^Around the fire:\s*/i, '') : c.x;
+  els.ctext.innerHTML = wordsHTML(text, who);
+  els.cfoot.textContent = {
+    q: `Answer it, then pass the phone to ${who.left}.`,
+    a: `Everyone answers. ${who.me} goes first, then around to the left.`,
+    v: 'Everyone votes in secret. Nobody sees a ballot but their own.',
+    h: 'Go around the circle. The fire is watching.',
+    r: 'In force until the next rule card.'
+  }[c.t];
+}
+function fitText() {
+  // keep long cards inside the sky: shrink the type until the card fits the deck area
+  els.ctext.style.removeProperty('--fs');
+  const max = els.deck.clientHeight;
+  let fs = parseFloat(getComputedStyle(els.ctext).fontSize), guard = 0;
+  while (els.card.scrollHeight > max && fs > 17 && guard++ < 20) { fs -= 1.5; els.ctext.style.setProperty('--fs', fs + 'px'); }
+}
+function showActs(c) {
+  els.actsAwait.hidden = true; els.actsCard.hidden = false;
+  $('#holder').style.visibility = 'visible';
+  const next = seat(G.holder + 1);
+  els.passlabel.textContent = c.t === 'v' ? 'Start the secret vote' : `Pass to ${next}`;
+}
+function passOn() {
+  if (G.phase !== 'card') return;
+  if (G.card && G.card.t === 'v') return startVote();
+  dissolveCard();
+  G.holder = (G.holder + 1) % n(); save();
+  setTimeout(showAwait, 520);
+}
+function dissolveCard() {
+  const r = els.card.getBoundingClientRect();
+  fx.fromRect(r, 70, { life: 1.6 });
+  els.card.classList.remove('in'); els.card.classList.add('out');
+  G.phase = 'passing';
+}
+function burnCard() {
+  if (G.phase !== 'card') return;
+  G.phase = 'burning';
+  const r = els.card.getBoundingClientRect();
+  els.card.classList.add('burning');
+  const t0 = performance.now(), dur = reduced ? 200 : 1100;
+  (function step(now) {
+    const k = Math.min(1, (now - t0) / dur), e = k * k * (3 - 2 * k);
+    const b = -10 + e * 118;
+    els.card.style.setProperty('--b', b.toFixed(1) + '%');
+    const y = r.bottom - (b + 4) / 100 * r.height;
+    if (y > r.top - 4) for (let i = 0; i < 4; i++) fx.ash(rnd(r.left + 8, r.right - 8), y + rnd(-4, 4));
+    if (k < 1) requestAnimationFrame(step);
+    else {
+      els.card.classList.remove('burning', 'in'); els.card.style.removeProperty('--b');
+      els.card.hidden = true; G.phase = 'await'; stoke();
+    }
+  })(t0);
+}
+els.play.addEventListener('click', e => {
+  if (G.phase !== 'await') return;
+  if (e.target.closest('.bar, .rulechip, .dock button:not(#draw)')) return;
+  stoke();
+});
+els.pass.addEventListener('click', passOn);
+els.burn.addEventListener('click', burnCard);
+els.rulechip.addEventListener('click', () => G.rule && toast('House rule: ' + G.rule, 4200));
+
+/* ── the secret ballot ── */
+let V = null;
+function startVote() {
+  G.phase = 'vote';
+  const c = G.card;
+  V = { q: plain(c.x, c.who), order: G.names.map((_, i) => seat(G.holder + i)), i: 0, ballots: [] };
+  els.card.classList.remove('in'); els.card.classList.add('out');
+  els.play.classList.add('away');
+  els.vote.hidden = false;
+  voteCover();
+}
+function progHTML() { return `<div class="v-prog">${V.order.map((_, i) => `<i class="${i < V.ballots.length ? 'done' : ''}"></i>`).join('')}</div>`; }
+function voteCover() {
+  const who = V.order[V.i];
+  els.vote.innerHTML = `<div class="v-step">
+    <p class="kick">Secret ballot · ${V.i + 1} of ${V.order.length}</p>
+    <p class="v-big">${V.i === 0 ? '' : 'Hand it to '}${esc(who)}</p>
+    <p class="v-small">${V.i === 0 ? 'You hold the fire, so you vote first. Keep your screen to yourself.' : 'Nobody else looks. The fire will know.'}</p>
+    <button class="cta" type="button" id="vgo">I'm ${esc(who)} — vote <b>→</b></button>
+    ${progHTML()}
+    <button class="textbtn" type="button" id="vskip" style="margin-top:26px">${V.i ? `Skip ${esc(who)}` : 'Skip this vote'}</button></div>`;
+  $('#vgo').onclick = voteBallot;
+  $('#vskip').onclick = () => {
+    if (V.i === 0) { cancelVote(); return; }
+    V.order.splice(V.i, 1);                      // someone wandered off to the tent
+    V.i < V.order.length ? voteCover() : voteDone();
+  };
+}
+function voteBallot() {
+  const who = V.order[V.i];
+  els.vote.innerHTML = `<div class="v-step">
+    <p class="kick">${esc(who)}'s ballot</p>
+    <p class="v-q">${esc(V.q)}</p>
+    <div class="v-grid">${G.names.map((nm, i) => `<button type="button" data-i="${i}">${esc(nm)}</button>`).join('')}</div>
+    ${progHTML()}</div>`;
+  els.vote.querySelector('.v-grid').onclick = e => {
+    const b = e.target.closest('button[data-i]'); if (!b) return;
+    V.ballots.push(+b.dataset.i); V.i++;
+    els.vote.innerHTML = `<div class="v-step"><p class="v-lock">Locked in</p></div>`;
+    setTimeout(V.i < V.order.length ? voteCover : voteDone, 520);
+  };
+}
+function cancelVote() {
+  els.vote.hidden = true; els.play.classList.remove('away'); els.card.hidden = true;
+  G.holder = (G.holder + 1) % n(); save();
+  showAwait();
+}
+function voteDone() {
+  els.vote.innerHTML = `<div class="v-step">
+    <p class="kick">All ${V.order.length} ballots are in</p>
+    <p class="v-big">Face it to the fire.</p>
+    <p class="v-small">Hold the phone up so everyone can see.</p>
+    <button class="cta" type="button" id="vrev">Reveal <b>→</b></button>
+    ${progHTML()}</div>`;
+  $('#vrev').onclick = startReveal;
+}
+function placeNames() {
+  const cx = L.fx, cy = L.fy - .24 * L.S;
+  const rx = Math.min(L.W * .36, .52 * L.S), ry = Math.min(.27 * L.S, L.H * .2);
+  [...els.rnames.children].forEach((el, i) => {
+    const a = Math.PI / 2 + i / n() * Math.PI * 2;
+    const x = clamp(cx + Math.cos(a) * rx, 56, L.W - 56), y = cy + Math.sin(a) * ry;
+    el.style.left = x + 'px'; el.style.top = y + 'px';
+    el._x = x; el._y = y;
+  });
+}
+function startReveal() {
+  G.phase = 'reveal';
+  els.vote.hidden = true; els.reveal.hidden = false; els.verdict.hidden = true;
+  $('.r-head', els.reveal).innerHTML = `<p class="kick">The fire decides</p><p class="r-q">${esc(V.q)}</p>`;
+  els.rnames.innerHTML = G.names.map((nm, i) => `<div class="r-name" style="animation-delay:${i * 60}ms">${esc(nm)}<b>0</b></div>`).join('');
+  placeNames();
+  const counts = G.names.map(() => 0);
+  const order = shuffle(V.ballots.slice());
+  F.flare = .6;
+  let i = 0, landed = 0;
+  const fire = () => {
+    if (i >= order.length) return;
+    const idx = order[i++], el = els.rnames.children[idx];
+    fx.flight(L.fx + rnd(-10, 10), L.fy - .28 * L.S * Math.max(F.heat, .5), el._x, el._y, .62, () => {
+      if (++landed === order.length) setTimeout(() => verdict(counts), 800);
+      counts[idx]++;
+      el.querySelector('b').textContent = counts[idx];
+      el.classList.add('has'); el.classList.remove('hit'); void el.offsetWidth; el.classList.add('hit');
+      fx.burst(el._x, el._y, 16, { up: 40, max: 180, life: .9 });
+      F.flare = Math.max(F.flare, .25);
+    }, { big: .7, lift: .3 });
+    setTimeout(fire, Math.max(260, 720 - i * 70));
+  };
+  setTimeout(fire, 700);
+}
+function verdict(counts) {
+  const top = Math.max(...counts);
+  const winners = counts.map((c, i) => (c === top ? i : -1)).filter(i => i >= 0);
+  [...els.rnames.children].forEach((el, i) => el.classList.add(winners.includes(i) ? 'win' : 'lose'));
+  F.flare = 1;
+  for (const w of winners) { const el = els.rnames.children[w]; fx.burst(el._x, el._y, 80, { up: 120, max: 420, life: 1.8, size: 2.6 }); }
+  const names = winners.map(i => G.names[i]);
+  const tie = names.length > 1;
+  $('.r-head', els.reveal).innerHTML = `
+    <p class="kick">${tie ? 'The fire can\'t decide' : 'The fire has spoken'}</p>
+    <p class="v-big">${esc(tie ? names.join(' & ') : names[0])}</p>
+    <p class="v-small">${tie ? 'A tie. Each of you makes your case; the circle cheers for the winner.' : `${top} of ${counts.reduce((a, b) => a + b, 0)} votes. ${esc(names[0])}, explain yourself.`}</p>
+    <p class="r-was">${esc(V.q)}</p>`;
+  els.verdict.innerHTML = `<button class="cta" type="button" id="rback">Back to the fire <b>→</b></button>`;
+  els.verdict.hidden = false;
+  $('#rback').onclick = () => {
+    els.reveal.hidden = true; els.card.hidden = true;
+    els.play.classList.remove('away');
+    G.holder = (G.holder + 1) % n(); save();
+    showAwait();
+  };
+}
+
+/* ── menu ── */
+function renderMenu() {
+  const lk = G.lock === null ? 'auto' : String(G.lock);
+  $('#seg').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lock === lk));
+  $('#tog-votes').setAttribute('aria-checked', G.votes);
+  $('#tog-rules').setAttribute('aria-checked', G.rules);
+  const own = G.custom.length, pk = G.pack ? G.pack.c.length : 0;
+  $('#wcount').textContent = (own ? `${own} card${own > 1 ? 's' : ''} written tonight. ` : '') + (pk ? `${pk} ${G.pack.n} cards in the deck.` : '') || 'Your cards get shuffled in and turn up more often than the rest.';
+}
+$('#menubtn').onclick = () => { renderMenu(); els.sheet.hidden = false; };
+$('#stagebtn').onclick = () => { renderMenu(); els.sheet.hidden = false; };
+$('#sheetclose').onclick = () => { els.sheet.hidden = true; };
+els.sheet.addEventListener('click', e => { if (e.target === els.sheet) els.sheet.hidden = true; });
+$('#seg').onclick = e => {
+  const b = e.target.closest('button'); if (!b) return;
+  G.lock = b.dataset.lock === 'auto' ? null : +b.dataset.lock; save(); renderMenu();
+  if (G.phase === 'await') showAwait(); else renderStage();
+};
+$('#tog-votes').onclick = () => { G.votes = !G.votes; save(); renderMenu(); };
+$('#tog-rules').onclick = () => { G.rules = !G.rules; if (!G.rules) { G.rule = null; renderRule(); } save(); renderMenu(); };
+$('#wadd').onclick = () => {
+  const x = $('#wtext').value.replace(/\s+/g, ' ').trim(); if (x.length < 6) { toast('Write a little more than that.'); return; }
+  const t = $('#wtype').value;
+  G.custom.push(mk(-1, t, x, 'House card')); $('#wtext').value = ''; save(); renderMenu();
+  toast('Into the deck it goes.');
+};
+$('#editcircle').onclick = () => {
+  els.sheet.hidden = true; G.phase = 'setup';
+  els.play.classList.remove('on', 'away'); els.play.hidden = true; els.setup.hidden = false; els.reveal.hidden = true; els.vote.hidden = true;
+  F.heatT = .3; F.coalT = .45; renderNames();
+};
+$('#reshuffle').onclick = () => { newNight(); els.sheet.hidden = true; showAwait(); toast('Fresh deck. New night.'); F.flare = .9; };
+
+/* ════════════════════════════════════════════════════════
+   6 · boot
+   ════════════════════════════════════════════════════════ */
+addEventListener('resize', onResize);
+addEventListener('orientationchange', () => setTimeout(onResize, 250));
+layout(); scene.resize(); fx.resize();
+
+if (MODE !== 'app') {
+  // share-card renders: a lit fire, no controls
+  document.querySelectorAll('.screen').forEach(s => (s.hidden = true));
+  F.heat = F.heatT = MODE === 'og' ? .92 : 1; F.coal = F.coalT = .7; T = 7.3;
+  for (let i = 0; i < 200; i++) fx.step(1 / 60, (T += 1 / 60), false);
+  if (MODE === 'og') {
+    const og = document.createElement('div'); og.className = 'og';
+    og.innerHTML = '<p class="kick">A deck for the fire</p><h1 class="wordmark">Ember</h1><p class="lede">One phone, passed hand to hand. The questions start light and burn down to the good stuff.</p><p class="url">naveed.io/ember</p>';
+    document.body.appendChild(og);
+  }
+} else {
+  renderNames();
+  if (G.packFresh) toast(`${G.pack.n} deck loaded: ${G.pack.c.length} house cards.`, 4000);
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+requestAnimationFrame(t => { last = t; frame(t); });
+window.__ember = { F, G, L, scene };
+})();
+</script>
+</body>
+</html>

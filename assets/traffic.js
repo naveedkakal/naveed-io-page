@@ -18,6 +18,7 @@
     "/writing/seventeen-years-same-problem.html": "/writing/seventeen-years-same-problem.html",
     "/writing/teaching-the-condemned.html": "/writing/teaching-the-condemned.html",
     "/dice/": "/dice/",
+    "/ember/": "/ember/",
     "/liam/": "/liam/",
     "/optioneers/": "/optioneers/"
   };
