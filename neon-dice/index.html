@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Neon dice — roll for it · naveed.io</title>
+<meta name="description" content="Can't decide? Load a few dice with your options, send the link, and let the dice decide. Nobody argues with dice." />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#05010f" />
+<meta name="apple-mobile-web-app-title" content="Neon Dice" />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="icon.png?v=2" />
+<link rel="canonical" href="https://naveed.io/neon-dice/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/neon-dice/" />
+<meta property="og:site_name" content="naveed.io" />
+<meta property="og:title" content="Roll for it 🎲" />
+<meta property="og:description" content="Somebody couldn't decide. Tap the link, shake your phone, and let District 9 settle it. Nobody argues with dice." />
+<meta property="og:image" content="https://naveed.io/neon-dice/og.png?v=3" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Three neon hologram dice labeled Who, Food, Where over a rainy neon city — Roll for it" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Roll for it 🎲" />
+<meta name="twitter:description" content="Somebody couldn't decide. Tap the link, shake your phone, and let District 9 settle it." />
+<meta name="twitter:image" content="https://naveed.io/neon-dice/og.png?v=3" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="dice.css?v=20260926a" />
+<script src="../assets/traffic.js" defer></script>
+</head>
+<body data-mode="setup">
+<canvas id="bg" class="bgc" aria-hidden="true"></canvas>
+
+<!-- ── setup: load the dice, get a link ─────────────────── -->
+<div class="setup" id="setup" hidden>
+  <div class="strip">
+    <a href="../">← naveed.io</a>
+    <span class="r"><span>neon dice · seed &amp; send</span></span>
+  </div>
+  <div class="wrap">
+    <div class="kick"><i></i>District 9 <span>· for the chronically undecided</span></div>
+    <h1 class="title" data-text="ROLL FOR IT">ROLL FOR IT</h1>
+    <p class="standfirst">Load a few dice with your options, send the link, and let the city decide. <b>Nobody argues with dice.</b></p>
+
+    <div class="presets" id="presets"><span class="lab">Start from</span></div>
+
+    <div id="cards"></div>
+    <button class="add-die" id="add" type="button">+ Add a die</button>
+
+    <div class="panel share">
+      <h2><span>D9 · Your link</span><span>CH 01</span></h2>
+      <p>Send this to whoever needs to make a decision. It opens straight onto the dice, nothing to install. Shake the phone to roll.</p>
+      <div class="urlbox">
+        <input id="url" type="text" readonly spellcheck="false" placeholder="Give a die at least two options…" aria-label="Shareable link" />
+        <span class="len" id="len"></span>
+      </div>
+      <div class="actions">
+        <button class="ctl c" id="share-btn" type="button">Share</button>
+        <button class="ctl" id="copy-btn" type="button">Copy link</button>
+        <button class="ctl m go" id="try-btn" type="button">Roll it <b>→</b></button>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <a href="../">← naveed.io</a>
+    <span>naveed.io/neon-dice · nobody argues with dice</span>
+  </div>
+</div>
+
+<!-- ── roll: what the link opens onto ──────────────────── -->
+<div class="app" id="roll" hidden>
+  <div class="strip">
+    <a href="../">← naveed.io</a>
+    <span class="r">
+      <span id="strip-t">dice · loaded</span>
+      <button id="snd" class="iconbtn" type="button" aria-label="Turn sound off" aria-pressed="true">🔊</button>
+    </span>
+  </div>
+
+  <div class="head">
+    <div class="kick"><i></i>District 9 <span>· somebody couldn't decide</span></div>
+    <h1 class="title" data-text="ROLL FOR IT">ROLL FOR IT</h1>
+  </div>
+
+  <div class="zone" id="zone"><div class="dice" id="dice"></div></div>
+  <canvas id="fg" class="fgc" aria-hidden="true"></canvas>
+
+  <div class="street" id="street">
+    <div class="panel vhud" id="vhud">
+      <h2><span id="vh-t">D9 · Standby</span><span id="vh-r">Roll 00</span></h2>
+      <div class="vlines" id="vlines"></div>
+      <div class="vq" id="vq" aria-live="polite"></div>
+    </div>
+    <div class="dock">
+      <div class="shakehint" id="shakehint"><span class="phone" aria-hidden="true"></span><span id="sh-t"></span></div>
+      <div class="ctls">
+        <button class="ctl c shk" id="shake" type="button" aria-pressed="false"><span class="phone" aria-hidden="true"></span>Shake <b id="shake-st">arm</b></button>
+        <button class="ctl m roll" id="rollbtn" type="button"><span id="roll-t">Roll</span> <b>⚡</b></button>
+        <button class="ctl y" id="share-res" type="button" disabled>Share</button>
+      </div>
+      <nav class="links">
+        <button type="button" id="edit">Edit these dice</button>
+        <button type="button" id="own">Make your own</button>
+      </nav>
+    </div>
+  </div>
+
+  <div class="ticker" aria-hidden="true"><span class="tl"><i></i>D9 Wire</span><div class="trun"><span id="wire"></span></div></div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="scene.js?v=20260926a" defer></script>
+<script src="dice.js?v=20260926a" defer></script>
+</body>
+</html>

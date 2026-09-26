@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════
-   naveed.io/dice — the app
+   naveed.io/neon-dice — the app
    ──────────────────────────────────────────────────────────
    Two views on one URL. No hash: load the dice and get a link.
    A hash: District 9, where the dice are neon holograms.

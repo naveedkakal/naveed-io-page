@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════
-   naveed.io/dice — District 9, after dark
+   naveed.io/neon-dice — District 9, after dark
    ──────────────────────────────────────────────────────────
    The backdrop: four parallax skylines with windows that come
    and go, neon signs that fail the way real neon fails, market
