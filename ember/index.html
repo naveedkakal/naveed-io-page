@@ -128,7 +128,7 @@ input, textarea { -webkit-user-select: text; user-select: text; }
   box-shadow: 0 30px 70px -34px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,225,190,.07);
 }
 .panel-h { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px; font: 600 10.5px/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--dim); }
-.panel-h b { font: 500 11px/1 var(--mono); letter-spacing: .06em; color: var(--amber); }
+.panel-h b { font: 500 11px/1 var(--mono); letter-spacing: .06em; color: var(--amber); white-space: nowrap; }
 .addrow { display: flex; gap: 8px; margin-top: 14px; }
 .addrow input {
   flex: 1; min-width: 0; padding: 14px 15px; border-radius: 14px; font-size: 17px; outline: none; color: var(--cream);
@@ -1253,7 +1253,7 @@ function toast(msg, ms = 2600) {
 /* ── setup ── */
 function renderNames() {
   els.names.innerHTML = G.names.map((nm, i) => `<li>${esc(nm)}<button type="button" data-i="${i}" aria-label="Remove ${esc(nm)}">×</button></li>`).join('');
-  els.count.textContent = n() ? `${n()} around the fire` : '0';
+  els.count.textContent = n();
   els.light.disabled = n() < 2;
   const resumable = G.drawn > 0 && n() >= 2;
   els.light.innerHTML = resumable ? 'Back to the fire <b>→</b>' : 'Light the fire <b>→</b>';
