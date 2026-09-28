@@ -1,0 +1,17 @@
+/* Ember for iOS: support and privacy. No scripts, no fonts from anywhere, no analytics. */
+:root { --ink: #070608; --cream: #f7ead5; --cream2: rgba(247,234,213,.78); --dim: rgba(247,234,213,.56);
+  --amber: #ffb454; --line: rgba(255,196,140,.15); }
+* { box-sizing: border-box; margin: 0; }
+html { background: var(--ink); }
+body { min-height: 100vh; color: var(--cream); font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(120% 60% at 50% 115%, rgba(160,60,10,.45), transparent 60%), var(--ink); }
+main { max-width: 620px; margin: 0 auto; padding: 56px 22px 72px; }
+.kick { font: 600 11px/1 -apple-system, system-ui, sans-serif; letter-spacing: .3em; text-transform: uppercase; color: var(--amber); }
+h1 { margin: 14px 0 8px; font: 400 clamp(44px, 12vw, 64px)/1 ui-serif, "New York", Georgia, serif; letter-spacing: -.03em;
+  background: linear-gradient(180deg, #fff8ea, #ffe3b0 40%, #ffb35a 70%, #ff6a1f); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lede { font: italic 20px/1.45 ui-serif, "New York", Georgia, serif; color: var(--cream2); margin-bottom: 36px; }
+h2 { font: 400 26px/1.2 ui-serif, "New York", Georgia, serif; margin: 34px 0 10px; padding-top: 24px; border-top: 1px solid var(--line); }
+p, li { color: var(--cream2); }
+ul { padding-left: 1.2em; } li + li { margin-top: 6px; }
+a { color: var(--amber); text-underline-offset: 3px; }
+.fine { margin-top: 44px; font-size: 14px; color: var(--dim); }
