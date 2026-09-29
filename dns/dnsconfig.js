@@ -12,6 +12,10 @@
 // The `misra` CNAME is the clearest case — it was added by hand (Naveed,
 // 2026-08-26) precisely so this file would not have to be pushed.
 //
+// TO ADD ONE RECORD, use dns/add-host.py, not a push. It reads the live host set,
+// appends one record, writes it back with the zone's own EmailType (FWD), and
+// reads it back to prove nothing else changed. Then declare the record here.
+//
 // The reason is in the mail section below. Declaring MX explicitly sets
 // Namecheap's EmailType to MX, and that flag is what turns his personal email
 // forwarding on. Whether forwarding survives with the eforward hosts as plain
@@ -36,7 +40,7 @@
 // why this file moved (2026-08-31). misra's copy is now a pointer comment.
 //
 // naveed.io is Naveed's personal utility zone. Besides the site at the apex it
-// carries fifteen project subdomains, a Google site verification, the Postmark
+// carries nineteen project subdomains, a Google site verification, the Postmark
 // DKIM and bounce records that other projects' senders depend on, and his
 // personal email forwarding. A repo that owns one subdomain here should never
 // be the thing declaring all of it.
@@ -55,6 +59,11 @@
 //
 //     get-zones : 24 records, zero MX, one TXT
 //     dig       : 5 MX (eforward1-5), 2 TXT (SPF + Google verification)
+//
+// Re-read 2026-09-29 (raw getHosts: EmailType="FWD", 28 host records; dig: the
+// same 5 MX and SPF). Five records had been added by hand since the last read
+// (clae, jays, rollup, traffic, _dmarc.outbound) and `ads` had been removed;
+// this file now matches.
 //
 // A config built from get-zones alone would preview as "1 correction, CREATE"
 // and destroy his personal email forwarding on the push. They are declared
@@ -107,6 +116,7 @@ D("naveed.io", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
   // ---- Postmark outbound -------------------------------------------------
   // misra sends as misra@outbound.naveed.io, so these two are misra's
   // deliverability as much as anything else's.
+  TXT("_dmarc.outbound", "v=DMARC1; p=none; adkim=r; aspf=r"),
   TXT("20260603205726pm._domainkey.outbound", "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCbgz6v0oJegoSYDatEz2r53dn9q/NHrPHgfvTz2sEjJ9Lzy6P03JFa3WjE5+hW4vZzZNljHmv2g0sjoDOV0RNsrhpD8BAGavWH2cXZkUyqWZdvK1bWsyBchioZtX5nAsxuZ0O9zlmnyula4Sb9eRtxuSyQQjgvd3PRx++OCjeBEwIDAQAB"),
   CNAME("pm-bounces.outbound", "pm.mtasv.net."),
 
@@ -118,13 +128,14 @@ D("naveed.io", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
   CNAME("mispronounced", "mispronounced.fly.dev."),
   CNAME("hushbin", "53qd5zx.blinkpad.fly.dev."),
   CNAME("weave", "9lo08zx.weave-laundry-web.fly.dev."),
+  CNAME("clae", "claepest.fly.dev."),
+  CNAME("jays", "jaysgreencare.fly.dev."),
+  CNAME("rollup", "rollup.fly.dev."),
+  CNAME("traffic", "naveed-traffic.fly.dev."),       // naveed.io's own visitor counter
 
   // `ads` (A 66.241.124.103 / AAAA 2a09:8280:1::11e:72cb:0) was dropped from
-  // this file on 2026-08-31: the vigil-ads demo it served was torn down and
-  // both Fly apps are being destroyed. The two records are still LIVE in the
-  // zone — deleting them here does not delete them from the internet, and
-  // NO_PURGE means a push will not either. They have to be removed by hand,
-  // or by turning NO_PURGE off with the rest of this file verified first.
+  // this file on 2026-08-31 when the vigil-ads demo was torn down. It has since
+  // been removed from the live zone too (absent from getHosts on 2026-09-29).
 
   // ---- GitHub Pages projects ---------------------------------------------
   CNAME("avalanche", "naveedkakal.github.io."),
