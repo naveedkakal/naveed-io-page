@@ -40,7 +40,7 @@
 // why this file moved (2026-08-31). misra's copy is now a pointer comment.
 //
 // naveed.io is Naveed's personal utility zone. Besides the site at the apex it
-// carries nineteen project subdomains, a Google site verification, the Postmark
+// carries twenty project subdomains, a Google site verification, the Postmark
 // DKIM and bounce records that other projects' senders depend on, and his
 // personal email forwarding. A repo that owns one subdomain here should never
 // be the thing declaring all of it.
@@ -144,6 +144,7 @@ D("naveed.io", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
   CNAME("glow", "naveedkakal.github.io."),
   CNAME("harry", "naveedkakal.github.io."),
   CNAME("mastel", "naveedkakal.github.io."),
+  CNAME("spitball", "naveedkakal.github.io."),    // added 2026-09-29 with dns/add-host.py
   CNAME("tv", "naveedkakal.github.io."),
   CNAME("xfm", "naveedkakal.github.io.")
 );
