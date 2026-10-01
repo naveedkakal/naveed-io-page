@@ -40,7 +40,7 @@
 // why this file moved (2026-08-31). misra's copy is now a pointer comment.
 //
 // naveed.io is Naveed's personal utility zone. Besides the site at the apex it
-// carries twenty project subdomains, a Google site verification, the Postmark
+// carries twenty-one project subdomains, a Google site verification, the Postmark
 // DKIM and bounce records that other projects' senders depend on, and his
 // personal email forwarding. A repo that owns one subdomain here should never
 // be the thing declaring all of it.
@@ -132,6 +132,7 @@ D("naveed.io", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
   CNAME("jays", "jaysgreencare.fly.dev."),
   CNAME("rollup", "rollup.fly.dev."),
   CNAME("traffic", "naveed-traffic.fly.dev."),       // naveed.io's own visitor counter
+  CNAME("earlgiles", "earlgiles.fly.dev."),          // added 2026-10-01 with dns/add-host.py
 
   // `ads` (A 66.241.124.103 / AAAA 2a09:8280:1::11e:72cb:0) was dropped from
   // this file on 2026-08-31 when the vigil-ads demo was torn down. It has since
