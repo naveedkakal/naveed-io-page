@@ -133,7 +133,8 @@ D("naveed.io", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
   CNAME("rollup", "rollup.fly.dev."),
   CNAME("traffic", "naveed-traffic.fly.dev."),       // naveed.io's own visitor counter
   CNAME("earlgiles", "earlgiles.fly.dev."),          // added 2026-10-01 with dns/add-host.py
-  CNAME("appleorchard", "orchard.fly.dev."),       // added 2026-10-03 with dns/add-host.py (Orchard, Codewrights)
+  CNAME("orchard", "orchard.fly.dev."),            // added 2026-10-03 with dns/add-host.py (Orchard, Codewrights)
+  CNAME("appleorchard", "orchard.fly.dev."),       // added 2026-10-03; Orchard's first host, now a redirect to orchard
 
   // `ads` (A 66.241.124.103 / AAAA 2a09:8280:1::11e:72cb:0) was dropped from
   // this file on 2026-08-31 when the vigil-ads demo was torn down. It has since
