@@ -148,6 +148,7 @@ D("naveed.io", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
   CNAME("harry", "naveedkakal.github.io."),
   CNAME("mastel", "naveedkakal.github.io."),
   CNAME("spitball", "naveedkakal.github.io."),    // added 2026-09-29 with dns/add-host.py
+  CNAME("knowthat", "naveedkakal.github.io."),    // added 2026-10-05 with dns/add-host.py
   CNAME("tv", "naveedkakal.github.io."),
   CNAME("xfm", "naveedkakal.github.io.")
 );
