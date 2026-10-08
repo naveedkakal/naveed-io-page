@@ -18,7 +18,7 @@ Last read from the Namecheap API: 2026-10-07.
 | codewrights.io | Cloudflare | codewrights `dns/dnsconfig.js` | 2027-06-09 | Yes (business domain). Eligible now |
 | picpost.io | Cloudflare | petalpost `dns/dnsconfig.js` | 2027-05-30 | **Yes (keeping).** Renew on Cloudflare: transfer any time before expiry. Eligible now |
 | mispronounced.io | Cloudflare | accent-app `dns/dnsconfig.js` | 2027-07-04 | **Yes (keeping).** Renew on Cloudflare: transfer any time before expiry. Eligible now |
-| napervillecarwashes.com | Cloudflare | npv-car-washes `dns/dnsconfig.js` | 2027-07-21 | **No. Lapses 2027-07-21.** Auto-renew turned off 2026-10-07 |
+| napervillecarwashes.com | Cloudflare (site is a Worker, proxied) | npv-car-washes `dns/dnsconfig.js` | 2027-07-21 | **No. Lapses 2027-07-21.** Auto-renew turned off 2026-10-07 |
 | spitballgame.io | Cloudflare | (dashboard) | 2027-10-07 | Keep? Registered 2026-10-07, locked until 2026-12-06 |
 | glowgardenusa.com | Cloudflare zone pending | (dashboard) | (not at Namecheap) | Check where it is registered |
 | weave-linen.com | Namecheap | — | **2026-12-30** | Decide before 2026-12-30 |
@@ -31,7 +31,7 @@ Last read from the Namecheap API: 2026-10-07.
 | pawpost.io | Namecheap | — (served by petalpost Fly app) | 2027-05-24 | **No. Let it lapse;** everything unifies under picpost.io. Turn auto-renew OFF at Namecheap (still on as of 2026-10-07). Not worth moving its DNS |
 | potionpost.io | Namecheap | — (served by petalpost Fly app) | 2027-05-24 | **No. Let it lapse;** everything unifies under picpost.io. Turn auto-renew OFF at Namecheap (still on as of 2026-10-07). Not worth moving its DNS |
 | ourworkshop.io | Namecheap | — | 2027-06-09 | Decide |
-| mhbuildstudio.com | Namecheap (Google mail) | mh-handcraft `dns/dnsconfig.js` | 2027-08-13 | Decide |
+| mhbuildstudio.com | Cloudflare | mh-handcraft `dns/dnsconfig.js` | 2027-08-13 | Probably yes (client site, live mail); confirm |
 
 ## Moving a zone's DNS to Cloudflare
 
