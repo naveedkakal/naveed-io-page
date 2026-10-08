@@ -79,10 +79,11 @@ D("naveed.io", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
   CNAME("appleorchard", "orchard.fly.dev."),         // Orchard's first host, now a redirect to orchard
 
   // ---- GitHub Pages projects ---------------------------------------------
+  // Every name here must be claimed by a repo's Pages CNAME, or anyone can claim
+  // it. glow and carwash were removed 2026-10-07 for that reason: glow-garden
+  // moved to glowgardenusa.com and npv-car-washes to napervillecarwashes.com.
   CNAME("avalanche", "naveedkakal.github.io."),
-  CNAME("carwash", "naveedkakal.github.io."),
   CNAME("cinderella", "naveedkakal.github.io."),
-  CNAME("glow", "naveedkakal.github.io."),
   CNAME("harry", "naveedkakal.github.io."),
   CNAME("mastel", "naveedkakal.github.io."),
   CNAME("spitball", "naveedkakal.github.io."),
