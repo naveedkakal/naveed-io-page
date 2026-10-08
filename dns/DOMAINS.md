@@ -27,9 +27,9 @@ Last read from the Namecheap API: 2026-10-07.
 | nazneen.io | Cloudflare | petalpost `dns/dnsconfig.js` (for now; moves with the site if it gets its own app) | 2027-03-16 | **Yes (keeping).** Transfer any time before 2027-03-16. Eligible now |
 | tycholinen.com | Namecheap | — | 2027-03-23 | Decide |
 | weavecmms.com | Namecheap | — | 2027-03-27 | Decide |
-| petalpost.io | Namecheap | — | 2027-05-22 | Decide; move DNS into petalpost `dns/dnsconfig.js` |
-| pawpost.io | Namecheap | — | 2027-05-24 | Decide; move DNS into petalpost `dns/dnsconfig.js` |
-| potionpost.io | Namecheap | — | 2027-05-24 | Decide; move DNS into petalpost `dns/dnsconfig.js` |
+| petalpost.io | Namecheap | — (served by petalpost Fly app) | 2027-05-22 | **No. Let it lapse;** everything unifies under picpost.io. Turn auto-renew OFF at Namecheap (still on as of 2026-10-07). Not worth moving its DNS |
+| pawpost.io | Namecheap | — (served by petalpost Fly app) | 2027-05-24 | **No. Let it lapse;** everything unifies under picpost.io. Turn auto-renew OFF at Namecheap (still on as of 2026-10-07). Not worth moving its DNS |
+| potionpost.io | Namecheap | — (served by petalpost Fly app) | 2027-05-24 | **No. Let it lapse;** everything unifies under picpost.io. Turn auto-renew OFF at Namecheap (still on as of 2026-10-07). Not worth moving its DNS |
 | ourworkshop.io | Namecheap | — | 2027-06-09 | Decide |
 | mhbuildstudio.com | Namecheap (Google mail) | mh-handcraft `dns/dnsconfig.js` | 2027-08-13 | Decide |
 
