@@ -14,17 +14,17 @@ Last read from the Namecheap API: 2026-10-07.
 
 | Domain | DNS | Records live in | Expires | Transfer to Cloudflare |
 |---|---|---|---|---|
-| naveed.io | Cloudflare | naveed-io `dns/dnsconfig.js` | **2026-11-26** | **Yes, do it before 2026-11-26** instead of renewing at Namecheap |
+| naveed.io | Cloudflare | naveed-io `dns/dnsconfig.js` | **2026-11-26** | **Yes (keeping).** Target: start by 2026-11-12. A transfer takes up to ~5 days and *is* the renewal, so leave margin before the 2026-11-26 expiry. Do not let Namecheap auto-renew first |
 | codewrights.io | Cloudflare | codewrights `dns/dnsconfig.js` | 2027-06-09 | Yes (business domain). Eligible now |
-| picpost.io | Cloudflare | petalpost `dns/dnsconfig.js` | 2027-05-30 | Keep? Decide. Eligible now |
-| mispronounced.io | Cloudflare | accent-app `dns/dnsconfig.js` | 2027-07-04 | Keep? Decide. Eligible now |
-| napervillecarwashes.com | Cloudflare | npv-car-washes `dns/dnsconfig.js` | 2027-07-21 | **No. Let it lapse. Turn auto-renew OFF at Namecheap** |
+| picpost.io | Cloudflare | petalpost `dns/dnsconfig.js` | 2027-05-30 | Undecided (as of 2026-10-07). Eligible now |
+| mispronounced.io | Cloudflare | accent-app `dns/dnsconfig.js` | 2027-07-04 | Undecided (as of 2026-10-07). Eligible now |
+| napervillecarwashes.com | Cloudflare | npv-car-washes `dns/dnsconfig.js` | 2027-07-21 | **No. Lapses 2027-07-21.** Auto-renew turned off 2026-10-07 |
 | spitballgame.io | Cloudflare | (dashboard) | 2027-10-07 | Keep? Registered 2026-10-07, locked until 2026-12-06 |
 | glowgardenusa.com | Cloudflare zone pending | (dashboard) | (not at Namecheap) | Check where it is registered |
 | weave-linen.com | Namecheap | — | **2026-12-30** | Decide before 2026-12-30 |
 | weave-linen.dev | Namecheap | — | 2027-01-11 | Auto-renew off; lapsing? |
 | tychocore.com | Namecheap (Google mail) | — | 2027-03-26 | Auto-renew off; lapsing? |
-| nazneen.io | Namecheap | — | 2027-03-16 | Decide |
+| nazneen.io | Namecheap (served by the petalpost Fly app) | — | 2027-03-16 | **Yes (keeping).** Move DNS to Cloudflare first, then transfer; any time before 2027-03-16 |
 | tycholinen.com | Namecheap | — | 2027-03-23 | Decide |
 | weavecmms.com | Namecheap | — | 2027-03-27 | Decide |
 | petalpost.io | Namecheap | — | 2027-05-22 | Decide; move DNS into petalpost `dns/dnsconfig.js` |
