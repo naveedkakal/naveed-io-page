@@ -89,6 +89,9 @@ for. Each article's JSON-LD declares the interview basis (`isBasedOn`), the styl
 - [MH Build Studio](https://naveed.io/apps/mhbuild.html)
 - [Misra](https://naveed.io/apps/misra.html)
 - [Spitball](https://naveed.io/apps/spitball.html)
+- [Know That?](https://naveed.io/apps/knowthat.html)
+- [Burrow](https://naveed.io/apps/burrow.html)
+- [Ember](https://naveed.io/apps/ember.html)
 
 ## Contact
 
