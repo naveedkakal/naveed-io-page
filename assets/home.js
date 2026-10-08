@@ -65,6 +65,7 @@
     ["carwash", "Naperville Car Wash Reviews", "apps/carwash.html"],
     ["mh-build-studio", "MH Build Studio", "apps/mhbuild.html"],
     ["misra", "Misra", "apps/misra.html"],
+    ["spitball", "Spitball", "apps/spitball.html"],
     ["glow-garden", "Glow Garden", "https://glowgardenusa.com"],
     ["mf-laundry", "M&F Laundry", "https://mflaundry.com"]
   ];
@@ -214,7 +215,7 @@
     },
     pwd: function () { line('<span class="v">/home/nk/naveed.io</span>'); },
     date: function () { line('<span class="v">' + esc(new Date().toString().replace(/\(.*\)/, "").trim()) + "</span>"); },
-    uptime: function () { line('<span class="v">up ' + uptime() + ", since Aug 2006 · load average: 13 apps, 3 case files, 1 industry</span>"); },
+    uptime: function () { line('<span class="v">up ' + uptime() + ", since Aug 2006 · load average: 14 apps, 3 case files, 1 industry</span>"); },
     echo: function (args) { line('<span class="v">' + esc(args.join(" ")) + "</span>"); },
     history: function () { hist.forEach(function (h, i) { line('<span class="cm">' + (i + 1) + '</span>  <span class="v">' + esc(h) + "</span>"); }); },
     clear: function () { term.innerHTML = ""; },

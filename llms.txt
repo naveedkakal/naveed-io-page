@@ -88,6 +88,7 @@ for. Each article's JSON-LD declares the interview basis (`isBasedOn`), the styl
 - [Naperville Car Wash Reviews](https://naveed.io/apps/carwash.html)
 - [MH Build Studio](https://naveed.io/apps/mhbuild.html)
 - [Misra](https://naveed.io/apps/misra.html)
+- [Spitball](https://naveed.io/apps/spitball.html)
 
 ## Contact
 
