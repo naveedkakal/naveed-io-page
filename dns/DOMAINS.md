@@ -20,7 +20,7 @@ Last read from the Namecheap API: 2026-10-07.
 | mispronounced.io | Cloudflare | accent-app `dns/dnsconfig.js` | 2027-07-04 | **Yes (keeping).** Renew on Cloudflare: transfer any time before expiry. Eligible now |
 | napervillecarwashes.com | Cloudflare (site is a Worker, proxied) | npv-car-washes `dns/dnsconfig.js` | 2027-07-21 | **No. Lapses 2027-07-21.** Auto-renew turned off 2026-10-07 |
 | spitballgame.io | Cloudflare | (dashboard) | 2027-10-07 | Keep? Registered 2026-10-07, locked until 2026-12-06 |
-| glowgardenusa.com | Cloudflare zone pending | (dashboard) | (not at Namecheap) | Check where it is registered |
+| glowgardenusa.com | GoDaddy (its nameservers); a Cloudflare zone exists but was never activated | glow-garden repo serves it on GitHub Pages | 2027-08-28 (registry) | Registered at **GoDaddy**, not Namecheap. Decide whether it's ours to move; if not, delete the pending Cloudflare zone |
 | weave-linen.com | Namecheap | — | **2026-12-30** | Decide before 2026-12-30 |
 | weave-linen.dev | Namecheap | — | 2027-01-11 | Auto-renew off; lapsing? |
 | tychocore.com | Namecheap (Google mail) | — | 2027-03-26 | Auto-renew off; lapsing? |
