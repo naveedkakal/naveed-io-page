@@ -23,6 +23,10 @@
 // DNSControl also warns that the namecheap provider does not reliably support
 // NO_PURGE, so the seatbelt further down is not one.
 //
+// UPDATE 2026-10-07: the forwarding turned out to have no rules (see the mail
+// section), so nothing real is at stake in the EmailType flip. The plan now is
+// to move the zone's DNS to Cloudflare rather than ever push this to Namecheap.
+//
 // Before any future push: re-read the zone both ways (the file says how), and
 // confirm with Namecheap that EmailType=MX keeps forwarding working.
 //
@@ -103,7 +107,11 @@ D("naveed.io", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
   CNAME("www", "naveedkakal.github.io."),
 
   // ---- mail: INVISIBLE TO get-zones, read from dig ------------------------
-  // Namecheap email forwarding for Naveed's personal address. Load-bearing.
+  // Namecheap email forwarding is switched on (EmailType=FWD) but has ZERO
+  // forwarding rules: getEmailForwarding returned none on 2026-10-07, and Naveed
+  // has never used an inbound naveed.io address. These MX accept nothing useful.
+  // Not load-bearing after all; the caution elsewhere in this file about
+  // "his personal email forwarding" predates that check and overstates it.
   MX("@", 10, "eforward1.registrar-servers.com."),
   MX("@", 10, "eforward2.registrar-servers.com."),
   MX("@", 10, "eforward3.registrar-servers.com."),
