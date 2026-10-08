@@ -31,7 +31,7 @@ Last read from the Namecheap API: 2026-10-07.
 | pawpost.io | Namecheap | — (served by petalpost Fly app) | 2027-05-24 | **No. Let it lapse;** everything unifies under picpost.io. Turn auto-renew OFF at Namecheap (still on as of 2026-10-07). Not worth moving its DNS |
 | potionpost.io | Namecheap | — (served by petalpost Fly app) | 2027-05-24 | **No. Let it lapse;** everything unifies under picpost.io. Turn auto-renew OFF at Namecheap (still on as of 2026-10-07). Not worth moving its DNS |
 | ourworkshop.io | Namecheap | — | 2027-06-09 | Decide |
-| mhbuildstudio.com | Cloudflare | mh-handcraft `dns/dnsconfig.js` | 2027-08-13 | Probably yes (client site, live mail); confirm |
+| mhbuildstudio.com | Cloudflare | mh-handcraft `dns/dnsconfig.js` | 2027-08-13 | **Yes (keeping).** Transfer any time before 2027-08-13. Eligible now (registered 2026-08-13) |
 
 ## Moving a zone's DNS to Cloudflare
 
