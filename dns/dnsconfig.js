@@ -1,103 +1,51 @@
-// DNS as code for naveed.io — managed with DNSControl.
+// DNS as code for naveed.io — managed with DNSControl, served by Cloudflare.
 //
-// *** NOT PUSHED, AND NOT TO BE PUSHED WITHOUT A DECISION. ***
+// Registrar: Namecheap (registration only). DNS: Cloudflare. Moved 2026-10-07.
+// This file is the source of truth for the zone. Change records here and push:
 //
-// This file is a verified record of the naveed.io zone, complete with the six
-// records the Namecheap API cannot see, ready for the day the zone is adopted.
-// It has never been pushed. Nothing has ever managed this zone: every record
-// below is live because it was put there by hand, not because anything applied
-// this file. Read it as a description of a zone awaiting adoption, not as a
-// description of a managed one.
-//
-// The `misra` CNAME is the clearest case — it was added by hand (Naveed,
-// 2026-08-26) precisely so this file would not have to be pushed.
-//
-// TO ADD ONE RECORD, use dns/add-host.py, not a push. It reads the live host set,
-// appends one record, writes it back with the zone's own EmailType (FWD), and
-// reads it back to prove nothing else changed. Then declare the record here.
-//
-// The reason is in the mail section below. Declaring MX explicitly sets
-// Namecheap's EmailType to MX, and that flag is what turns his personal email
-// forwarding on. Whether forwarding survives with the eforward hosts as plain
-// MX is not knowable from here, and it fails by bouncing mail silently.
-// DNSControl also warns that the namecheap provider does not reliably support
-// NO_PURGE, so the seatbelt further down is not one.
-//
-// UPDATE 2026-10-07: the forwarding turned out to have no rules (see the mail
-// section), so nothing real is at stake in the EmailType flip. The plan now is
-// to move the zone's DNS to Cloudflare rather than ever push this to Namecheap.
-//
-// Before any future push: re-read the zone both ways (the file says how), and
-// confirm with Namecheap that EmailType=MX keeps forwarding working.
-//
+//   set -a; source ~/.config/dnscontrol/env; set +a
 //   dnscontrol --config dns/dnsconfig.js --creds ~/.config/dnscontrol/creds.json preview
 //   dnscontrol --config dns/dnsconfig.js --creds ~/.config/dnscontrol/creds.json push
 //
-// ALWAYS preview first. Namecheap's API has no partial update: every push
-// replaces the domain's entire host-record set.
+// ALWAYS preview first. Cloudflare updates records one at a time, so a push only
+// touches what the preview lists.
+//
+// The registrar is declared as "none" on purpose. With a namecheap registrar here,
+// a push would also rewrite the domain's nameservers at Namecheap. The nameservers
+// were set once, by hand, at the cutover; this file should never touch them.
 //
 // ---------------------------------------------------------------------------
 // THIS FILE LIVES HERE BECAUSE THIS REPO OWNS THE ZONE.
 //
-// It was written in ~/dev/misra/dns/dnsconfig.js, which declared the entire
-// naveed.io zone in order to add one CNAME. That was the wrong home and it is
-// why this file moved (2026-08-31). misra's copy is now a pointer comment.
-//
-// naveed.io is Naveed's personal utility zone. Besides the site at the apex it
-// carries twenty-one project subdomains, a Google site verification, the Postmark
-// DKIM and bounce records that other projects' senders depend on, and his
-// personal email forwarding. A repo that owns one subdomain here should never
-// be the thing declaring all of it.
+// naveed.io is Naveed's personal utility zone: the site at the apex, project
+// subdomains, a Google site verification, and the Postmark records that other
+// projects' senders depend on (misra sends as misra@outbound.naveed.io).
 //
 // mh-handcraft/dns/dnsconfig.js has a `D("naveed.io", ...)` block deliberately
-// left COMMENTED OUT, with a warning saying why. It must stay that way. Two
-// files declaring one zone means whoever pushes last silently deletes whatever
+// left COMMENTED OUT, and misra's old copy is a pointer comment. Keep it that
+// way. Two files declaring one zone means whoever pushes last deletes whatever
 // the other declared.
 //
 // ---------------------------------------------------------------------------
-// SIX RECORDS BELOW ARE INVISIBLE TO THE API AND WERE RECONSTRUCTED FROM `dig`.
+// MAIL. There is no inbound mail for naveed.io. On Namecheap the zone had email
+// forwarding switched on (five eforward MX + their SPF) but zero forwarding
+// rules (getEmailForwarding, 2026-10-07), so those records were dropped at the
+// move. For an inbound address, set up Cloudflare Email Routing; it adds its
+// own MX and SPF, which then need declaring here.
 //
-// Namecheap serves email forwarding behind a separate `EmailType` flag rather
-// than as host records, so `get-zones` returns neither the five eforward MX nor
-// the forwarding SPF. Read on 2026-08-26:
-//
-//     get-zones : 24 records, zero MX, one TXT
-//     dig       : 5 MX (eforward1-5), 2 TXT (SPF + Google verification)
-//
-// Re-read 2026-09-29 (raw getHosts: EmailType="FWD", 28 host records; dig: the
-// same 5 MX and SPF). Five records had been added by hand since the last read
-// (clae, jays, rollup, traffic, _dmarc.outbound) and `ads` had been removed;
-// this file now matches.
-//
-// A config built from get-zones alone would preview as "1 correction, CREATE"
-// and destroy his personal email forwarding on the push. They are declared
-// explicitly here so the record set is complete however Namecheap resolves the
-// EmailType flag.
-//
-// Re-check both before every push. They disagree in both directions:
-//   did my write land?          -> get-zones
-//   what is serving right now?  -> dig @dns1.registrar-servers.com
-//
-//     dig MX naveed.io @dns1.registrar-servers.com
-//     dig TXT naveed.io @dns1.registrar-servers.com
+// PROXY. Every record is DNS-only (grey cloud), the DNSControl default. Fly.io
+// and GitHub Pages issue their own TLS certificates and the Cloudflare proxy can
+// break issuing and renewing them. Proxy a record only on purpose, per record,
+// with CF_PROXY_ON.
 
-var REG_NAMECHEAP = NewRegistrar("namecheap");
-var DSP_NAMECHEAP = NewDnsProvider("namecheap");
-
-// The zone already serves 1799. DNSControl defaults to 300, which rewrites the
-// TTL of all 24 existing records and turns a one-record change into a 31-line
-// diff -- noise that hides the thing being reviewed.
-DEFAULTS(DefaultTTL(1799));
+var REG_NONE = NewRegistrar("none");
+var DSP_CLOUDFLARE = NewDnsProvider("cloudflare");
 
 // GitHub Pages apex. Four A records, all four required.
 var GHP = ["185.199.108.153", "185.199.109.153",
            "185.199.110.153", "185.199.111.153"];
 
-D("naveed.io", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
-  NO_PURGE,   // SEATBELT. Refuses to delete anything not listed here. Keep it
-              // on: this file was assembled from two disagreeing read paths on
-              // a zone nothing has ever managed, and a record missed by both is
-              // a record this file does not know about.
+D("naveed.io", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
 
   // ---- apex: GitHub Pages ------------------------------------------------
   A("@", GHP[0]),
@@ -106,30 +54,16 @@ D("naveed.io", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
   A("@", GHP[3]),
   CNAME("www", "naveedkakal.github.io."),
 
-  // ---- mail: INVISIBLE TO get-zones, read from dig ------------------------
-  // Namecheap email forwarding is switched on (EmailType=FWD) but has ZERO
-  // forwarding rules: getEmailForwarding returned none on 2026-10-07, and Naveed
-  // has never used an inbound naveed.io address. These MX accept nothing useful.
-  // Not load-bearing after all; the caution elsewhere in this file about
-  // "his personal email forwarding" predates that check and overstates it.
-  MX("@", 10, "eforward1.registrar-servers.com."),
-  MX("@", 10, "eforward2.registrar-servers.com."),
-  MX("@", 10, "eforward3.registrar-servers.com."),
-  MX("@", 15, "eforward4.registrar-servers.com."),
-  MX("@", 20, "eforward5.registrar-servers.com."),
-  TXT("@", "v=spf1 include:spf.efwd.registrar-servers.com ~all"),
-
   TXT("@", "google-site-verification=yZj00p0HgkOlxhyguSpqLv6EtJh1jeNO_UuDnjchmx0"),
 
   // ---- Postmark outbound -------------------------------------------------
-  // misra sends as misra@outbound.naveed.io, so these two are misra's
-  // deliverability as much as anything else's.
+  // misra sends as misra@outbound.naveed.io, so these are misra's deliverability.
   TXT("_dmarc.outbound", "v=DMARC1; p=none; adkim=r; aspf=r"),
   TXT("20260603205726pm._domainkey.outbound", "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCbgz6v0oJegoSYDatEz2r53dn9q/NHrPHgfvTz2sEjJ9Lzy6P03JFa3WjE5+hW4vZzZNljHmv2g0sjoDOV0RNsrhpD8BAGavWH2cXZkUyqWZdvK1bWsyBchioZtX5nAsxuZ0O9zlmnyula4Sb9eRtxuSyQQjgvd3PRx++OCjeBEwIDAQAB"),
   CNAME("pm-bounces.outbound", "pm.mtasv.net."),
 
   // ---- Fly.io apps -------------------------------------------------------
-  CNAME("misra", "misra.fly.dev."),          // added by hand 2026-08-26
+  CNAME("misra", "misra.fly.dev."),
   CNAME("mf", "mflaundry.fly.dev."),
   CNAME("mh", "mh-handcraft.fly.dev."),
   CNAME("miscolored", "miscolored.fly.dev."),
@@ -140,13 +74,9 @@ D("naveed.io", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
   CNAME("jays", "jaysgreencare.fly.dev."),
   CNAME("rollup", "rollup.fly.dev."),
   CNAME("traffic", "naveed-traffic.fly.dev."),       // naveed.io's own visitor counter
-  CNAME("earlgiles", "earlgiles.fly.dev."),          // added 2026-10-01 with dns/add-host.py
-  CNAME("orchard", "orchard.fly.dev."),            // added 2026-10-03 with dns/add-host.py (Orchard, Codewrights)
-  CNAME("appleorchard", "orchard.fly.dev."),       // added 2026-10-03; Orchard's first host, now a redirect to orchard
-
-  // `ads` (A 66.241.124.103 / AAAA 2a09:8280:1::11e:72cb:0) was dropped from
-  // this file on 2026-08-31 when the vigil-ads demo was torn down. It has since
-  // been removed from the live zone too (absent from getHosts on 2026-09-29).
+  CNAME("earlgiles", "earlgiles.fly.dev."),
+  CNAME("orchard", "orchard.fly.dev."),              // Orchard, Codewrights
+  CNAME("appleorchard", "orchard.fly.dev."),         // Orchard's first host, now a redirect to orchard
 
   // ---- GitHub Pages projects ---------------------------------------------
   CNAME("avalanche", "naveedkakal.github.io."),
@@ -155,8 +85,8 @@ D("naveed.io", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
   CNAME("glow", "naveedkakal.github.io."),
   CNAME("harry", "naveedkakal.github.io."),
   CNAME("mastel", "naveedkakal.github.io."),
-  CNAME("spitball", "naveedkakal.github.io."),    // added 2026-09-29 with dns/add-host.py
-  CNAME("knowthat", "naveedkakal.github.io."),    // added 2026-10-05 with dns/add-host.py
+  CNAME("spitball", "naveedkakal.github.io."),
+  CNAME("knowthat", "naveedkakal.github.io."),
   CNAME("tv", "naveedkakal.github.io."),
   CNAME("xfm", "naveedkakal.github.io.")
 );
