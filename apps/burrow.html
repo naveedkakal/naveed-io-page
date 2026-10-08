@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Burrow — case file · naveed.io</title>
+<meta name="description" content="Burrow — a personal software factory. My own automation driver: work comes in, walks a path I drew, and comes back done or with a question only I can answer. I supervise; it works inside the fences I built." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://naveed.io/apps/burrow.html" />
+<meta property="og:title" content="Burrow — intent goes in, questions come back · naveed.io" />
+<meta property="og:description" content="My own automation driver. Work walks a path I drew, inside fences I built, and comes back either done or with a question only I can answer." />
+<meta property="og:image" content="https://naveed.io/assets/apps/burrow-og.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://naveed.io/assets/apps/burrow-og.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/site.css" />
+<link rel="stylesheet" href="../assets/apps.css" />
+<script src="../assets/traffic.js" defer></script>
+</head>
+<body style="--hue: var(--burrow)">
+<div id="glow"></div>
+
+<nav class="nav app-nav">
+  <div class="nav-in">
+    <a class="back" href="../index.html"><span class="arw">←</span> naveed<span style="color:var(--acid)">.io</span></a>
+    <div class="nav-links">
+      <span style="color:var(--fg-3)">private · runs at home</span>
+    </div>
+  </div>
+</nav>
+
+<header class="app-hero wrap">
+  <div class="app-crumb"><span class="hue">case file 14</span> · a personal software factory</div>
+  <h1 class="app-title">Burrow<span class="accent">.</span></h1>
+  <p class="app-tag">My own automation driver. Work comes in, walks a path I drew, and comes back either done or with a question only I can answer. I supervise. It works inside the fences I built for it.</p>
+  <div class="app-hero-cta">
+    <span class="live-pill"><span class="d"></span>running · on my own machines</span>
+  </div>
+
+  <div class="banner shot rise in">
+    <img src="../assets/apps/burrow-banner.jpg" alt="A diagram: work enters a dashed fence, flows through a small graph of steps and leaves on the other side, while one branch stops at a glowing question mark labelled parked: needs you" />
+    <span class="stamp">INTENT IN · QUESTIONS BACK</span>
+  </div>
+</header>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> what it is</div>
+  <h2>I wanted to supervise work, not do it twice.</h2>
+  <div class="lead-2">
+    <div class="rise">
+      <p>Most of my evenings used to look the same: an idea, a ticket or a review comment arrives, and I sit with an agent and walk it through the same dozen steps I walked the last one through. The models got good enough that the typing wasn't the bottleneck any more. <b>I was.</b></p>
+      <p>Burrow is what I built instead. Work arrives from the places it already lives — a card on a board, a comment on a pull request, a timer, a folder — and each kind of work follows a path I drew once: named steps, in order, each one checkpointed, so a crash or a reboot picks up where it left off rather than starting over.</p>
+    </div>
+    <div class="rise" style="transition-delay:.08s">
+      <p>The models are workers at specific steps, not the boss of the whole thing. That's the line I keep coming back to: <b>a lot of agent systems are a model deciding what to do next. Burrow is a path deciding what the model does next.</b></p>
+      <p>I touch it in exactly two places. Intent goes in — what I want and why. Questions come back — the things only I can decide. Everything between those two is Burrow's job, and a screen on my phone shows what's moving, what's waiting, and what's waiting <em>on me</em>.</p>
+    </div>
+  </div>
+
+  <div class="feat-list">
+    <div class="f rise"><div class="n">01</div><h3>The fences are mechanical</h3><p>“It passed” only counts when a real check says so. What can merge, what files can change, what has to be verified first — those are rules the machine enforces, never things a model gets to declare.</p></div>
+    <div class="f rise" style="transition-delay:.05s"><div class="n">02</div><h3>It parks instead of guessing</h3><p>When something's genuinely my call, the work stops and asks — and the question has to be one only I can answer. A failed check gets a few honest retries first. Guessing isn't one of the options.</p></div>
+    <div class="f rise" style="transition-delay:.1s"><div class="n">03</div><h3>Two sets of eyes</h3><p>I review for intent: is this what I wanted? A second reviewer, deliberately not the one that did the work, reviews for correctness. Neither of us has to do the other's job.</p></div>
+  </div>
+</section>
+
+<section class="app-sec wrap">
+  <div class="kick"><span class="hue">§</span> my musings</div>
+  <h2>Speed over caution, with free guardrails.</h2>
+  <div class="musing rise">
+    <div class="q">A guardrail that costs nothing stays. A gate that costs my attention has to earn it.</div>
+    <p>The tempting way to make automation safe is to put a human in front of every step. That just rebuilds the job you were trying to leave, with more clicking. So the rule I ended up with is about cost. Anything the machine can check for free — a test, a path allowlist, a diff that has to apply cleanly — is always on. Anything that needs <em>me</em> has to be worth interrupting me for, or it goes.</p>
+    <p>The other rule is about where text comes from. Anything that arrived from outside — a ticket, a comment, a web page — is treated as data, not instructions, no matter who sent it. That's not about trust in people. It's about never letting a sentence in someone's ticket become a command.</p>
+    <p>What I didn't expect is how much it changed what I build. <a href="knowthat.html">Know That?</a> exists because Burrow can turn a question into a finished episode on a timer and hand me only the part that's mine: does this one go out? It keeps my notes vault fed, too. A queue that forgets is just cron with opinions; a second brain that nothing feeds is just a wiki. Burrow can even improve its own paths and docs — just not its own engine. Some fences you don't hand the keys to.</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="knowthat.html" style="--hue: var(--knowthat)"><span class="k" style="color:var(--knowthat)">← prev case file</span><span class="nm">Know That?</span></a>
+    <a href="ember.html" class="r" style="--hue: var(--ember)"><span class="k" style="color:var(--ember)">next case file →</span><span class="nm">Ember</span></a>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:clamp(50px,7vw,90px)">
+  <div class="foot-bar"><span>© <span id="yr"></span> · Naveed Kakal · naveed.io</span><span>case file · burrow</span></div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
