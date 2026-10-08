@@ -16,15 +16,15 @@ Last read from the Namecheap API: 2026-10-07.
 |---|---|---|---|---|
 | naveed.io | Cloudflare | naveed-io `dns/dnsconfig.js` | **2026-11-26** | **Yes (keeping).** Target: start by 2026-11-12. A transfer takes up to ~5 days and *is* the renewal, so leave margin before the 2026-11-26 expiry. Do not let Namecheap auto-renew first |
 | codewrights.io | Cloudflare | codewrights `dns/dnsconfig.js` | 2027-06-09 | Yes (business domain). Eligible now |
-| picpost.io | Cloudflare | petalpost `dns/dnsconfig.js` | 2027-05-30 | Undecided (as of 2026-10-07). Eligible now |
-| mispronounced.io | Cloudflare | accent-app `dns/dnsconfig.js` | 2027-07-04 | Undecided (as of 2026-10-07). Eligible now |
+| picpost.io | Cloudflare | petalpost `dns/dnsconfig.js` | 2027-05-30 | **Yes (keeping).** Renew on Cloudflare: transfer any time before expiry. Eligible now |
+| mispronounced.io | Cloudflare | accent-app `dns/dnsconfig.js` | 2027-07-04 | **Yes (keeping).** Renew on Cloudflare: transfer any time before expiry. Eligible now |
 | napervillecarwashes.com | Cloudflare | npv-car-washes `dns/dnsconfig.js` | 2027-07-21 | **No. Lapses 2027-07-21.** Auto-renew turned off 2026-10-07 |
 | spitballgame.io | Cloudflare | (dashboard) | 2027-10-07 | Keep? Registered 2026-10-07, locked until 2026-12-06 |
 | glowgardenusa.com | Cloudflare zone pending | (dashboard) | (not at Namecheap) | Check where it is registered |
 | weave-linen.com | Namecheap | — | **2026-12-30** | Decide before 2026-12-30 |
 | weave-linen.dev | Namecheap | — | 2027-01-11 | Auto-renew off; lapsing? |
 | tychocore.com | Namecheap (Google mail) | — | 2027-03-26 | Auto-renew off; lapsing? |
-| nazneen.io | Namecheap (served by the petalpost Fly app) | — | 2027-03-16 | **Yes (keeping).** Move DNS to Cloudflare first, then transfer; any time before 2027-03-16 |
+| nazneen.io | Cloudflare | petalpost `dns/dnsconfig.js` (for now; moves with the site if it gets its own app) | 2027-03-16 | **Yes (keeping).** Transfer any time before 2027-03-16. Eligible now |
 | tycholinen.com | Namecheap | — | 2027-03-23 | Decide |
 | weavecmms.com | Namecheap | — | 2027-03-27 | Decide |
 | petalpost.io | Namecheap | — | 2027-05-22 | Decide; move DNS into petalpost `dns/dnsconfig.js` |
