@@ -76,6 +76,7 @@ D("naveed.io", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
   CNAME("traffic", "naveed-traffic.fly.dev."),       // naveed.io's own visitor counter
   CNAME("earlgiles", "earlgiles.fly.dev."),
   CNAME("orchard", "orchard.fly.dev."),              // Orchard, Codewrights
+  CNAME("hunch", "hunch.fly.dev."),                  // Hunch: football hunches vs the closing line (~/dev/izzo-book)
   CNAME("appleorchard", "orchard.fly.dev."),         // Orchard's first host, now a redirect to orchard
 
   // ---- GitHub Pages projects ---------------------------------------------
