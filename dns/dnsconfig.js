@@ -90,6 +90,6 @@ D("naveed.io", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
   CNAME("spitball", "naveedkakal.github.io."),
   CNAME("knowthat", "naveedkakal.github.io."),
   CNAME("tv", "naveedkakal.github.io."),
-  CNAME("ryanwillove", "naveedkakal.github.io."),
+  CNAME("ryan-will-love", "naveedkakal.github.io."),
   CNAME("xfm", "naveedkakal.github.io.")
 );
