@@ -19,10 +19,15 @@
   customer stayed for fourteen years.
 - September 2014 – February 2017: Centro, Chicago — developer, then dev lead and
   engineering manager.
-- March 2017: Returned to ETECH, just as Kannegiesser acquired the company.
+- March 2017: Returned to ETECH, just as Kannegiesser acquired the company, as Cathay
+  Pacific's Vogue Laundry in Hong Kong (then ETECH's largest project) was commissioning.
+- December 2018: First Hong Kong trip — Wireshark captures that helped trace a network
+  broadcast storm to a saturated switch trunk.
 - October 2019: PLC communications moved to an Elixir application he started that April.
 - November 2025: 434 commits in one month.
 - August 2026: 10,000th commit on the record.
+- October 2026: On site in Hong Kong for Vogue's eVue 5 → v26 upgrade (layout, PLC,
+  network and fiber work included); 36-hour window, most of the system running in under 20.
 - Today: Director of Software Development, Kannegiesser ETECH; 400+ plants run eVue.
 
 ## Working principles
@@ -50,6 +55,17 @@ for. Each article's JSON-LD declares the interview basis (`isBasedOn`), the styl
 (`genre`), and the AI contributor (`contributor`).
 
 ## Writing — On record
+
+- [Arguing with your own legacy](https://naveed.io/writing/arguing-with-your-own-legacy.html):
+  Case file on Cathay Pacific's Vogue Laundry in Hong Kong (eVue job 2326), ETECH's largest
+  project when it was commissioned in 2017. The 2018 broadcast storm (I/O controllers
+  missing inputs, a misrouted track switch becoming a jam cleared from lifts), traced via
+  Wireshark to a saturated 1 Gb trunk and relieved short-term by slowing the server's port
+  to 100 Mbps — a colleague's fix, his data. Nine years on eVue 5 made it the operators'
+  "correct" way; the October 2026 upgrade to eVue v26 meant holding the line on new
+  workflows (automated recirculation) instead of rebuilding old ones — "I have done 400 of
+  these laundries… let me come and make you feel safe and taken care of" — plus PLC,
+  switch and fiber upgrades in a 36-hour window, most of it running in under 20.
 
 - [The prank that brought him back](https://naveed.io/writing/prank-that-brought-him-back.html):
   Case file on the 2014–2017 gap. Why he left after eight years (the "does my

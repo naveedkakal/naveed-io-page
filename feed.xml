@@ -5,8 +5,16 @@
   <link href="https://naveed.io/feed.xml" rel="self" type="application/atom+xml"/>
   <link href="https://naveed.io/" rel="alternate" type="text/html"/>
   <id>https://naveed.io/</id>
-  <updated>2026-07-21T00:00:00Z</updated>
+  <updated>2026-10-25T00:00:00Z</updated>
   <author><name>Naveed Kakal</name><uri>https://naveed.io</uri></author>
+  <entry>
+    <title>Arguing with your own legacy</title>
+    <link href="https://naveed.io/writing/arguing-with-your-own-legacy.html" rel="alternate" type="text/html"/>
+    <id>https://naveed.io/writing/arguing-with-your-own-legacy.html</id>
+    <published>2026-10-25T00:00:00Z</published>
+    <updated>2026-10-25T00:00:00Z</updated>
+    <summary>Cathay Pacific's Hong Kong laundry was the largest project ETECH had ever built. Nine years on eVue 5 later: a broadcast storm, a server slowed down on purpose, and a 36-hour cutover to eVue v26.</summary>
+  </entry>
   <entry>
     <title>The prank that brought him back</title>
     <link href="https://naveed.io/writing/prank-that-brought-him-back.html" rel="alternate" type="text/html"/>

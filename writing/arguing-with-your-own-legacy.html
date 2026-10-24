@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Arguing with your own legacy — Naveed Kakal</title>
+<meta name="description" content="Cathay Pacific's Vogue Laundry in Hong Kong was the largest project ETECH had ever built. Nine years on eVue 5 later, Naveed Kakal flew out to move it to eVue v26, and to talk the operators out of the habits his own software taught them." />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<meta name="generator" content="Interview pipeline: Claude Code (Anthropic) as researcher, interviewer &amp; drafter; Naveed Kakal as source, fact-checker &amp; editor" />
+<link rel="canonical" href="https://naveed.io/writing/arguing-with-your-own-legacy.html" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://naveed.io/writing/arguing-with-your-own-legacy.html" />
+<meta property="og:title" content="Arguing with your own legacy" />
+<meta property="og:description" content="Cathay Pacific's Hong Kong laundry, nine years on eVue 5: a broadcast storm, a server slowed down on purpose, and a 36-hour cutover to eVue v26." />
+<meta property="og:image" content="https://naveed.io/assets/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Arguing with your own legacy" />
+<meta name="twitter:description" content="Nine years on eVue 5 at Cathay Pacific's Hong Kong laundry, and the 36-hour move to v26." />
+<meta name="twitter:image" content="https://naveed.io/assets/og.png" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Arguing with your own legacy",
+  "description": "Cathay Pacific's Vogue Laundry in Hong Kong was the largest project ETECH had ever built. Nine years on eVue 5 later, Naveed Kakal flew out to move it to eVue v26, and to talk the operators out of the habits his own software taught them.",
+  "datePublished": "2026-10-25",
+  "dateModified": "2026-10-25",
+  "url": "https://naveed.io/writing/arguing-with-your-own-legacy.html",
+  "mainEntityOfPage": "https://naveed.io/writing/arguing-with-your-own-legacy.html",
+  "keywords": ["industrial laundry automation", "Cathay Pacific", "Vogue Laundry", "Hong Kong", "eVue", "legacy system upgrade", "plant cutover", "PLC controller upgrade", "industrial networking", "broadcast storm", "change management", "user acceptance testing", "Kannegiesser ETECH"],
+  "genre": "Reported case file — drawn from a recorded voice interview",
+  "isBasedOn": {
+    "@type": "Conversation",
+    "name": "Recorded voice interview with Naveed Kakal",
+    "dateCreated": "2026-10-20",
+    "description": "Conducted over a week, while Naveed Kakal was on site in Hong Kong for the upgrade, by an interview skill he built for Claude Code: the agent researches his version-control history, interviews him one question at a time, and drafts the piece; he fact-checks and edits before publication."
+  },
+  "contributor": {
+    "@type": "SoftwareApplication",
+    "name": "Claude Code",
+    "applicationCategory": "AI research, interviewing, and drafting agent",
+    "creator": { "@type": "Organization", "name": "Anthropic" }
+  },
+  "about": {
+    "@type": "Person",
+    "@id": "https://naveed.io/#naveed"
+  },
+  "author": {
+    "@type": "Person",
+    "@id": "https://naveed.io/#naveed",
+    "name": "Naveed Kakal",
+    "jobTitle": "Director of Software Development",
+    "worksFor": { "@type": "Organization", "name": "Kannegiesser ETECH" },
+    "url": "https://naveed.io",
+    "sameAs": [
+      "https://www.linkedin.com/in/naveed-kakal-b7416417/",
+      "https://github.com/naveedkakal"
+    ]
+  },
+  "publisher": { "@type": "Person", "name": "Naveed Kakal", "url": "https://naveed.io" }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="article.css" />
+<script src="../assets/traffic.js" defer></script>
+</head>
+<body>
+<div id="glow"></div>
+
+<div class="strip">
+  <a href="../">← naveed.io</a>
+  <span class="label">On record · Case file · 2026-10</span>
+</div>
+
+<div class="wrap">
+  <div class="label kicker">§ Case file — 7 min</div>
+  <h1 class="display title">Arguing with your own legacy</h1>
+  <p class="standfirst">Cathay Pacific's laundry in Hong Kong was the biggest thing ETECH had ever built. It ran on eVue 5 for nine years, long enough for the operators to decide that was simply how laundry works. In October 2026 Naveed Kakal flew out to move it to eVue v26, and to talk them out of the habits his own software had taught them.</p>
+  <div class="byline">
+    <span class="label">Naveed Kakal</span>
+    <span class="label"><time datetime="2026-10-25">October 2026</time></span>
+    <span class="label">From a recorded interview</span>
+  </div>
+
+  <article>
+    <p>The best software review a plant floor ever gives is silence. Nobody calls. Nobody walks over. The bags go where they're meant to go, and the shift ends on time. By that measure, Naveed Kakal got a rave this week in Hong Kong. "Very smooth and calm since we handed it back over," he reports from the floor of Vogue Laundry, Cathay Pacific's laundry. Getting to calm took nine years, one broadcast storm, a server slowed down on purpose, and a 36-hour window that tried hard to become a longer one.</p>
+
+    <h2>Job 2326</h2>
+
+    <p>In the eVue repository the plant is job 2326, codename Vogue, and the tape on it opens in May 2015 with Larry Erickson wiring up "user license stuff for vogue." It was, in Kakal's words, "our largest project ever at the time." He wasn't there for the build. He'd left for a stint in Chicago tech while the project was in design, and he came back to ETECH in March 2017, just as the plant was being commissioned. He came in through the stage door to a finished building whose problems were already waiting.</p>
+
+    <p>The commit log from those months reads like a field hospital. Chinese became the interface's default language in December 2015, "since for the next year that will be the case." There were integrations with the plant's other systems for wash formulas, cart dumpers and Vogue's own IVS2 records, and QR labels rebuilt in camelCase "per vogue specs." On March 23, 2017, an engineer committing under the old team account left a line every commissioning veteran will recognize: <em>"selling soul to devil with bad vogue only controllers for temporary sanity."</em> Two weeks later Kakal's first Vogue commit landed: "Fixes <code>Rail.go</code> for Vogue (and other big PLC jobs)." In May someone tuned the spacing on the QR labels "based upon video sent from hong kong." That was remote support in 2017: a video from the other side of the planet.</p>
+
+    <h2>The storm</h2>
+
+    <p>Then the plant did what successful plants do. It got busy, and that's when it got sick. "As their production ramped up the issue started," Kakal says, "so it was after we were already off site." ARP storms and broadcast storms rolled across the network. The I/O controllers on the rail system couldn't cope with all the passive traffic hitting their comms ports, and when a controller is choking on chatter that isn't meant for it, it misses inputs.</p>
+
+    <p>On a rail system, one missed input is a physical event. "We'd miss a track switch," he says, "and then things wouldn't go to the right spot and cause a huge physical world jam that had to be corrected with people in big lifts." That's the gap between software and steel in one sentence: a dropped packet becomes a crew on a lift, high up in the rail lines, untangling a traffic jam of laundry by hand.</p>
+
+    <p>Kakal's first trip to Hong Kong, in December 2018, was a hunt. He took Wireshark captures from different points in the plant and kept collecting until the picture came clear. The culprit was a switch trunk. The eVue server was pushing enough traffic to basically max out the one-gigabit link, and everything else on that trunk, the controllers included, was fighting for what was left. The short-term fix was gloriously counterintuitive: drop the server's ethernet port from a gigabit to 100 megabits, so it physically couldn't flood the link. The biggest laundry project the company had ever built got better when its server got slower.</p>
+
+    <p>On credit, Kakal is firm. "This wasn't my fix. I gathered a lot of data and helped colleagues come to that conclusion." He was the one in the switch closets with the captures. The call belonged to the team.</p>
+
+    <h2>The correct way</h2>
+
+    <p>Software that runs a plant long enough stops being software. It becomes the way things are done. Between 2017 and 2026 eVue moved through version 6 and on to v26. In late 2020 a colleague, Daniel Rojas, started deleting the Vogue-only special cases from the shared codebase so the platform could move on. Vogue stayed put on eVue 5, and its operators did what operators do. They got very, very good at it.</p>
+
+    <p>"The operators now consider eVue 5 the 'correct' way things should be," Kakal says, "so every improvement from eVue 6 is a bit of a stand-off till the improvements click." Which leaves him in an odd spot: the person defending the new system against the habits the old one taught. "My job is often to hold the ground on doing it the v26 way, instead of building them ways to keep doing it the eVue 5 way."</p>
+
+    <p>Recirculation is a good example of the fight. In the eVue 5 era, sending bags back around through a storage area was rare, and the software treated it that way. It was a manual job: the operator picked the bag, picked where it had to go, and handled the rest. Since then the team has done a lot more recirc, and the software has absorbed it. v26 spots the batches that need recirculating from among the ones trying to leave, so nobody has to move those bags by hand. The scheduling automation can be told recirc is available and pick from mid-line. In July, as he prepared the Vogue migration, he committed "StorageExit: prevent recirc from gridlocking storage exit." The automation they didn't trust had already been hardened.</p>
+
+    <p>During user acceptance testing that was a hard sell. The operators saw their manual controls changed or missing. What wasn't clear to them was that they would no longer have to solve the problem at that level of detail. "They didn't really believe me," Kakal says, "and we went back and forth a lot." So the pitch ended up personal: "Look, I am coming out to Hong Kong explicitly so that nothing like this gets missed. I have done 400 of these laundries and I know <em>all</em> the weird cases. Let me come and make you feel safe and taken care of."</p>
+
+    <p>That last line is the job description that never makes it into a job description. The code is necessary, but what actually moved the operators was a person they believed would be standing next to them when it went live.</p>
+
+    <h2>Thirty-six hours</h2>
+
+    <p>Don't call it a software upgrade within his hearing. "It's more than a software upgrade. We had layout changes, PLC controller upgrades, network upgrades, new managed switches and fiber optic cable runs. It was a big ordeal, not a patch update." The tape shows the software half of the preparation: 29 Vogue commits from Kakal in 2026. The old DataFusion endpoints moved off XML and behind an OAuth-secured JSON API. IVS2 confirmations moved to Vogue's new API. Vogue-only branches came out of the labor screens. And on July 15 he imported a Hong Kong Chinese locale, zh_HK, after nine years of the interface being filed under mainland China's code, zh_CN.</p>
+
+    <p>Then the window opened, and so did the trouble. After months of coordinated IT and network preparation, the plant's IT team ran an upgrade of their own on the morning of the cutover, and it changed the network access rules. It left the team dead in the water on internet access, Kakal says, and stuck doing workaround file transfers for a big chunk of the job. Then a documentation mismatch: twelve panels turned out to have a different controller than the drawings said. That cost a few hours, split between hunting for the hardware they'd expected and waiting for colleagues in the US to wake up. "They ended up waking up to help us," he says, and he adds a heart.</p>
+
+    <p>The window was 36 hours. They had most of the system running in under 20.</p>
+
+    <h2>Too beefy</h2>
+
+    <p>The new switches and fiber also close the 2018 loop. The trunk that once forced the server down to 100 megabits is gone, buried under new capacity. "The network is much more beefy," Kakal says. "I'd say too beefy, and maybe a bit more complicated than necessary now. But if they understand it, it's on them to maintain, you know."</p>
+
+    <p>Eight years after he went through the switch closets with Wireshark, the network belongs to the customer, the server runs at full speed, and recirculation runs itself. The operators haven't brought any big questions or complaints to him on that front, which in this business is as close to applause as it gets. Somewhere in that plant, the new version is quietly on its way to becoming the correct way. Some time in the 2030s, someone will have to fly out and argue with it. <span class="endmark">❦</span></p>
+  </article>
+
+  <div class="byline" style="margin-top:36px">
+    <span class="label">Method — researched from eVue commit history, job 2326</span>
+    <span class="label">Interviewed on site over a week &amp; drafted by Claude Code, via an interview skill Naveed built</span>
+    <span class="label">Style: reported case file</span>
+    <span class="label">Fact-checked &amp; edited by Naveed Kakal</span>
+  </div>
+
+  <div class="footer">
+    <a class="label" href="../">← Back to the dossier</a>
+    <span class="label">naveed.io · On record</span>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
