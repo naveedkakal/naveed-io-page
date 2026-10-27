@@ -76,6 +76,7 @@
   // ── § 01 — the climb: a tower that lights up layer by layer ──
   const LAYERS = ['plan', 'I/O', 'control', 'screens', 'people', 'plant', 'cloud', 'mobile']
   const LONG = ['the plan', 'I/O · field devices', 'machine control', 'screens & workflows', 'people & productivity', 'local reporting', 'cloud reporting', 'mobile · Pulse']
+  const atLabel = (n) => n > 7 ? 'L0–L7 · one plant' : `L${n} · ${LONG[n]}`
   const steps = $$('.step[data-layer]'), towerStage = $('#tower-stage'), towerAt = $('#tower-at')
   let layer = 0
   const tower = towerStage ? buildTower() : null
@@ -83,11 +84,11 @@
     if (!steps.length) return
     const line = innerHeight * (innerWidth <= 920 ? 0.78 : 0.55)
     let n = +steps[0].dataset.layer
-    steps.forEach((s) => { if (s.getBoundingClientRect().top < line) n = +s.dataset.layer })
+    steps.forEach((s) => { if (s.offsetParent && s.getBoundingClientRect().top < line) n = +s.dataset.layer })
     if (n === layer && steps.find((s) => +s.dataset.layer === n).classList.contains('on')) return
     layer = n
     steps.forEach((s) => s.classList.toggle('on', +s.dataset.layer === n))
-    towerAt.textContent = `L${n} · ${LONG[n]}`
+    towerAt.textContent = atLabel(n)
     tower && tower.setLayer(n)
   }
 
@@ -106,12 +107,41 @@
     let G, svg, bags = [], spawnT = 0, last = 0, running = false, pkts = [], kpi = 0, bars = [], rate = 1240, run = 94, faults = 2, faultAt = [6, 15], noteI = 0, noteT = 0, msgT = 0, forcedT = null, state = 0, rxT = 0, crewT = 0, gateCls = -1, flies = [], waveT = 0, org = 2481300
     const forced = new Set()   // sensors forced ON: the controller thinks that spot is taken
 
+    // on a phone the tower is a short sticky frame: every band is drawn at full size and the view
+    // pans to the layer being read, with its neighbours peeking in. At the end it re-assembles whole.
+    const phone = () => innerWidth <= 920
+    let whole = false, vy = 0, panRaf = 0, dropIn = false
     function geom() {
-      const W = towerStage.clientWidth, H = towerStage.clientHeight, pad = 10, gap = 6
-      const bh = (H - pad * 2 - gap * 7) / 8
+      const W = towerStage.clientWidth, SH = towerStage.clientHeight, pad = 10, gap = 6
+      const focus = phone() && !whole
+      const bh = focus ? Math.min(SH - 34, 132) : (SH - pad * 2 - gap * 7) / 8
+      const H = focus ? pad * 2 + gap * 7 + bh * 8 : SH
       const top = (i) => H - pad - (i + 1) * bh - i * gap   // i = 0 is the floor
       const cx0 = 58, cx1 = W - 34
-      return { W, H, bh, top, cx0, cx1, cw: cx1 - cx0, spine: W - 18 }
+      return { W, H, SH, focus, bh, top, cx0, cx1, cw: cx1 - cx0, spine: W - 18, narrow: cx1 - cx0 < 420 }
+    }
+    function frame(n, instant) {
+      if (!svg) return
+      const { W, H, SH, focus, bh, top } = G
+      if (!focus) { svg.setAttribute('viewBox', `0 0 ${W} ${H}`); return }
+      const to = top(Math.min(n, 7)) + bh / 2 - SH / 2, from = vy
+      cancelAnimationFrame(panRaf)
+      if (instant || reduced) { vy = to; svg.setAttribute('viewBox', `0 ${vy} ${W} ${SH}`); return }
+      const t0 = performance.now()
+      const step = (now) => {
+        const k = Math.min(1, (now - t0) / 520), e = 1 - Math.pow(1 - k, 3)
+        vy = from + (to - from) * e
+        svg.setAttribute('viewBox', `0 ${vy} ${W} ${SH}`)
+        if (k < 1) panRaf = requestAnimationFrame(step)
+      }
+      panRaf = requestAnimationFrame(step)
+    }
+    // the finale: the tower grows, the bands drop back into place from the floor up
+    function assemble(on) {
+      if (on === whole) return
+      whole = on
+      towerStage.closest('.tower').classList.toggle('whole', on)
+      dropIn = on && !reduced   // the resize rebuilds the svg; build() plays the drop-in on the new one
     }
     function build() {
       G = geom()
@@ -130,6 +160,7 @@
       svg = document.createElementNS(NS, 'svg')
       svg.setAttribute('class', 'tw')
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
+      svg.setAttribute('preserveAspectRatio', 'xMidYMin meet')
       svg.setAttribute('aria-hidden', 'true')
       svg.innerHTML = s
       towerStage.innerHTML = ''
@@ -156,6 +187,13 @@
       paintOrg()
       paintCrew()
       setLayer(layer)
+      cancelAnimationFrame(panRaf)   // a pan started on the old svg must not keep steering the new one
+      frame(layer, true)
+      if (dropIn) {
+        dropIn = false
+        $$('.lyr', svg).forEach((g) => g.animate([{ opacity: 0, transform: 'translateY(-26px)' }, { opacity: 1, transform: 'none' }],
+          { duration: 480, delay: +g.dataset.l * 70, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }))
+      }
       draw()
     }
     const railY = () => G.top(1) + G.bh * (G.bh < 64 ? 0.5 : 0.6)
@@ -204,7 +242,7 @@
     ]
     function peopleArt(y) {
       const { bh, cx0, cx1, cw } = G, tight = bh < 64
-      const pw = Math.min(tight ? cw * 0.62 : 300, cw * 0.72), x = cx0, by = y + bh * 0.08, ph = bh * 0.84
+      const pw = Math.min(tight || G.narrow ? cw * 0.62 : 300, cw * 0.72), x = cx0, by = y + bh * 0.08, ph = bh * 0.84
       const rows = tight ? 2 : 4, cols = tight ? 2 : 1, rh = ph / rows
       let a = `<rect class="box" x="${x}" y="${by}" width="${pw}" height="${ph}" rx="6"/>`
       G.crew = { x, by, pw, rh, cols, tight }
@@ -224,7 +262,7 @@
       if (sx < cx1 - 40) {
         a += `<text id="tw-team" class="ink" x="${sx}" y="${y + bh * (tight ? 0.5 : 0.42)}" style="font:800 ${tight ? 11 : 16}px var(--font-display)">1,040</text>`
         a += `<text class="ink-3" x="${sx}" y="${y + bh * (tight ? 0.5 : 0.42) + (tight ? 11 : 13)}" style="font-size:${tight ? 6.5 : 8}px">lb / operator-hr</text>`
-        if (!tight) a += `<text class="ink-3" x="${sx}" y="${y + bh * 0.42 + 26}" style="font-size:8px">team rate · all stations</text>`
+        if (!tight && !G.narrow) a += `<text class="ink-3" x="${sx}" y="${y + bh * 0.42 + 26}" style="font-size:8px">team rate · all stations</text>`
       }
       return a
     }
@@ -332,7 +370,7 @@
       }
       if (i === 4) {
         // the fleet: plants with their status lights, a cloud they roll up into, and the org's view of all of them
-        const cols = tight ? 6 : 5, rows = tight ? 1 : 2, ts = tight ? Math.min(10, bh * 0.2) : Math.min(18, bh * 0.17), tg = tight ? 4 : 5
+        const cols = tight ? 6 : G.narrow ? 3 : 5, rows = tight ? 1 : 2, ts = tight ? Math.min(10, bh * 0.2) : Math.min(18, bh * 0.17), tg = tight ? 4 : 5
         const gx = cx0, gy = tight ? cy - ts / 2 : y + bh * 0.32
         let a = tight ? '' : `<text class="ink-3" x="${cx0}" y="${y + 18}" style="font-size:9.5px">400+ plants · one picture</text>`
         const STAT = ['#3ddc84', '#3ddc84', '#3ddc84', '#f2b100', '#3ddc84', '#3ddc84', '#3ddc84', '#e5484d', '#3ddc84', '#3ddc84']
@@ -348,29 +386,29 @@
         if (tight) {
           a += `<text id="tw-org" x="${px + 7}" y="${py + ph / 2 + 4}" style="font:800 11px var(--font-display);fill:#eef0f4">0</text>`
         } else {
-          a += `<text id="tw-sync" x="${px + 9}" y="${py + 13}" style="font-size:8px;fill:#6b7280">org rollup · next in 6 s</text>`
-          a += `<text id="tw-org" x="${px + 9}" y="${py + 33}" style="font:800 17px var(--font-display);fill:#eef0f4">0</text><text x="${px + 9}" y="${py + 44}" style="font-size:7.5px;fill:#6b7280">pieces today · every plant</text>`
-          const rh = Math.max(9, (ph - 54) / 3)
-          ;['plant 041', 'plant 017', 'plant 233'].forEach((n, k) => {
+          a += `<text id="tw-sync" x="${px + 9}" y="${py + 13}" style="font-size:8px;fill:#6b7280">${G.narrow ? 'rollup' : 'org rollup'} · next in 6 s</text>`
+          a += `<text id="tw-org" x="${px + 9}" y="${py + 33}" style="font:800 17px var(--font-display);fill:#eef0f4">0</text><text x="${px + 9}" y="${py + 44}" style="font-size:7.5px;fill:#6b7280">pieces today${G.narrow ? '' : ' · every plant'}</text>`
+          const rh = 11, bars = pw > 140   // too narrow for bars: name and percent only
+          ;['plant 041', 'plant 017', 'plant 233'].slice(0, Math.max(0, Math.floor((ph - 52) / rh))).forEach((n, k) => {
             const ry = py + 52 + k * rh
-            a += `<text x="${px + 9}" y="${ry + 6}" style="font-size:7.5px;fill:#a2a8b4">${n}</text><rect x="${px + 58}" y="${ry}" width="${pw - 92}" height="5" rx="2.5" style="fill:#1f2530"/><rect class="rank" data-r="${k}" x="${px + 58}" y="${ry}" width="0" height="5" rx="2.5"/><text class="rankv" data-r="${k}" x="${px + pw - 9}" y="${ry + 6}" text-anchor="end" style="font-size:7.5px;fill:#eef0f4">0%</text>`
+            a += `<text x="${px + 9}" y="${ry + 6}" style="font-size:7.5px;fill:#a2a8b4">${n}</text>` + (bars ? `<rect x="${px + 58}" y="${ry}" width="${pw - 92}" height="5" rx="2.5" style="fill:#1f2530"/><rect class="rank" data-r="${k}" x="${px + 58}" y="${ry}" width="0" height="5" rx="2.5"/>` : '') + `<text class="rankv" data-r="${k}" x="${px + pw - 9}" y="${ry + 6}" text-anchor="end" style="font-size:7.5px;fill:#eef0f4">0%</text>`
           })
         }
         G.org = { px, pw }
         return a
       }
       // Pulse: a QR code at the plant links a phone; plant data leaves through a secure relay; alerts land on the phone
-      const pb = tight ? 26 : Math.min(84, cw * 0.22), pbh = tight ? bh * 0.6 : bh * 0.62, pbx = cx0, pby = cy - pbh / 2
+      const pb = tight ? 26 : G.narrow ? 40 : Math.min(84, cw * 0.22), pbh = tight ? bh * 0.6 : bh * 0.62, pbx = cx0, pby = cy - pbh / 2
       let a = `<rect class="box" x="${pbx}" y="${pby}" width="${pb}" height="${pbh}" rx="5"/>`
       const qs = tight ? 16 : Math.min(26, pbh - 14), qx = pbx + (tight ? 5 : 7), qy = pby + (pbh - qs) / 2
       const Q = [1,1,1,0,1,0,1, 1,0,1,0,0,1,1, 1,1,1,0,1,0,0, 0,0,1,1,0,1,1, 1,0,0,1,1,0,1, 0,1,1,0,1,1,0, 1,1,0,1,0,1,1]
       Q.forEach((v, k) => { if (v) a += `<rect x="${(qx + (k % 7) * qs / 7).toFixed(1)}" y="${(qy + Math.floor(k / 7) * qs / 7).toFixed(1)}" width="${(qs / 7).toFixed(1)}" height="${(qs / 7).toFixed(1)}" class="ink"/>` })
-      if (!tight) a += `<text class="ink-3" x="${qx + qs + 6}" y="${qy + qs / 2 - 2}" style="font-size:8px">plant</text><text class="ink-3" x="${qx + qs + 6}" y="${qy + qs / 2 + 8}" style="font-size:8px">scan</text>`
-      const lx = pbx + pb + (tight ? 14 : 30), lr = tight ? 6 : 9
-      const ph = bh * (tight ? 0.88 : 0.86), pw = Math.min(ph * 0.52, 54), phx = lx + lr + (tight ? 12 : 26), phy = cy - ph / 2
+      if (!tight && !G.narrow) a += `<text class="ink-3" x="${qx + qs + 6}" y="${qy + qs / 2 - 2}" style="font-size:8px">plant</text><text class="ink-3" x="${qx + qs + 6}" y="${qy + qs / 2 + 8}" style="font-size:8px">scan</text>`
+      const lx = pbx + pb + (tight ? 14 : G.narrow ? 20 : 30), lr = tight ? 6 : 9
+      const ph = bh * (tight ? 0.88 : 0.86), pw = Math.min(ph * 0.52, 54), phx = lx + lr + (tight ? 12 : G.narrow ? 14 : 26), phy = cy - ph / 2
       a += `<path class="wire" d="M${pbx + pb} ${cy} L${lx - lr} ${cy}"/><path class="wire" d="M${lx + lr} ${cy} L${phx} ${cy}"/>`
       a += `<g id="tw-relay"><circle class="box" cx="${lx}" cy="${cy}" r="${lr}"/><rect x="${lx - lr * 0.38}" y="${cy - lr * 0.05}" width="${lr * 0.76}" height="${lr * 0.55}" rx="1" class="ink-2"/><path d="M${lx - lr * 0.24} ${cy} v${-lr * 0.22} a${lr * 0.24} ${lr * 0.24} 0 0 1 ${lr * 0.48} 0 v${lr * 0.22}" style="fill:none;stroke:var(--fg-2);stroke-width:1.3"/></g>`
-      if (!tight) a += `<text class="ink-3" x="${lx}" y="${cy + lr + 11}" text-anchor="middle" style="font-size:7.5px">secure relay</text>`
+      if (!tight && !G.narrow) a += `<text class="ink-3" x="${lx}" y="${cy + lr + 11}" text-anchor="middle" style="font-size:7.5px">secure relay</text>`
       a += `<rect id="tw-phone" class="dark" x="${phx}" y="${phy}" width="${pw}" height="${ph}" rx="${tight ? 5 : 8}"/><rect x="${phx + pw / 2 - 6}" y="${phy + 3}" width="12" height="2.5" rx="1.2" style="fill:#2a323f"/>`
       if (!tight) {
         ;[0.55, 0.68, 0.81].forEach((f, k) => { a += `<rect x="${phx + 6}" y="${phy + ph * f}" width="${(pw - 12) * [0.8, 0.55, 0.7][k]}" height="3.5" rx="1.7" style="fill:#2a323f"/>` })
@@ -378,13 +416,20 @@
       const bnh = Math.min(tight ? 9 : 16, ph * 0.26)
       a += `<g class="note" id="tw-note"><rect x="${phx + 3}" y="${phy + 9}" width="${pw - 6}" height="${bnh}" rx="3" style="fill:#5bc8ff"/><rect x="${phx + 6}" y="${phy + 9 + bnh * 0.3}" width="${(pw - 12) * 0.7}" height="${tight ? 1.6 : 2.5}" rx="1" style="fill:#05121c;opacity:.65"/></g>`
       const nx = phx + pw + (tight ? 9 : 14)
+      G.nx = nx
       a += `<text class="ink" x="${nx}" y="${y + bh * (tight ? 0.4 : 0.3)}" style="font:800 ${tight ? 11 : 14}px var(--font-display)">Pulse</text>`
-      a += `<text id="tw-n0" class="ink" x="${nx}" y="${y + bh * (tight ? 0.4 : 0.3) + (tight ? 13 : 20)}" style="font-size:${tight ? 8 : 9.5}px;font-weight:700">🔔 ${NOTES[0]} · now</text>`
-      if (!tight) a += `<text id="tw-n1" class="ink-3" x="${nx}" y="${y + bh * 0.3 + 34}" style="font-size:9px">${NOTES[NOTES.length - 1]} · 4 min</text><text class="ink-3" x="${nx}" y="${y + bh * 0.3 + 48}" style="font-size:8px;opacity:.7">linked by QR · nothing to install</text>`
+      a += `<text id="tw-n0" class="ink" x="${nx}" y="${y + bh * (tight ? 0.4 : 0.3) + (tight ? 13 : 20)}" style="font-size:${tight ? 8 : 9.5}px;font-weight:700">${noteText(NOTES[0], 'now')}</text>`
+      if (!tight && !G.narrow) a += `<text id="tw-n1" class="ink-3" x="${nx}" y="${y + bh * 0.3 + 34}" style="font-size:9px">${NOTES[NOTES.length - 1]} · 4 min</text><text class="ink-3" x="${nx}" y="${y + bh * 0.3 + 48}" style="font-size:8px;opacity:.7">linked by QR · nothing to install</text>`
       G.pulse = { from: [pbx + pb, cy], relay: [lx, cy], to: [phx, cy] }
       return a
     }
 
+    // a narrow band breaks the alert over two lines: what, then the detail
+    function noteText(t, when) {
+      if (!G.narrow || G.bh < 64) return `🔔 ${t} · ${when}`
+      const [what, ...rest] = t.split(' · ')
+      return `<tspan>🔔 ${what}</tspan><tspan x="${G.nx}" dy="13" style="font-weight:500;font-size:8.5px">${rest.join(' · ')} · ${when}</tspan>`
+    }
     function paintForced() {
       if (!svg) return
       SENS.forEach((_, k) => {
@@ -403,7 +448,7 @@
       $$('.lyr', svg).forEach((g) => {
         const l = +g.dataset.l
         g.classList.toggle('off', l > n)
-        g.classList.toggle('on', l === n)
+        g.classList.toggle('on', l === n || n > 7)
       })
     }
     function bagShape(b) {
@@ -444,7 +489,7 @@
       const g = svg && $('#tw-prof', svg)
       if (!g) return
       const x = +g.dataset.x, y = +g.dataset.y, w = +g.dataset.w, h = +g.dataset.h, [name, bins] = PROFILES[prof]
-      if (+g.dataset.tight) {
+      if (+g.dataset.tight || (h - 20) / 3 < 11) {   // too short for three labelled bins: name and colour chips
         g.innerHTML = (h >= 30 ? `<text x="${x + 5}" y="${y + 10}" style="font-size:7.5px;fill:#a2a8b4">${name}</text>` : '') +
           bins.map(([, c], k) => `<rect x="${x + 5 + k * 11}" y="${y + h - 11}" width="8" height="7" rx="1.5" style="fill:${c}"/>`).join('')
         return
@@ -478,10 +523,10 @@
     function paintOrg() {
       if (!svg || !$('#tw-org', svg)) return
       $('#tw-org', svg).textContent = fmt(org)
-      $$('.rank', svg).forEach((r) => {
-        const k = +r.dataset.r, v = RANK[k], full = G.org.pw - 92
-        r.setAttribute('width', (full * v).toFixed(1)); r.style.fill = v >= 0.9 ? '#3ddc84' : v >= 0.85 ? '#f2b100' : '#e5484d'
-        $(`.rankv[data-r="${k}"]`, svg).textContent = `${Math.round(v * 100)}%`
+      $$('.rankv', svg).forEach((t) => {
+        const k = +t.dataset.r, v = RANK[k], r = $(`.rank[data-r="${k}"]`, svg)
+        t.textContent = `${Math.round(v * 100)}%`
+        if (r) { r.setAttribute('width', (Math.max(0, G.org.pw - 92) * v).toFixed(1)); r.style.fill = v >= 0.9 ? '#3ddc84' : v >= 0.85 ? '#f2b100' : '#e5484d' }
       })
     }
     function pulseOut() {
@@ -493,7 +538,7 @@
           const n0 = $('#tw-n0', svg), n1 = $('#tw-n1', svg)
           if (n1) n1.textContent = `${NOTES[noteI]} · 1 min`
           noteI = (noteI + 1) % NOTES.length
-          n0.textContent = `🔔 ${NOTES[noteI]} · now`
+          n0.innerHTML = noteText(NOTES[noteI], 'now')
           n0.animate([{ opacity: 0, transform: 'translateX(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 400 })
           $('#tw-note', svg).animate([{ transform: 'translateY(-8px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 450, easing: 'cubic-bezier(.2,.7,.2,1)' })
           hot($('#tw-phone', svg), 600)
@@ -580,7 +625,7 @@
         waveT -= dt
         if (waveT <= 0) { waveT = 6000; rollup(); RANK.forEach((v, k) => { RANK[k] = clamp(v + (Math.random() - 0.5) * 0.06, 0.78, 0.99) }) }
         const sync = $('#tw-sync', svg)
-        if (sync) sync.textContent = `org rollup · next in ${Math.ceil(waveT / 1000)} s`
+        if (sync) sync.textContent = `${G.narrow ? 'rollup' : 'org rollup'} · next in ${Math.ceil(waveT / 1000)} s`
       }
       if (layer >= 4) {
         crewT += dt
@@ -590,7 +635,7 @@
         noteT += dt
         if (noteT > 3400) { noteT = 0; pulseOut() }
       }
-      if (forcedT && now - forcedT > 1400) { forcedT = null; towerAt.textContent = `L${layer} · ${LONG[layer]}` }
+      if (forcedT && now - forcedT > 1400) { forcedT = null; towerAt.textContent = atLabel(layer) }
       draw()
       requestAnimationFrame(tick)
     }
@@ -610,7 +655,8 @@
         if (running) { last = 0; requestAnimationFrame(tick) }
       }), { threshold: 0.1 }).observe(towerStage)
     }
-    return { setLayer: (n) => { setLayer(n); if (n < 2) { pkts.forEach((p) => p.el.remove()); pkts = [] } } }
+    addEventListener('resize', () => { if (!phone()) assemble(false) })
+    return { setLayer: (n) => { assemble(phone() && n > 7); setLayer(n); frame(n); if (n < 2) { pkts.forEach((p) => p.el.remove()); pkts = [] } } }
   }
 
   // ── dusk: the sky turns over ─────────────────────────

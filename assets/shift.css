@@ -556,12 +556,13 @@ button.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); bord
 .hero .kicker { margin-top: 0; }
 
 /* § 01 — the climb: steps scroll, the tower stays */
+.step.assemble { display: none; }
 .climb-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 5vw, 72px); margin-top: clamp(36px, 5vw, 64px); align-items: start; }
 .steps { display: grid; gap: 0; }
 .step { min-height: 78vh; padding: 8vh 0 6vh; opacity: .32; transition: opacity .5s var(--ease); }
 .step:first-child { padding-top: 0; }
 /* the last step is as tall as the pinned tower, so the tower never slides up under the bar */
-.step:last-child { min-height: calc(100vh - 120px); min-height: calc(100dvh - 120px); }
+.step[data-layer="7"] { min-height: calc(100vh - 120px); min-height: calc(100dvh - 120px); }
 .step.on { opacity: 1; }
 .step .lv { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--fg-3); }
 .step .lv span { display: grid; place-items: center; min-width: 30px; height: 22px; padding: 0 6px; border-radius: 6px; background: var(--acc); color: var(--acc-ink); font-weight: 700; letter-spacing: .04em; }
@@ -635,7 +636,11 @@ button.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); bord
   .tower-bar { padding: 8px 12px; }
   .step { min-height: 62vh; padding: 6vh 0 4vh; }
   .step:first-child { padding-top: 5vh; }
-  .step:last-child { min-height: 40vh; }
+  .step[data-layer="7"] { min-height: 40vh; }
+  /* a short sticky frame that pans layer to layer; the finale grows it back into the whole tower */
+  .tower { height: 238px; }
+  .tower.whole { height: calc(100svh - 92px); max-height: 540px; }   /* short enough that the bands draw compact */
+  .step.assemble { display: block; min-height: calc(100svh - 40px); padding: 0; opacity: 1; }
 }
 
 /* § 03 bio: prose only now; the photo lives in the hero */
