@@ -103,7 +103,7 @@
     ]
     const STATES = ['idle', 'ready', 'lifting', 'release']
     const NOTES = ['Dryer 4 · door open 6 min', 'Washers · 1,240 pcs/hr · on target', 'Storage 92% full', 'Shift report ready · 06:00']
-    let G, svg, bags = [], spawnT = 0, last = 0, running = false, pkts = [], kpi = 0, bars = [], rate = 1240, run = 94, faults = 2, faultAt = [6, 15], noteI = 0, noteT = 0, msgT = 0, forcedT = null, state = 0, rxT = 0
+    let G, svg, bags = [], spawnT = 0, last = 0, running = false, pkts = [], kpi = 0, bars = [], rate = 1240, run = 94, faults = 2, faultAt = [6, 15], noteI = 0, noteT = 0, msgT = 0, forcedT = null, state = 0, rxT = 0, gateCls = -1, flies = [], waveT = 0, org = 2481300
     const forced = new Set()   // sensors forced ON: the controller thinks that spot is taken
 
     function geom() {
@@ -152,6 +152,8 @@
       paintForced()
       paintState()
       paintProfile()
+      flies = []
+      paintOrg()
       setLayer(layer)
       draw()
     }
@@ -178,7 +180,8 @@
           a += `<text class="ink-3" x="${sx(SENS[1])}" y="${ry + 20}" text-anchor="middle" style="font-size:8.5px">reader</text>`
           a += `<text x="${x1 + 4}" y="${ry - d + 3}" style="font-size:8.5px;fill:${CLS[0]};font-weight:700">A</text><text x="${x1 + 4}" y="${ry + d + 3}" style="font-size:8.5px;fill:${CLS[1]};font-weight:700">B</text>`
         }
-        a += `<g id="tw-gate" transform="translate(${sx(SW)} ${ry})"><line class="gate" x1="-2" y1="0" x2="${tight ? 10 : 14}" y2="0"/></g><g id="tw-bags"></g>`
+        a += `<g id="tw-gate" transform="translate(${sx(SW)} ${ry})"><line class="gate" x1="0" y1="0" x2="${tight ? 13 : 22}" y2="0"/><circle class="pivot" r="${tight ? 3.5 : 5}"/></g><g id="tw-bags"></g>`
+        if (!tight) a += `<text class="ink-3" x="${sx(SW) - 8}" y="${ry + 24}" text-anchor="end" style="font-size:8.5px">switch</text>`
         SENS.forEach((f, k) => {
           const x = sx(f)
           a += `<g class="sensor" data-i="${k}" tabindex="0" role="button" aria-label="Force sensor ${k + 1}"><circle cx="${x}" cy="${ry}" r="16" fill="transparent"/><rect class="d" x="${x - 6}" y="${ry - 6}" width="12" height="12" transform="rotate(45 ${x} ${ry})"/></g>`
@@ -253,21 +256,57 @@
         return a
       }
       if (i === 4) {
-        const ccx = cx0 + Math.min(cw * 0.6, 250), ccy = y + bh * 0.44, r = Math.min(bh * 0.22, 19)
-        let a = tight ? '' : `<text class="ink-3" x="${cx0}" y="${y + 18}" style="font-size:9.5px">400+ plants · one picture · every minute</text>`
-        const n = 7, sy = y + bh * 0.76
-        for (let k = 0; k < n; k++) {
-          const x = cx0 + 4 + k * Math.min(26, (cw * 0.42) / n)
-          a += `<path class="wire" d="M${x + 4} ${sy - 4} L${ccx - r * 0.6 + (k / (n - 1)) * r * 1.2} ${ccy + r * 0.7}"/><rect class="site" data-s="${k}" x="${x}" y="${sy - 4}" width="9" height="9" rx="2"/>`
+        // the fleet: plants with their status lights, a cloud they roll up into, and the org's view of all of them
+        const cols = tight ? 6 : 5, rows = tight ? 1 : 2, ts = tight ? Math.min(10, bh * 0.2) : Math.min(18, bh * 0.17), tg = tight ? 4 : 5
+        const gx = cx0, gy = tight ? cy - ts / 2 : y + bh * 0.32
+        let a = tight ? '' : `<text class="ink-3" x="${cx0}" y="${y + 18}" style="font-size:9.5px">400+ plants · one picture</text>`
+        const STAT = ['#3ddc84', '#3ddc84', '#3ddc84', '#f2b100', '#3ddc84', '#3ddc84', '#3ddc84', '#e5484d', '#3ddc84', '#3ddc84']
+        for (let k = 0; k < cols * rows; k++) {
+          const tx = gx + (k % cols) * (ts + tg), ty = gy + Math.floor(k / cols) * (ts + tg)
+          a += `<rect class="site" data-s="${k}" x="${tx}" y="${ty}" width="${ts}" height="${ts}" rx="3"/><circle cx="${tx + ts - 3.5}" cy="${ty + 3.5}" r="${tight ? 1.6 : 2.2}" style="fill:${STAT[k]}"/>`
         }
-        a += `<g class="box"><circle cx="${ccx - r * 0.9}" cy="${ccy + r * 0.2}" r="${r * 0.7}"/><circle cx="${ccx}" cy="${ccy - r * 0.25}" r="${r}"/><circle cx="${ccx + r * 0.95}" cy="${ccy + r * 0.25}" r="${r * 0.62}"/><rect x="${ccx - r * 0.9}" y="${ccy + r * 0.05}" width="${r * 1.85}" height="${r * 0.82}" style="stroke:none"/></g>`
+        const gw = cols * (ts + tg), r = Math.min(bh * 0.2, 16), hx = gx + gw + r * 1.4 + (tight ? 4 : 14), hy = cy
+        G.fleet = { cols, rows, ts, tg, gx, gy, hx, hy }
+        a += `<g id="tw-hub" class="box"><circle cx="${hx - r * 0.9}" cy="${hy + r * 0.2}" r="${r * 0.7}"/><circle cx="${hx}" cy="${hy - r * 0.25}" r="${r}"/><circle cx="${hx + r * 0.95}" cy="${hy + r * 0.25}" r="${r * 0.62}"/><rect x="${hx - r * 0.9}" y="${hy + r * 0.05}" width="${r * 1.85}" height="${r * 0.82}" style="stroke:none"/></g>`
+        const px = hx + r * 1.7 + (tight ? 6 : 14), pw = cx1 - 4 - px, ph = bh * 0.8, py = y + bh * 0.1
+        a += `<rect class="dark" x="${px}" y="${py}" width="${pw}" height="${ph}" rx="6"/>`
+        if (tight) {
+          a += `<text id="tw-org" x="${px + 7}" y="${py + ph / 2 + 4}" style="font:800 11px var(--font-display);fill:#eef0f4">0</text>`
+        } else {
+          a += `<text id="tw-sync" x="${px + 9}" y="${py + 13}" style="font-size:8px;fill:#6b7280">org rollup · next in 6 s</text>`
+          a += `<text id="tw-org" x="${px + 9}" y="${py + 33}" style="font:800 17px var(--font-display);fill:#eef0f4">0</text><text x="${px + 9}" y="${py + 44}" style="font-size:7.5px;fill:#6b7280">pieces today · every plant</text>`
+          const rh = Math.max(9, (ph - 54) / 3)
+          ;['plant 041', 'plant 017', 'plant 233'].forEach((n, k) => {
+            const ry = py + 52 + k * rh
+            a += `<text x="${px + 9}" y="${ry + 6}" style="font-size:7.5px;fill:#a2a8b4">${n}</text><rect x="${px + 58}" y="${ry}" width="${pw - 92}" height="5" rx="2.5" style="fill:#1f2530"/><rect class="rank" data-r="${k}" x="${px + 58}" y="${ry}" width="0" height="5" rx="2.5"/><text class="rankv" data-r="${k}" x="${px + pw - 9}" y="${ry + 6}" text-anchor="end" style="font-size:7.5px;fill:#eef0f4">0%</text>`
+          })
+        }
+        G.org = { px, pw }
         return a
       }
-      const ph = bh * 0.84, pw = Math.min(ph * 0.52, 50), x = cx0, py = y + bh * 0.08
-      let a = `<rect class="dark" x="${x}" y="${py}" width="${pw}" height="${ph}" rx="8"/><rect x="${x + pw / 2 - 7}" y="${py + 3}" width="14" height="3" rx="1.5" style="fill:#2a323f"/>`
-      a += `<g class="note" id="tw-note"><rect x="${x + 4}" y="${py + 12}" width="${pw - 8}" height="${Math.min(22, ph * 0.3)}" rx="4" style="fill:#5bc8ff"/><rect x="${x + 8}" y="${py + 17}" width="${(pw - 16) * 0.7}" height="3" rx="1.5" style="fill:#05121c;opacity:.6"/><rect x="${x + 8}" y="${py + 23}" width="${(pw - 16) * 0.45}" height="3" rx="1.5" style="fill:#05121c;opacity:.4"/></g>`
-      a += `<text class="ink" x="${x + pw + 14}" y="${y + bh * (tight ? 0.42 : 0.4)}" style="font:800 ${tight ? 13 : 15}px var(--font-display)">Pulse</text>${tight ? '' : `<text class="ink-3" x="${x + pw + 14}" y="${y + bh * 0.4 + 14}" style="font-size:9px">plant data, out to the phone</text>`}`
-      a += `<text id="tw-notetxt" class="ink-2" x="${x + pw + 14}" y="${y + bh * (tight ? 0.42 : 0.4) + (tight ? 15 : 30)}" style="font-size:${tight ? 9 : 10}px">🔔 ${NOTES[0]}</text>`
+      // Pulse: a QR code at the plant links a phone; plant data leaves through a secure relay; alerts land on the phone
+      const pb = tight ? 26 : Math.min(84, cw * 0.22), pbh = tight ? bh * 0.6 : bh * 0.62, pbx = cx0, pby = cy - pbh / 2
+      let a = `<rect class="box" x="${pbx}" y="${pby}" width="${pb}" height="${pbh}" rx="5"/>`
+      const qs = tight ? 16 : Math.min(26, pbh - 14), qx = pbx + (tight ? 5 : 7), qy = pby + (pbh - qs) / 2
+      const Q = [1,1,1,0,1,0,1, 1,0,1,0,0,1,1, 1,1,1,0,1,0,0, 0,0,1,1,0,1,1, 1,0,0,1,1,0,1, 0,1,1,0,1,1,0, 1,1,0,1,0,1,1]
+      Q.forEach((v, k) => { if (v) a += `<rect x="${(qx + (k % 7) * qs / 7).toFixed(1)}" y="${(qy + Math.floor(k / 7) * qs / 7).toFixed(1)}" width="${(qs / 7).toFixed(1)}" height="${(qs / 7).toFixed(1)}" class="ink"/>` })
+      if (!tight) a += `<text class="ink-3" x="${qx + qs + 6}" y="${qy + qs / 2 - 2}" style="font-size:8px">plant</text><text class="ink-3" x="${qx + qs + 6}" y="${qy + qs / 2 + 8}" style="font-size:8px">scan</text>`
+      const lx = pbx + pb + (tight ? 14 : 30), lr = tight ? 6 : 9
+      const ph = bh * (tight ? 0.88 : 0.86), pw = Math.min(ph * 0.52, 54), phx = lx + lr + (tight ? 12 : 26), phy = cy - ph / 2
+      a += `<path class="wire" d="M${pbx + pb} ${cy} L${lx - lr} ${cy}"/><path class="wire" d="M${lx + lr} ${cy} L${phx} ${cy}"/>`
+      a += `<g id="tw-relay"><circle class="box" cx="${lx}" cy="${cy}" r="${lr}"/><rect x="${lx - lr * 0.38}" y="${cy - lr * 0.05}" width="${lr * 0.76}" height="${lr * 0.55}" rx="1" class="ink-2"/><path d="M${lx - lr * 0.24} ${cy} v${-lr * 0.22} a${lr * 0.24} ${lr * 0.24} 0 0 1 ${lr * 0.48} 0 v${lr * 0.22}" style="fill:none;stroke:var(--fg-2);stroke-width:1.3"/></g>`
+      if (!tight) a += `<text class="ink-3" x="${lx}" y="${cy + lr + 11}" text-anchor="middle" style="font-size:7.5px">secure relay</text>`
+      a += `<rect id="tw-phone" class="dark" x="${phx}" y="${phy}" width="${pw}" height="${ph}" rx="${tight ? 5 : 8}"/><rect x="${phx + pw / 2 - 6}" y="${phy + 3}" width="12" height="2.5" rx="1.2" style="fill:#2a323f"/>`
+      if (!tight) {
+        ;[0.55, 0.68, 0.81].forEach((f, k) => { a += `<rect x="${phx + 6}" y="${phy + ph * f}" width="${(pw - 12) * [0.8, 0.55, 0.7][k]}" height="3.5" rx="1.7" style="fill:#2a323f"/>` })
+      }
+      const bnh = Math.min(tight ? 9 : 16, ph * 0.26)
+      a += `<g class="note" id="tw-note"><rect x="${phx + 3}" y="${phy + 9}" width="${pw - 6}" height="${bnh}" rx="3" style="fill:#5bc8ff"/><rect x="${phx + 6}" y="${phy + 9 + bnh * 0.3}" width="${(pw - 12) * 0.7}" height="${tight ? 1.6 : 2.5}" rx="1" style="fill:#05121c;opacity:.65"/></g>`
+      const nx = phx + pw + (tight ? 9 : 14)
+      a += `<text class="ink" x="${nx}" y="${y + bh * (tight ? 0.4 : 0.3)}" style="font:800 ${tight ? 11 : 14}px var(--font-display)">Pulse</text>`
+      a += `<text id="tw-n0" class="ink" x="${nx}" y="${y + bh * (tight ? 0.4 : 0.3) + (tight ? 13 : 20)}" style="font-size:${tight ? 8 : 9.5}px;font-weight:700">🔔 ${NOTES[0]} · now</text>`
+      if (!tight) a += `<text id="tw-n1" class="ink-3" x="${nx}" y="${y + bh * 0.3 + 34}" style="font-size:9px">${NOTES[NOTES.length - 1]} · 4 min</text><text class="ink-3" x="${nx}" y="${y + bh * 0.3 + 48}" style="font-size:8px;opacity:.7">linked by QR · nothing to install</text>`
+      G.pulse = { from: [pbx + pb, cy], relay: [lx, cy], to: [phx, cy] }
       return a
     }
 
@@ -318,7 +357,12 @@
       lit.forEach((on, c) => $(`.route[data-r="${c}"]`, svg).classList.toggle('lit', on))
       // the switch points at the track the next item needs; that is the controller's output
       const next = bags.filter((b) => b.t <= SW).sort((p, q) => q.t - p.t)[0]
-      if (next) $('#tw-gate', svg).setAttribute('transform', `translate(${sx(SW)} ${railY()}) rotate(${next.cls ? 28 : -28})`)
+      if (next) {
+        const gate = $('#tw-gate', svg)
+        gate.setAttribute('transform', `translate(${sx(SW)} ${railY()}) rotate(${next.cls ? 30 : -30})`)
+        $('.gate', gate).style.stroke = CLS[next.cls]
+        if (next.cls !== gateCls) { gateCls = next.cls; hot(gate, 450) }   // it fired: the controller switched the output
+      }
     }
     let prof = 0
     function paintProfile() {
@@ -334,6 +378,52 @@
       g.innerHTML = `<text x="${x + 7}" y="${y + 12}" style="font-size:8px;fill:#a2a8b4">sort · ${name} plant</text>` +
         bins.map(([t, c], k) => `<rect x="${x + 7}" y="${(y + 17 + k * rh).toFixed(1)}" width="${w - 14}" height="${(rh - 3).toFixed(1)}" rx="3" style="fill:${c};opacity:.24"/><rect x="${x + 7}" y="${(y + 17 + k * rh).toFixed(1)}" width="3" height="${(rh - 3).toFixed(1)}" rx="1" style="fill:${c}"/><text x="${x + 15}" y="${(y + 17 + k * rh + rh / 2 + 1.5).toFixed(1)}" style="font-size:8.5px;fill:#eef0f4">${t}</text>`).join('')
       g.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 350 })
+    }
+    function fly(x0, y0, x1, y1, ms, color, done) {
+      if (!svg || reduced) { done && done(); return }
+      const c = document.createElementNS(NS, 'circle')
+      c.setAttribute('r', '2.6'); c.setAttribute('fill', color); c.setAttribute('cx', x0); c.setAttribute('cy', y0)
+      $('#tw-pkts', svg).append(c)
+      flies.push({ c, x0, y0, x1, y1, ms, t: 0, done })
+    }
+    // every few seconds the whole fleet rolls up: each plant sends its numbers to the cloud, the org view updates
+    function rollup() {
+      const F = G.fleet
+      if (!F) return
+      const n = F.cols * F.rows
+      for (let k = 0; k < n; k++) {
+        const tx = F.gx + (k % F.cols) * (F.ts + F.tg) + F.ts / 2, ty = F.gy + Math.floor(k / F.cols) * (F.ts + F.tg) + F.ts / 2
+        setTimeout(() => {
+          hot($(`.site[data-s="${k}"]`, svg), 300)
+          fly(tx, ty, F.hx, F.hy, 520, '#5bc8ff', () => { hot($('#tw-hub', svg), 260); org += 300 + Math.floor(Math.random() * 900); paintOrg() })
+        }, k * 45)
+      }
+    }
+    const RANK = [0.96, 0.91, 0.84]
+    function paintOrg() {
+      if (!svg || !$('#tw-org', svg)) return
+      $('#tw-org', svg).textContent = fmt(org)
+      $$('.rank', svg).forEach((r) => {
+        const k = +r.dataset.r, v = RANK[k], full = G.org.pw - 92
+        r.setAttribute('width', (full * v).toFixed(1)); r.style.fill = v >= 0.9 ? '#3ddc84' : v >= 0.85 ? '#f2b100' : '#e5484d'
+        $(`.rankv[data-r="${k}"]`, svg).textContent = `${Math.round(v * 100)}%`
+      })
+    }
+    function pulseOut() {
+      const P = G.pulse
+      if (!P) return
+      fly(P.from[0], P.from[1], P.relay[0], P.relay[1], 480, '#3ddc84', () => {
+        hot($('#tw-relay', svg), 300)
+        fly(P.relay[0], P.relay[1], P.to[0], P.to[1], 420, '#3ddc84', () => {
+          const n0 = $('#tw-n0', svg), n1 = $('#tw-n1', svg)
+          if (n1) n1.textContent = `${NOTES[noteI]} · 1 min`
+          noteI = (noteI + 1) % NOTES.length
+          n0.textContent = `🔔 ${NOTES[noteI]} · now`
+          n0.animate([{ opacity: 0, transform: 'translateX(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 400 })
+          $('#tw-note', svg).animate([{ transform: 'translateY(-8px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 450, easing: 'cubic-bezier(.2,.7,.2,1)' })
+          hot($('#tw-phone', svg), 600)
+        })
+      })
     }
     function hot(el, ms = 260) { if (!el) return; el.classList.add('hot'); setTimeout(() => el.classList.remove('hot'), ms) }
     function fire(k) {
@@ -360,7 +450,6 @@
         if (Math.random() < 0.06) { faults++; faultAt.push(bars.length - 1) }
         paintBars()
       }
-      if (layer >= 5) hot($(`.site[data-s="${Math.floor(Math.random() * 7)}"]`, svg), 380)
     }
     function paintBars() {
       if (!svg || !$('#tw-k0', svg)) return
@@ -405,14 +494,22 @@
       if (rxT > 420) { rxT = 0; hot($('.led.rx', svg), 110) }   // the bridge polls the PLC
       msgT += dt
       if (msgT > 3000) { msgT = 0; prof = (prof + 1) % PROFILES.length; paintProfile();  }
+      flies = flies.filter((f) => {
+        f.t += dt
+        const k = Math.min(1, f.t / f.ms), e = k * k * (3 - 2 * k)
+        f.c.setAttribute('cx', (f.x0 + (f.x1 - f.x0) * e).toFixed(1)); f.c.setAttribute('cy', (f.y0 + (f.y1 - f.y0) * e).toFixed(1))
+        if (k < 1) return true
+        f.c.remove(); f.done && f.done(); return false
+      })
+      if (layer >= 5) {
+        waveT -= dt
+        if (waveT <= 0) { waveT = 6000; rollup(); RANK.forEach((v, k) => { RANK[k] = clamp(v + (Math.random() - 0.5) * 0.06, 0.78, 0.99) }) }
+        const sync = $('#tw-sync', svg)
+        if (sync) sync.textContent = `org rollup · next in ${Math.ceil(waveT / 1000)} s`
+      }
       if (layer >= 6) {
         noteT += dt
-        if (noteT > 3200) {
-          noteT = 0; noteI = (noteI + 1) % NOTES.length
-          $('#tw-notetxt', svg).textContent = `🔔 ${NOTES[noteI]}`
-          const n = $('#tw-note', svg)
-          n.animate([{ transform: 'translateY(-10px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 450, easing: 'cubic-bezier(.2,.7,.2,1)' })
-        }
+        if (noteT > 3400) { noteT = 0; pulseOut() }
       }
       if (forcedT && now - forcedT > 1400) { forcedT = null; towerAt.textContent = `L${layer} · ${LONG[layer - 1]}` }
       draw()

@@ -604,7 +604,15 @@ button.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); bord
 .tw .route { fill: none; stroke: #3f4a5c; stroke-width: 2.2; stroke-linecap: round; transition: stroke .3s; }
 .tw .route[data-r="0"].lit { stroke: #5bc8ff; }
 .tw .route[data-r="1"].lit { stroke: #f2b100; }
-.tw .gate { stroke: var(--acc); stroke-width: 3.2; stroke-linecap: round; }
+.tw .gate { stroke: var(--acc); stroke-width: 5; stroke-linecap: round; transition: stroke .2s; }
+.tw .pivot { fill: var(--surface); stroke: var(--fg); stroke-width: 2; }
+#tw-gate { transition: transform .18s cubic-bezier(.2,.7,.2,1); }
+#tw-gate.hot .gate { filter: drop-shadow(0 0 6px currentColor) drop-shadow(0 0 3px #fff); stroke-width: 7; }
+#tw-gate.hot .pivot { fill: #f2b100; }
+.tw .rank { transition: width .5s cubic-bezier(.2,.7,.2,1), fill .3s; }
+#tw-hub.hot circle, #tw-hub.hot rect { fill: color-mix(in oklab, var(--acc) 30%, var(--surface)); }
+#tw-relay.hot circle { fill: rgba(61,220,132,.35); stroke: #3ddc84; }
+#tw-phone.hot { stroke: #5bc8ff; stroke-width: 2; filter: drop-shadow(0 0 6px rgba(91,200,255,.6)); }
 .tw .mach { fill: #151a23; stroke: #3ddc84; stroke-opacity: .55; transition: fill .3s; }
 .tw .mach.hot { fill: rgba(61,220,132,.22); }
 .tw .kv.bad { fill: #e5484d; }
@@ -618,7 +626,7 @@ button.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); bord
 .tw .pkt { fill: var(--acc); }
 .tw .bar { fill: var(--acc); transition: height .4s var(--ease), y .4s var(--ease); }
 .tw .site { fill: var(--surface); stroke: var(--line-2); transition: fill .2s; }
-.tw .site.hot { fill: color-mix(in oklab, var(--acc) 45%, var(--surface)); }
+.tw .site.hot { fill: color-mix(in oklab, var(--acc) 55%, var(--surface)); stroke: var(--acc); }
 .tw .note { transition: transform .5s var(--ease), opacity .5s; }
 @media (max-width: 920px) {
   .climb-grid { grid-template-columns: 1fr; gap: 0; }
