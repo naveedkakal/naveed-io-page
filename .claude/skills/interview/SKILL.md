@@ -136,7 +136,7 @@ if they don't exist yet:
 
 - **JSON-LD** in the page head: `BlogPosting` with `headline`, `datePublished`,
   `description`, `keywords`, and `author` pointing at a canonical `Person` node —
-  Naveed Kakal, Director of Software Development at Kannegiesser ETECH,
+  Naveed Kakal, Lead Developer at Kannegiesser ETECH,
   `url: https://naveed.io`, `sameAs` → his public profiles (confirm the list with him
   on first use, then reuse verbatim everywhere).
 - `<meta name="description">`, OG and twitter card tags (mirror the homepage patterns),
@@ -162,7 +162,7 @@ raw material stays private; the published piece is the public artifact).
 
 ## Editorial guardrails
 
-- Naveed is Director of Software Development at **Kannegiesser ETECH** and currently
+- Naveed is Lead Developer at **Kannegiesser ETECH** and currently
   employed there. Never frame him as having left, gone independent, or consulting.
 - eVue is a company codebase: history, metrics, and stories are fair game; verbatim code
   and customer names need his explicit OK per piece.
