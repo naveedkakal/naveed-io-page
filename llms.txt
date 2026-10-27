@@ -23,9 +23,10 @@
   plant he supports maps 8,710 I/O points into a single controller. Click-to-force, a
   commissioning test tool, has been his testing standard since early 2009; paired with
   a test PLC, it exercises the full stack before a real item moves.
-- L2 Machine control: PLC programs generated from each plant's database (129 device
-  types, 123 B&R PLCs), replacing hand-written programs. PLC communications via SOAP
-  (2007), an Elixir service (2019) and an OPC UA bridge today. Rule: never act on a
+- L2 Machine control: PLC programs generated from a model of each plant: devices,
+  their configuration parameters and what feeds what, for what purpose (129 device
+  types across 123 B&R PLC projects), replacing hand-written programs. PLC communications via SOAP
+  (2007), an Elixir service he wrote (2019) and an OPC UA bridge today. Rule: never act on a
   stale sensor.
 - L3 Screens and workflows: eVue, a web-based plant control system since 2007 (Rails,
   React), never rewritten; routing, storage, sort stations, autopilot for what goes
@@ -56,7 +57,7 @@
   Pacific's Vogue Laundry in Hong Kong (then ETECH's largest project) was commissioning.
 - December 2018: First Hong Kong trip — Wireshark captures that helped trace a network
   broadcast storm to a saturated switch trunk.
-- October 2019: PLC communications moved to an Elixir application he started that April.
+- October 2019: PLC communications moved to an Elixir application he wrote, begun that April.
 - November 2025: 434 commits in one month.
 - August 2026: 10,000th commit on the record.
 - October 2026: On site in Hong Kong for Vogue's eVue 5 → v26 upgrade (layout, PLC,
