@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Naveed Kakal — Résumé</title>
+<meta name="description" content="Naveed Kakal, Lead Developer at Kannegiesser ETECH: twenty years of industrial automation software, from PLC programs to plant control, reporting and mobile." />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-body: 'Instrument Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    --bg: #f1f3f6; --surface: #ffffff; --line: #dce1e8; --line-2: #c5ccd7;
+    --fg: #0b0e15; --fg-2: #394250; --fg-3: #5f6876; --acc: #0a6fab;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.55 var(--font-body);
+    background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px; background-attachment: fixed; }
+  a { color: inherit; }
+
+  .bar { max-width: 860px; margin: 0 auto; padding: 22px 16px 0; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    font: 500 12px var(--font-mono); letter-spacing: .04em; }
+  .bar a { text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
+  .mk { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line-2); color: var(--acc); font-weight: 700; }
+  .bar .acc { color: var(--acc); }
+  .print { font: inherit; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface); color: var(--fg); cursor: pointer; }
+  .print:hover { border-color: var(--acc); color: var(--acc); }
+
+  .sheet { max-width: 860px; margin: 18px auto 64px; background: var(--surface); border: 1px solid var(--line-2); border-radius: 18px;
+    padding: clamp(24px, 6vw, 56px); box-shadow: 0 30px 60px -40px rgba(11,14,21,.35); }
+
+  header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: end; padding-bottom: 22px; border-bottom: 2px solid var(--fg); }
+  .kicker { font: 500 11px var(--font-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--fg-3); }
+  .kicker b { color: var(--acc); font-weight: 500; }
+  h1 { font: 800 clamp(40px, 7vw, 60px)/.92 var(--font-display); letter-spacing: -.045em; margin: 10px 0 10px; }
+  .role { font: 600 17px var(--font-body); color: var(--fg-2); margin: 0; }
+  .contact { list-style: none; margin: 0; padding: 0; text-align: right; font: 500 12px/1.9 var(--font-mono); color: var(--fg-2); }
+  .contact a { text-decoration: none; }
+  .contact a:hover { color: var(--acc); }
+
+  section { margin-top: 26px; }
+  h2 { display: flex; align-items: center; gap: 10px; font: 700 11px var(--font-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--acc); margin: 0 0 12px; }
+  h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .summary { font-size: 16px; color: var(--fg-2); margin: 0; max-width: 70ch; }
+  .summary b { color: var(--fg); font-weight: 600; }
+
+  .job { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 4px 22px; padding: 14px 0; border-top: 1px dashed var(--line); }
+  .job:first-of-type { border-top: 0; padding-top: 2px; }
+  .when { font: 500 12px/1.6 var(--font-mono); color: var(--fg-3); padding-top: 3px; }
+  .when span { display: block; }
+  h3 { font: 800 19px/1.2 var(--font-display); letter-spacing: -.02em; margin: 0; }
+  h3 small { font: 500 14px var(--font-body); letter-spacing: 0; color: var(--fg-3); }
+  .job ul { margin: 8px 0 0; padding-left: 18px; color: var(--fg-2); }
+  .job li { margin: 4px 0; padding-left: 2px; }
+  .job li::marker { color: var(--acc); }
+  .job li b { color: var(--fg); font-weight: 600; }
+  .sub { font: 600 13px var(--font-body); color: var(--fg-3); margin: 2px 0 0; }
+
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; }
+  .skills { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 6px 22px; margin: 0; }
+  .skills dt { font: 500 12px/1.9 var(--font-mono); color: var(--fg-3); }
+  .skills dd { margin: 0; color: var(--fg-2); }
+  .builds { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+  .builds li { color: var(--fg-2); }
+  .builds b { color: var(--fg); font-weight: 600; }
+  .plain { margin: 0; color: var(--fg-2); }
+  .plain b { color: var(--fg); font-weight: 600; }
+
+  @media (max-width: 640px) {
+    header { grid-template-columns: 1fr; }
+    .contact { text-align: left; }
+    .job, .skills { grid-template-columns: 1fr; }
+    .when span { display: inline; }
+    .when span + span::before { content: " · "; }
+    .grid2 { grid-template-columns: 1fr; }
+    .grid2 section + section { margin-top: 26px; }
+  }
+
+  /* paper: one clean letter page, no chrome */
+  @page { size: letter; margin: 0.35in 0.5in; }
+  @media print {
+    body { background: none; font-size: 8.8pt; line-height: 1.34; }
+    .job { grid-template-columns: 96px minmax(0, 1fr); }
+    h3 { font-size: 12.5pt; }
+    header { padding-bottom: 12px; }
+    .bar { display: none; }
+    .sheet { margin: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none; max-width: none; }
+    h1 { font-size: 28pt; margin: 4px 0; }
+    .role { font-size: 11pt; }
+    .contact { line-height: 1.6; }
+    .skills { gap: 1px 14px; }
+    .skills dt { line-height: 1.6; }
+    .builds { gap: 3px; }
+    .when { font-size: 8.5pt; }
+    section { margin-top: 12px; }
+    h2 { margin-bottom: 6px; }
+    .job { padding: 6px 0; break-inside: avoid; }
+    .job ul { margin-top: 4px; }
+    .job li { margin: 2px 0; }
+    .summary { font-size: 9.2pt; }
+    a { text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+  <nav class="bar" aria-label="Site">
+    <a href="/"><span class="mk">nk</span><span>naveed<span class="acc">.io</span></span></a>
+    <button class="print" type="button" onclick="print()">print / save as PDF</button>
+  </nav>
+
+  <main class="sheet">
+    <header>
+      <div>
+        <div class="kicker"><b>§</b> résumé · Naperville, IL</div>
+        <h1>Naveed Kakal</h1>
+        <p class="role">Lead Developer · Industrial automation software, from sensor to boardroom</p>
+      </div>
+      <ul class="contact">
+        <li><a href="mailto:naveed.kakal@gmail.com">naveed.kakal@gmail.com</a></li>
+        <li><a href="https://naveed.io">naveed.io</a></li>
+        <li><a href="https://www.linkedin.com/in/naveed-kakal-b7416417/">in/naveed-kakal</a></li>
+        <li><a href="https://github.com/naveedkakal">github.com/naveedkakal</a></li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Summary</h2>
+      <p class="summary">Electrical engineer with <b>twenty years building the software that runs industrial laundry plants</b>, some of the hardest material handling there is. I've worked in every layer of the stack: plant layout with sales, generated PLC programs, the eVue plant control system (the role a WCS/WES plays in a warehouse, or an MES in a factory), labor tracking, plant reporting and mobile. On a very small team with projects on several continents, I know the whole plant end to end and its customers first-hand. IC at heart.</p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+
+      <div class="job">
+        <div class="when"><span>Mar 2017 –</span><span>present</span></div>
+        <div>
+          <h3>Lead Developer <small>· Kannegiesser ETECH</small></h3>
+          <p class="sub">Plant control software for industrial laundries · 400+ plants run eVue</p>
+          <ul>
+            <li>Lead development of <b>eVue</b>, a web-based plant control system (Rails, React) in continuous use since 2007 and never rewritten: routing, storage, sort stations, autopilot, plain-language alarms, configured per plant workflow.</li>
+            <li>Built the <b>PLC program generator</b>: a model of each plant (devices, configuration parameters, and what feeds what, for what purpose) that writes the controller program. 129 device types, with a hash check proving a change moved nothing it shouldn't. Fewer errors, much faster projects.</li>
+            <li>Wrote the <b>Elixir PLC communications service</b> (2019); PLC communication today runs through an OPC UA bridge. One plant maps 8,710 I/O points into a single controller.</li>
+            <li>Built <b>labor tracking and productivity</b> (operator logins by station and task, piece-rate and team rates, supervisor reports), <b>local KPI reporting</b>, and <b>Pulse</b>, a mobile app that gets plant data securely off isolated plant networks.</li>
+            <li>Work with sales on <b>plant layouts</b> and own the product's long-term roadmap.</li>
+            <li>Commission and upgrade plants on site, including Cathay Pacific's Vogue Laundry in Hong Kong: a 2026 upgrade of layout, PLC, network and fiber in a 36-hour window, most of it running in under 20.</li>
+            <li>Reshaped the department into a product team on returning in 2017.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="when"><span>Sep 2014 –</span><span>Feb 2017</span></div>
+        <div>
+          <h3>Developer → Dev Lead → Engineering Manager <small>· Centro, Chicago</small></h3>
+          <ul>
+            <li>Advertising technology. Grew from developer to dev lead to engineering manager, and learned I'm an IC at heart.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="when"><span>Aug 2006 –</span><span>Aug 2014</span></div>
+        <div>
+          <h3>ETECH <small>· Minneapolis · controls, then software</small></h3>
+          <ul>
+            <li>Kept the GE 90-30 / Cimplicity generation running and improved it well past what anyone expected, using it as R&amp;D for its web-based successor.</li>
+            <li>Created <b>click-to-force</b> (2009), the commissioning test tool that became the team's testing standard: paired with a test PLC, it exercises the full stack before a real item moves.</li>
+            <li>Commissioned the new platform at Angelica's Los Angeles plant (2009).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="when"><span>1997 –</span><span>2006</span></div>
+        <div>
+          <h3>Royal Oaks Car Wash <small>· Shoreview, MN · ending as general manager</small></h3>
+          <ul>
+            <li>Nine years, from the tunnel to running the business. Machines, water, and a line that can't stop: good training for laundry.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid2">
+      <section>
+        <h2>Skills</h2>
+        <dl class="skills">
+          <dt>controls</dt><dd>B&amp;R and GE PLCs, OPC UA, Modbus TCP, POWERLINK, generated PLC code</dd>
+          <dt>software</dt><dd>Ruby on Rails, React, Elixir, SwiftUI</dd>
+          <dt>systems</dt><dd>WCS / WES / MES, labor tracking, KPI reporting, plant networks</dd>
+          <dt>AI</dt><dd>Claude Code, multi-agent builds, AI in production</dd>
+        </dl>
+      </section>
+      <section>
+        <h2>Independent builds</h2>
+        <ul class="builds">
+          <li><b>Weave</b> · AI maintenance for laundries, in production</li>
+          <li><b>Spitball</b> &amp; <b>Ember</b> · paid games on the App Store</li>
+          <li><b>Know That?</b> · a science channel my daughters pick topics for</li>
+          <li><b>Burrow</b> · a personal software factory</li>
+        </ul>
+        <h2 style="margin-top:22px">Education</h2>
+        <p class="plain"><b>Degree in Electrical Engineering</b></p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
