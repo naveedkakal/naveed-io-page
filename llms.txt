@@ -25,7 +25,7 @@
   a test PLC, it exercises the full stack before a real item moves.
 - L2 Machine control: PLC programs generated from a model of each plant: devices,
   their configuration parameters and what feeds what, for what purpose (129 device
-  types across 123 B&R PLC projects), replacing hand-written programs. PLC communications via SOAP
+  types, B&R PLCs), replacing hand-written programs. PLC communications via SOAP
   (2007), an Elixir service he wrote (2019) and an OPC UA bridge today. Rule: never act on a
   stale sensor.
 - L3 Screens and workflows: eVue, a web-based plant control system since 2007 (Rails,
