@@ -5,8 +5,8 @@
 > plants, among the hardest material handling there is: plant layout with sales,
 > generated PLC programs, the eVue plant control system (the role a WCS/WES plays in a
 > warehouse, or an MES in a factory), labor tracking and productivity, plant and cloud
-> reporting across 400+ plants, and the Pulse mobile app. Kannegiesser owns the
-> product; the design, the decisions and most of the code are his. The same stack
+> reporting across 400+ plants, and the Pulse mobile app. Kannegiesser's name is on
+> the product; his is on the design, the decisions and most of the commits. The same stack
 > applies to warehouses, factories and airports: sensors, controllers, routing and
 > reports, with different nouns. Since 2025 he also builds with a fleet of AI agents
 > (10,402 commits across 103 repositories in the year to October 2026).
