@@ -1,11 +1,42 @@
 # naveed.io — Naveed Kakal
 
-> Naveed Kakal is Lead Developer at Kannegiesser ETECH. He has spent
-> two decades building the software that runs industrial laundry plants — plant-floor
-> state management, PLC/machine communications, telemetry, and the teams that ship them.
+> Naveed Kakal is Lead Developer at Kannegiesser ETECH and an electrical engineer. For
+> twenty years he has built every layer of the software that runs industrial laundry
+> plants, among the hardest material handling there is: plant layout with sales,
+> generated PLC programs, the eVue plant control system (the role a WCS/WES plays in a
+> warehouse, or an MES in a factory), labor tracking and productivity, plant and cloud
+> reporting across 400+ plants, and the Pulse mobile app. Kannegiesser owns the
+> product; the design, the decisions and most of the code are his. The same stack
+> applies to warehouses, factories and airports: sensors, controllers, routing and
+> reports, with different nouns. Since 2025 he also builds with a fleet of AI agents
+> (10,402 commits across 103 repositories in the year to October 2026).
 > This site is his dossier: case files and field notes drawn from recorded interviews
 > and 10,134 commits of version-control history (March 2009 – September 2026) on one
 > product line — 3,209 in Subversion (2009–2014) and 6,925 in git (2017–present).
+
+## The stack he has built, bottom up
+
+- L0 The plan: plant layout with the sales team (the controls gotchas, what the
+  system can and can't do) and the product's long-term roadmap.
+- L1 I/O and field devices: photo-eyes, proximity switches, scales, motor drives. One
+  plant he supports maps 8,710 I/O points into a single controller. Click-to-force, a
+  commissioning test tool, has been his testing standard since 2009.
+- L2 Machine control: PLC programs generated from each plant's database (129 device
+  types, 123 B&R PLCs), replacing hand-written programs. PLC communications via SOAP
+  (2007), an Elixir service (2019) and an OPC UA bridge today. Rule: never act on a
+  stale sensor.
+- L3 Screens and workflows: eVue, a web-based plant control system since 2007 (Rails,
+  React), never rewritten; routing, storage, sort stations, autopilot for what goes
+  next, plain-language alarms, configured per plant workflow. One plant: 611 rail
+  sections and 93 machines.
+- L4 People and productivity: operator logins by station and task, piece-rate and team
+  pounds-per-operator-hour measures, breaks and shifts, supervisor reports.
+- L5 Local reporting: KPI dashboards and scheduled reports on the plant's own server,
+  so the floor runs when the internet doesn't.
+- L6 Cloud reporting: a hub at every site rolls numbers up every minute across 400+
+  plants.
+- L7 Mobile: Pulse, a phone app that gets plant data securely off isolated plant
+  networks to supervisors (QR-linked devices, push alerts).
 
 ## Timeline
 
@@ -36,7 +67,7 @@ From the case files, in his words where possible:
 
 1. Count problems solved per developer dollar.
 2. Remove the seams — responsibility leaks out through the joints between specialists.
-3. Speak the floor's language (sling, rail, batch), so the floor can tell when the
+3. Speak the floor's language — use the operators' words, so the floor can tell when the
    software is wrong.
 4. Let reality win — when the plant and its digital picture drift, ask a human what
    happened, and offer only answers that can physically occur.
