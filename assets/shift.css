@@ -616,16 +616,8 @@ button.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); bord
   .step:last-child { min-height: 40vh; }
 }
 
-/* § 03 bio */
-.bio { display: grid; grid-template-columns: minmax(200px, 300px) minmax(0, 680px); gap: clamp(24px, 4vw, 56px); margin-top: clamp(32px, 4vw, 52px); align-items: start; }
-.portrait { margin: 0; }
-.portrait .ph { aspect-ratio: 4 / 5; border-radius: 14px; overflow: hidden; border: 1px solid var(--line-2); position: relative; background: var(--bg-2); }
-.portrait img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05); transition: filter .6s var(--ease); }
-.portrait .ph::after { content: ""; position: absolute; inset: 0; background: var(--acc); mix-blend-mode: color; opacity: .55; transition: opacity .6s var(--ease); pointer-events: none; }
-.portrait:hover img { filter: none; }
-.portrait:hover .ph::after { opacity: 0; }
-.portrait figcaption { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .06em; color: var(--fg-3); }
-@media (max-width: 760px) { .bio { grid-template-columns: 1fr; } .portrait { max-width: 260px; } }
+/* § 03 bio: prose only now; the photo lives in the hero */
+.bio { margin-top: clamp(28px, 4vw, 48px); }
 
 /* passes: the live one is a link */
 a.pass { color: inherit; text-decoration: none; transition: transform .18s var(--ease), border-color .2s; }
@@ -666,3 +658,29 @@ a.weave:hover { transform: translateY(-3px); border-color: color-mix(in oklab, v
 .dusk .then .stroke { color: #07090e; -webkit-text-stroke-width: 2.8px; paint-order: stroke fill; }
 .dawn .h-sec .stroke { color: transparent; -webkit-text-stroke: 1.6px #e8c2b8; }
 @media (max-width: 920px) { .tower-bar .kicker { display: none; } .tower-bar { justify-content: flex-end; } }
+
+/* hero: the name and the photo, first thing */
+.hero-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 360px); grid-template-areas: "id photo" "tag photo"; column-gap: clamp(28px, 5vw, 72px); align-items: end; }
+.hero-id { grid-area: id; }
+.hero-photo { grid-area: photo; margin: 0; position: relative; z-index: 2; align-self: end; }
+.hero-photo .ph { aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; border: 1px solid var(--line-2); background: var(--bg-2); box-shadow: 0 40px 80px -44px rgba(11,14,21,.55); }
+.hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+.hero-photo figcaption { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .06em; color: var(--fg-3); }
+.tagline { grid-area: tag; margin: 22px 0 0; font-family: var(--font-display); font-weight: 500; font-size: clamp(26px, 3.6vw, 50px); letter-spacing: -.025em; line-height: 1.05; }
+.tagline .dim { color: var(--fg-3); }
+.hero .hero-grid { margin-top: clamp(32px, 4vw, 56px); }
+@media (max-width: 760px) {
+  .hero-top { grid-template-columns: minmax(0, 1fr) 118px; grid-template-areas: "id photo" "tag tag"; column-gap: 16px; }
+  .hero-photo .ph { border-radius: 14px; }
+  .hero-photo figcaption { display: none; }
+}
+body.developing .hero .hero-photo { animation: develop .9s var(--ease) .2s both; }
+
+/* binder: three sheets, no tabs */
+.binder-hint { margin: 22px 0 0; }
+.binder-hint .swipe { display: none; }
+@media (max-width: 760px) { .binder-hint .swipe { display: inline; } }
+.sheet { margin-top: clamp(36px, 5vw, 64px); }
+.sheet-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; max-width: 940px; margin: 0 auto; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.sheet .binder { margin-top: 16px; }
+.hero .hero-grid { align-items: start; }

@@ -56,9 +56,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/shift.css?v=20261027" />
+<link rel="stylesheet" href="assets/shift.css?v=20261028" />
 <script src="assets/traffic.js" defer></script>
-<script src="assets/shift.js?v=20261027" defer></script>
+<script src="assets/shift.js?v=20261028" defer></script>
 </head>
 <body>
 <a class="skip" href="#climb">Skip to the stack</a>
@@ -93,12 +93,21 @@
 <section class="sec day hero" aria-labelledby="h-hero">
   <div class="sun" aria-hidden="true"></div>
   <div class="wrap">
-    <div class="kicker rise in"><span class="acc">§</span> Lead Developer · Kannegiesser ETECH</div>
-    <h1 id="h-hero" class="rise in">From the sensor<span class="l2 stroke">to the phone.</span></h1>
+    <div class="hero-top">
+      <div class="hero-id">
+        <div class="kicker rise in"><span class="acc">§</span> Lead Developer · Kannegiesser ETECH</div>
+        <h1 id="h-hero" class="rise in">Naveed<span class="l2 stroke">Kakal.</span></h1>
+      </div>
+      <figure class="hero-photo rise in" style="transition-delay:.06s">
+        <div class="ph"><img src="assets/portrait-900.jpg" alt="Naveed Kakal, in a navy knit sweater, looking at the camera" width="675" height="900" fetchpriority="high" /></div>
+        <figcaption><span>fig. 00 — on the day shift</span><span>QA dept. not pictured</span></figcaption>
+      </figure>
+      <p class="tagline rise in" style="transition-delay:.04s">From the sensor <span class="dim">to the phone.</span></p>
+    </div>
 
     <div class="hero-grid">
       <div class="rise in" style="transition-delay:.08s">
-        <p class="intro">I'm <b>Naveed Kakal</b>. For twenty years I've written the software that runs industrial laundries: the biggest ones, washing for hospitals, hotels and airlines around the clock. Not one layer of it. <b>All of them</b>: the I/O on the floor, the PLC programs, the screens operators work from, the plant's own reports, the cloud rollup across <b>400+ plants</b>, and the app that buzzes a supervisor's phone. Electrical engineer. IC at heart. Lately, the nights belong to AI.</p>
+        <p class="intro">For twenty years I've written the software that runs industrial laundries: the biggest ones, washing for hospitals, hotels and airlines around the clock. Not one layer of it. <b>All of them</b>: the I/O on the floor, the PLC programs, the screens operators work from, the plant's own reports, the cloud rollup across <b>400+ plants</b>, and the app that buzzes a supervisor's phone. Electrical engineer. IC at heart. Lately, the nights belong to AI.</p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#climb">Climb the stack <span aria-hidden="true">↓</span></a>
           <a class="btn" href="#binder">Skip to the builds <span aria-hidden="true">→</span></a>
@@ -236,11 +245,7 @@
     <h2 class="h-sec" id="h-steward">I don't leave. <span class="stroke">I take care of things.</span></h2>
 
     <div class="bio">
-      <figure class="portrait rise">
-        <div class="ph"><img src="assets/portrait-900.jpg" alt="Naveed Kakal, in a navy knit sweater, looking at the camera" width="675" height="900" loading="lazy" /></div>
-        <figcaption><span>fig. 03 — Naveed Kakal</span><span>QA dept. not pictured</span></figcaption>
-      </figure>
-      <div class="prose rise" style="transition-delay:.06s">
+      <div class="prose rise">
         <p>Before laundry there was a car wash: nine years at Royal Oaks in Shoreview, Minnesota, ending as the manager. In 2006 an industrial controls company hired me, fresh out of electrical engineering, on a hunch that car washes and laundries have a lot in common. <b>They do.</b> Machines, water, valuable things moving through a tunnel on a schedule, and nobody can stop the line.</p>
         <p>I left once, for two and a half years of Chicago tech at Centro. I wrote better software there and solved fewer problems per developer dollar, got promoted to engineering manager, and learned I'm an IC at heart. Then a prank phone call brought me home, just as Kannegiesser acquired ETECH.</p>
         <p>Today I'm Lead Developer at Kannegiesser ETECH. <b>The building can't stop, so the software can't either</b>, and I'm still the one who gets on the plane.</p>
@@ -379,15 +384,9 @@
     <div class="sec-head"><div class="kicker"><span class="acc">§ 05</span> — the binder</div><div class="kicker" id="binder-count">night shift ’26</div></div>
     <h2 class="h-sec" id="h-binder">Everything I built <span class="stroke">after bedtime.</span></h2>
     <p class="lead rise">Graded on what holds up: <span class="dim">tests, users, receipts. Not how fast it shipped.</span></p>
-    <div class="binder-bar">
-      <div class="seg" role="group" aria-label="Binder page" id="pages">
-        <button type="button" data-page="0" aria-pressed="true">page 1 · the big ones</button>
-        <button type="button" data-page="1" aria-pressed="false">page 2 · gifts &amp; curiosities</button>
-      </div>
-      <span class="count">tap a card to flip it<span class="swipe"> · swipe for more</span></span>
-    </div>
-    <div class="binder" id="cards"></div>
-    <p class="small mono pile">Also in the pile: Roll-for-it dice for family decisions · sites for a few people I like (<a href="https://glowgardenusa.com" target="_blank" rel="noopener">Glow Garden</a>, <a href="https://mflaundry.com" target="_blank" rel="noopener">M&amp;F Laundry</a>, <a href="apps/mhbuild.html">MH Build Studio</a>) · and the interview skill that writes § 06.</p>
+    <p class="small mono binder-hint">three sheets · tap a card to flip it<span class="swipe"> · swipe each sheet for more</span></p>
+    <div class="sheets" id="cards"></div>
+    <p class="small mono pile">Also in the pile: Roll-for-it dice for family decisions · sites for a few more people I like (<a href="https://glowgardenusa.com" target="_blank" rel="noopener">Glow Garden</a>, <a href="https://mflaundry.com" target="_blank" rel="noopener">M&amp;F Laundry</a>) · and the interview skill that writes § 06.</p>
   </div>
 </section>
 

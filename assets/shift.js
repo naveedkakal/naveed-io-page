@@ -641,7 +641,6 @@
   // g: [status, number, unit] — graded on what holds up, not on how fast it shipped
   const A = 'assets/shift/'
   const CARDS = [
-    // page 1 — the big ones
     { n: 'Weave', cert: '1362263', hue: 'weave', holo: 1, art: 'gen:weave', type: 'AI maintenance (CMMS) · in production',
       flav: 'A QR code on every machine. Procedures written from the manual, page cited. A report the owner reads on Monday.',
       g: ['LIVE', '14', 'written invariants'], stat: ['1,832 commits', 'since Dec ’25'],
@@ -687,7 +686,6 @@
       g: ['WEEKLY', '144', 'poems'], stat: ['8 poets', 'recited'],
       back: ['For people like me who understand spoken Urdu but can’t read the script.', 'The first thing my software factory built end to end, from an empty repo.', 'The model never writes the poem. A word it can’t pair stays dark.'],
       links: [['misra.naveed.io', 'https://misra.naveed.io'], ['case file', 'apps/misra.html']] },
-    // page 2 — gifts and curiosities
     { n: 'Hunch', cert: 'e6600b2', hue: 'hunch', art: 'gen:hunch', type: 'a football notebook for a friend',
       flav: 'Write a take in plain English. AI reads every game’s context; the math scores it against the closing line.',
       g: ['LIVE', '1,517', 'games scored'], stat: ['since 2021', 'weather, snaps, lines'],
@@ -734,7 +732,14 @@
       back: ['The camera notices when things disappear from the floor.', 'A stop-motion recap at the end, as the reward.', 'Paused at about 40%. The QA department has opinions.'],
       links: [] },
   ]
-  const PER = 9
+  // three sheets, no tabs: what runs every day, what people pay for, what I made for people I like
+  const SHEETS = [
+    ['the machinery', 'runs every day, mostly unattended', ['Weave', 'Burrow', 'Traffic', 'Misra', 'Hushbin', 'OurWorkshop']],
+    ['out in the world', 'things people pay for', ['Spitball', 'Ember', 'PicPost', 'Mispronounced', 'Miscolored', 'PetalPost']],
+    ['for people I like', 'family, friends, my town', ['Know That?', 'Hunch', 'TV Cal', 'Car wash reviews', 'MH Build Studio', 'Cleanup Quest']],
+  ]
+  const byName = Object.fromEntries(CARDS.map((c) => [c.n, c]))
+  CARDS.splice(0, CARDS.length, ...SHEETS.flatMap(([, , names]) => names.map((n) => byName[n])))
   function genArt(kind) {
     if (kind.startsWith('logo:')) return `<div class="gen" style="background:radial-gradient(110% 110% at 30% 20%,color-mix(in oklab,var(--hue) 45%,#0b0e15),#0b0e15 72%)"><img src="${kind.slice(5)}" alt="" style="position:absolute;left:50%;top:50%;width:38%;height:auto;transform:translate(-50%,-50%);filter:drop-shadow(0 10px 24px rgba(0,0,0,.5))"></div>`
     switch (kind) {
@@ -776,14 +781,10 @@
     return ''
   }
   const cardsEl = $('#cards')
-  let page = 0
-  function renderCards() {
-    const list = CARDS.slice(page * PER, page * PER + PER)
-    cardsEl.innerHTML = list.map((c, k) => {
-      const i = page * PER + k
-      const art = c.art.startsWith('gen:') ? genArt(c.art.slice(4)) : `<img src="${A}${c.art}.webp" alt="" loading="lazy"${c.pos ? ` style="object-position:${c.pos}"` : ''}>`
-      const ext = (u) => /^https?:/.test(u) ? ' target="_blank" rel="noopener"' : ''
-      return `
+  const slab = (c, i, k) => {
+    const art = c.art.startsWith('gen:') ? genArt(c.art.slice(4)) : `<img src="${A}${c.art}.webp" alt="" loading="lazy"${c.pos ? ` style="object-position:${c.pos}"` : ''}>`
+    const ext = (u) => /^https?:/.test(u) ? ' target="_blank" rel="noopener"' : ''
+    return `
       <article class="slab${c.holo ? ' holo' : ''} rise" style="--hue:var(--${c.hue});transition-delay:${(k % 3) * 0.05}s" data-i="${i}">
         <button class="flip" type="button" aria-pressed="false"><span class="vh">Flip the ${esc(c.n)} card</span></button>
         <span class="label"><span class="t"><b>${esc(c.n)}</b>night shift ’26 · #${String(i + 1).padStart(2, '0')}/${CARDS.length}<em>cert ${esc(c.cert)}</em></span><span class="g"><span class="st">${esc(c.g[0])}</span><b>${esc(c.g[1])}</b><span>${esc(c.g[2])}</span></span></span>
@@ -803,7 +804,14 @@
         </span>
         <span class="sheen" aria-hidden="true"></span>
       </article>`
-    }).join('')
+  }
+  function renderCards() {
+    let i = 0
+    cardsEl.innerHTML = SHEETS.map(([name, sub, names], n) => `
+      <section class="sheet" aria-label="Sheet ${n + 1}: ${esc(name)}">
+        <div class="sheet-head"><span class="kicker"><span class="acc">sheet ${n + 1}</span> — ${esc(name)}</span><span class="kicker">${esc(sub)}</span></div>
+        <div class="binder">${names.map((_, k) => slab(CARDS[i], i++, k)).join('')}</div>
+      </section>`).join('')
     watchRise(cardsEl)
     $$('.slab', cardsEl).forEach(tilt)
   }
@@ -828,11 +836,6 @@
   if (cardsEl) {
     $('#binder-count').textContent = `night shift ’26 · ${CARDS.length} cards`
     renderCards()
-    $$('#pages [data-page]').forEach((b) => b.addEventListener('click', () => {
-      page = +b.dataset.page
-      $$('#pages [data-page]').forEach((x) => x.setAttribute('aria-pressed', x === b))
-      renderCards()
-    }))
   }
 
   // ── § 07 — the terminal ──────────────────────────────
@@ -868,9 +871,6 @@
         const q = cmd.slice(5), i = CARDS.findIndex((c) => c.n.toLowerCase().startsWith(q))
         if (i < 0) return line(`no build called “${esc(q)}”. try ls builds`, 'er')
         line(`opening ${esc(CARDS[i].n)}…`, 'ok')
-        page = Math.floor(i / PER)
-        $$('#pages [data-page]').forEach((x) => x.setAttribute('aria-pressed', +x.dataset.page === page))
-        renderCards()
         setTimeout(() => { const el = $(`.slab[data-i="${i}"]`); el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' }); el.classList.add('in', 'flipped'); $('.flip', el).setAttribute('aria-pressed', 'true') }, 300)
         return
       }
