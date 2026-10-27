@@ -56,9 +56,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/shift.css?v=20261042" />
+<link rel="stylesheet" href="assets/shift.css?v=20261044" />
 <script src="assets/traffic.js" defer></script>
-<script src="assets/shift.js?v=20261042" defer></script>
+<script src="assets/shift.js?v=20261043" defer></script>
 </head>
 <body>
 <a class="skip" href="#climb">Skip to the stack</a>
@@ -77,8 +77,8 @@
 </header>
 <nav class="jump day" id="jump" aria-label="Sections">
   <a href="#top"><span class="h">06:00</span><span>the short version</span></a>
-  <a href="#climb"><span class="h">07:00</span><span>§ 01 the stack, bottom up</span></a>
-  <a href="#break"><span class="h">16:30</span><span>§ 02 try to break it</span></a>
+  <a href="#break"><span class="h">06:30</span><span>§ 01 material handling, hard mode</span></a>
+  <a href="#climb"><span class="h">07:00</span><span>§ 02 the stack, bottom up</span></a>
   <a href="#steward"><span class="h">17:00</span><span>§ 03 the long run</span></a>
   <a href="#dusk"><span class="h">18:00</span><span>shift change</span></a>
   <a href="#ai"><span class="h">22:00</span><span>§ 04 then AI showed up</span></a>
@@ -107,9 +107,9 @@
 
     <div class="hero-grid">
       <div class="rise in" style="transition-delay:.08s">
-        <p class="intro">For twenty years I've written the software that runs industrial laundries: the biggest ones, washing for hospitals, hotels and airlines around the clock. Not one layer of it. <b>All of them</b>: the layout on the drawing board, the sensors on the floor, the controller programs that run the machines, the screens operators work from, the labor tracking that measures their work fairly, the plant's own reports, the cloud rollup across <b>400+ plants</b>, and the app that buzzes a supervisor's phone. <b>And not as one of many hands.</b> It's a small team: I've always been at least half of it, and most years I've been the only one building new things. Electrical engineer. IC at heart. Lately, the nights belong to AI.</p>
+        <p class="intro">For twenty years I've written the software that runs industrial laundries: the biggest ones, washing for hospitals, hotels and airlines around the clock. Not one layer of it. <b>All of them</b>: the layout on the drawing board, the sensors on the floor, the controller programs that run the machines, the screens operators work from, the labor tracking that measures their work fairly, the plant's own reports, the cloud rollup across <b>400+ plants</b>, and the app that buzzes a supervisor's phone. <b>And not as one of many hands.</b> It's a small team: I've always been at least half of it, and most years I've been the only one building new things. Kannegiesser owns the product; <b>the design, the decisions and most of the code are mine.</b> Electrical engineer. IC at heart. Lately, the nights belong to AI.</p>
         <div class="hero-cta">
-          <a class="btn btn-primary" href="#climb">Climb the stack <span aria-hidden="true">↓</span></a>
+          <a class="btn btn-primary" href="#break">See the job <span aria-hidden="true">↓</span></a>
           <a class="btn" href="#binder">Skip to the builds <span aria-hidden="true">→</span></a>
         </div>
       </div>
@@ -152,23 +152,49 @@
   </div>
 </section>
 
-<!-- ═══════════ § 01 — the climb (day) ═══════════ -->
+<!-- ═══════════ § 01 — hard mode (day) ═══════════ -->
+<section class="sec day" id="break" aria-labelledby="h-break" data-clock="6.5">
+  <div class="wrap">
+    <div class="sec-head"><div class="kicker"><span class="acc">§ 01</span> — the job</div><div class="kicker">twenty years of 3 a.m. calls, in three switches</div></div>
+    <h2 class="h-sec" id="h-break">Material handling <span class="stroke">on hard mode.</span></h2>
+    <div class="hazard" aria-hidden="true"></div>
+    <p class="lead rise" style="max-width:38ch">Cartons have corners. Laundry doesn't, and it changes weight as it's washed and dried. <span class="dim">Now move it through a building the size of a big-box store, around the clock, with one system running every move.</span></p>
+    <p class="prose rise" style="margin-top:20px">If you run a warehouse, a factory or an airport, <b>this is your stack too</b>: the same sensors, controllers, routing and reports, with different nouns. Try to break the line.</p>
+
+    <div class="plant rise" id="plant">
+      <div class="plant-bar">
+        <span class="kicker"><span class="acc">fig. 01</span> — a laundry line, simplified</span>
+        <span class="hint">tap a <span style="color:var(--fg)">◆</span> sensor to force it on (a test tool), again to let go</span>
+      </div>
+      <div class="plant-stage" id="plant-stage"></div>
+      <div class="console"><span class="out" id="plant-out" aria-live="polite">Laundry in, dirty and heavy. Watch the tags: heavier when wet, lighter when dry, then folded.</span><span class="cnt" id="plant-cnt">0 through</span></div>
+      <div class="switches" id="switches">
+        <button type="button" class="sw" data-sw="wan" aria-pressed="false"><b>Cut the internet</b><span>The plant doesn't notice. The cloud catches up when it's back.</span></button>
+        <button type="button" class="sw" data-sw="halt" aria-pressed="false"><b>Halt one side</b><span>Only that side stops. The rest of the plant keeps working.</span></button>
+        <button type="button" class="sw" data-sw="stale" aria-pressed="false"><b>Make a sensor lie</b><span>Never act on a stale sensor. When in doubt, read it again.</span></button>
+      </div>
+      <div class="small mono" style="padding:8px 14px 12px">an illustration, not a real plant. Tap a stopped item to ask it why.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ § 02 — the climb (day) ═══════════ -->
 <section class="sec day climb" id="climb" aria-labelledby="h-climb">
   <div class="wrap">
-    <div class="sec-head"><div class="kicker"><span class="acc">§ 01</span> — the stack, bottom up</div><div class="kicker">eight layers · one person · since 2006</div></div>
+    <div class="sec-head"><div class="kicker"><span class="acc">§ 02</span> — the stack, bottom up</div><div class="kicker">eight layers · one person · since 2006</div></div>
     <h2 class="h-sec" id="h-climb">Every layer of a plant. <span class="stroke">I've written code in all of them.</span></h2>
     <p class="lead rise">Most software careers are one cubicle on one floor of the building. <span class="dim">I've worked every desk on every floor, and I take the stairs: from the bit a sensor flips to the alert on a supervisor's phone.</span></p>
 
     <div class="climb-grid">
       <div class="steps">
-        <article class="step" data-layer="0" data-clock="6.5">
+        <article class="step" data-layer="0" data-clock="7">
           <div class="lv"><span>L0</span> the plan · layout &amp; roadmap</div>
           <h3>Before the first sensor: the drawing, and the long plan.</h3>
           <p>I'm in the room while a plant is still a layout drawing. I work with our sales team so the layout really meets the customer's needs, and I bring the gotchas they can't be expected to know: what our controls can and can't do, and which choice on paper turns into a headache in year three.</p>
           <p>I also try to keep the software from becoming a rule book. It grows with the pressure each new plant puts on it, and I run its long-term roadmap, so even small, fast changes land inside one bigger plan: <b>giving laundries what they need to run.</b> We don't just program these plants. We're part of how they get sold, specified and built.</p>
           <div class="stack-chips"><span>layout design</span><span>working with sales</span><span>custom requirements</span><span>product roadmap</span></div>
         </article>
-        <article class="step" data-layer="1" data-clock="7">
+        <article class="step" data-layer="1" data-clock="7.5">
           <div class="lv"><span>L1</span> I/O · field devices</div>
           <h3>Everything starts as a bit.</h3>
           <p>Out on the floor are the field devices. A photo-eye sees an item go by. A proximity switch confirms a gate is closed. A scale weighs a load, and in this business weight is money. A motor drive moves a conveyor, a reader tells one kind of item from another, and a switch sends each down its own track. Each of those is a wire, an I/O point, and network modules gather them onto the plant network. One plant I support maps <b>8,700 I/O points into a single controller</b>, about 7,700 of them simple on/off signals.</p>
@@ -185,8 +211,8 @@
         <article class="step" data-layer="3" data-clock="10">
           <div class="lv"><span>L3</span> screens &amp; workflows</div>
           <h3>Then a person has to run it.</h3>
-          <p>In 2007 the operator screens were a per-seat license. The floor wanted eyes everywhere; the invoice said pick two. So we made the screen a web page, and for nearly twenty years <b>eVue</b> has set the bar for what a laundry's screens can be: a live picture of the whole plant, every item moving through it, and alarms that say in plain words <b>why something isn't moving</b>.</p>
-          <p>And these buildings are big. The largest are the size of a big-box store, with one system running every move across the whole floor: the plant behind that I/O count has <b>611 rail sections and 93 machines</b>, every one routed by eVue.</p>
+          <p>In 2007 the operator screens were a per-seat license. The floor wanted eyes everywhere; the invoice said pick two. So we made the screen a web page. Nearly twenty years on, that page is <b>eVue</b>, and it's still what operators work in every shift at 400+ plants: a live picture of the whole plant, every item moving through it, and alarms that say in plain words <b>why something isn't moving</b>. In warehouse terms it sits where the control and execution systems (WCS, WES) would; in a factory, where the MES would.</p>
+          <p>One system runs every move across the whole building: the plant behind that I/O count has <b>611 rail sections and 93 machines</b>, every one routed by eVue.</p>
           <p>No two laundries work the same way, either. A hospital plant, a hotel plant and an airline plant each sort, store and send work through in their own order. So eVue is <b>configured, not rebuilt</b>, for each one: every station shows its operator just what they need to do that task right, not one generic screen for everything.</p>
           <div class="stack-chips"><span>eVue</span><span>live plant view</span><span>configured per plant</span><span>since 2007</span></div>
         </article>
@@ -208,7 +234,7 @@
           <div class="lv"><span>L6</span> cloud reporting</div>
           <h3>Then the company reads all of them.</h3>
           <p>Each plant runs on its own. A hub at every site rolls its numbers up to the cloud <b>every minute</b>, so the people running a company of plants see one picture instead of forty phone calls.</p>
-          <p>The fleet is the hard part: 400+ plants, each its own building, floor plan and set of machines. One afternoon this fall, AI agents scanned ~300 plant repos for one rename and opened <b>86 pull requests</b>. 42 landed that day; 14 were held on purpose.</p>
+          <p>The fleet is the hard part: 400+ plants, each its own building, floor plan and set of machines. One afternoon this fall, AI agents carried a single change across ~300 plant repos in about an hour. That story is on the night shift, below.</p>
           <div class="stack-chips"><span>edge hub per plant</span><span>1-minute rollup</span><span>multi-tenant warehouse</span></div>
         </article>
         <article class="step" data-layer="7" data-clock="16">
@@ -221,34 +247,9 @@
       </div>
 
       <figure class="tower" id="tower" aria-label="The plant's software stack, drawn as eight layers, from the plan up. The layer you are reading lights up; data flows up from the floor.">
-        <div class="tower-bar"><span class="kicker"><span class="acc">fig. 01</span> — one plant, eight layers</span><span class="tower-at" id="tower-at" aria-live="polite">L0 · the plan</span></div>
+        <div class="tower-bar"><span class="kicker"><span class="acc">fig. 02</span> — one plant, eight layers</span><span class="tower-at" id="tower-at" aria-live="polite">L0 · the plan</span></div>
         <div class="tower-stage" id="tower-stage"></div>
       </figure>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════ § 02 — try to break it (day) ═══════════ -->
-<section class="sec day" id="break" aria-labelledby="h-break" data-clock="16.5">
-  <div class="wrap">
-    <div class="sec-head"><div class="kicker"><span class="acc">§ 02</span> — material handling, hard mode</div><div class="kicker">twenty years of 3 a.m. calls, in three switches</div></div>
-    <h2 class="h-sec" id="h-break">Dirty laundry is material handling <span class="stroke">on hard mode.</span></h2>
-    <div class="hazard" aria-hidden="true"></div>
-    <p class="lead rise" style="max-width:36ch">You can't pick it up. It has no corners. It doesn't even stay the same weight through the day. <span class="dim">Try to break the line.</span></p>
-
-    <div class="plant rise" id="plant">
-      <div class="plant-bar">
-        <span class="kicker"><span class="acc">fig. 02</span> — a laundry line, simplified</span>
-        <span class="hint">tap a <span style="color:var(--fg)">◆</span> sensor to force it on (a test tool), again to let go</span>
-      </div>
-      <div class="plant-stage" id="plant-stage"></div>
-      <div class="console"><span class="out" id="plant-out" aria-live="polite">Laundry in, dirty and heavy. Watch the tags: heavier when wet, lighter when dry, then folded.</span><span class="cnt" id="plant-cnt">0 through</span></div>
-      <div class="switches" id="switches">
-        <button type="button" class="sw" data-sw="wan" aria-pressed="false"><b>Cut the internet</b><span>The plant doesn't notice. The cloud catches up when it's back.</span></button>
-        <button type="button" class="sw" data-sw="halt" aria-pressed="false"><b>Halt one side</b><span>Only that side stops. The rest of the plant keeps working.</span></button>
-        <button type="button" class="sw" data-sw="stale" aria-pressed="false"><b>Make a sensor lie</b><span>Never act on a stale sensor. When in doubt, read it again.</span></button>
-      </div>
-      <div class="small mono" style="padding:8px 14px 12px">an illustration, not a real plant. Tap a stopped item to ask it why.</div>
     </div>
   </div>
 </section>
@@ -374,10 +375,28 @@
       <figcaption class="small mono"><span class="acc">fig. 03</span> — Burrow, condensed from its own map: 29 feeds, 18 graphs, 27 profiles. Current shows where work moves. Pink is the authority that decides, and it's never the model that wrote the change.<span class="swipe"> Swipe the map.</span></figcaption>
     </figure>
 
+    <figure class="fleet rise" id="fleet">
+      <div class="fleet-head">
+        <div>
+          <div class="kicker"><span class="acc">fig. 04</span> — one change, the whole fleet</div>
+          <h3>One afternoon. About an hour. Every plant.</h3>
+          <p class="prose">A rename in eVue had to reach every plant's own code. AI agents scanned <b>296 plant repositories</b>, found the 112 that needed it, and opened <b>86 pull requests</b>: 15 agents on the changes that needed judgment, 97 on the mechanical ones. 42 merged that afternoon. 14 were held on purpose, because merging them early would have collided with an upgrade those plants already had in flight.</p>
+        </div>
+        <dl class="fleet-legend">
+          <div><dt><i class="sw s"></i>scanned</dt><dd>296</dd></div>
+          <div><dt><i class="sw n"></i>needed it</dt><dd>112</dd></div>
+          <div><dt><i class="sw p"></i>pull requests</dt><dd>86</dd></div>
+          <div><dt><i class="sw m"></i>merged that day</dt><dd>42</dd></div>
+          <div><dt><i class="sw h"></i>held on purpose</dt><dd>14</dd></div>
+        </dl>
+      </div>
+      <div class="fleet-grid" id="fleet-grid" aria-hidden="true"></div>
+    </figure>
+
     <div class="year rise" style="margin-top:clamp(56px,7vw,96px)">
       <div class="year-head">
         <div>
-          <div class="kicker"><span class="acc">fig. 04</span> — the year, one month at a time</div>
+          <div class="kicker"><span class="acc">fig. 05</span> — the year, one month at a time</div>
           <div class="bignum" id="yearnum" aria-live="off">0</div>
         </div>
         <div class="bignum-l">commits · 366 days<br><span id="over" class="over" aria-hidden="true">it's over 9000</span></div>
@@ -392,7 +411,7 @@
         <div><div class="n">103</div><div class="l">repos touched</div></div>
         <div><div class="n">50</div><div class="l">of them new this year</div></div>
         <div><div class="n">2</div><div class="l">paid games on the App Store</div></div>
-        <div><div class="n">86</div><div class="l">PRs across ~300 plant repos in one afternoon</div></div>
+        <div><div class="n">322</div><div class="l">of the last 366 days with code in</div></div>
       </div>
     </div>
   </div>
@@ -404,7 +423,7 @@
     <div class="sec-head"><div class="kicker"><span class="acc">§ 05</span> — the binder</div><div class="kicker" id="binder-count">night shift ’26</div></div>
     <h2 class="h-sec" id="h-binder">Everything I built <span class="stroke">after bedtime.</span></h2>
     <p class="lead rise">Graded on what holds up: <span class="dim">tests, users, receipts. Not how fast it shipped.</span></p>
-    <p class="small mono binder-hint">three sheets · tap a card to flip it<span class="swipe"> · swipe each sheet for more</span></p>
+    <p class="small mono binder-hint">six to start with, then the range<span class="swipe"> · swipe the six for more</span></p>
     <div class="sheets" id="cards"></div>
     <p class="small mono pile">Also in the pile: Roll-for-it dice for family decisions · sites for a few more people I like (<a href="https://glowgardenusa.com" target="_blank" rel="noopener">Glow Garden</a>, <a href="https://mflaundry.com" target="_blank" rel="noopener">M&amp;F Laundry</a>) · and the interview skill that writes § 06.</p>
   </div>

@@ -953,6 +953,25 @@
     if (reduced) $$('animateMotion', fac).forEach((a) => a.remove())
   }
 
+  // ── the fleet sweep: one change through every plant's repo ──
+  const fg = $('#fleet-grid')
+  if (fg) {
+    // 296 repos scanned → 112 needed it → 86 PRs (42 merged, 14 held, 30 still open) → 26 left for later
+    const kinds = [...Array(42).fill('m'), ...Array(14).fill('h'), ...Array(30).fill('p'), ...Array(26).fill('n'), ...Array(184).fill('s')]
+    for (let i = kinds.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [kinds[i], kinds[j]] = [kinds[j], kinds[i]] }
+    fg.innerHTML = kinds.map((k) => `<i data-k="${k}"></i>`).join('')
+    const cells = $$('i', fg)
+    const settle = () => cells.forEach((c) => c.classList.add(c.dataset.k))
+    if (reduced) settle()
+    else new IntersectionObserver((es, o) => es.forEach((e) => {
+      if (!e.isIntersecting) return
+      o.disconnect()
+      // first the scan sweeps every repo, then the results land
+      cells.forEach((c, i) => setTimeout(() => c.classList.add('s'), i * 4))
+      cells.forEach((c, i) => setTimeout(() => { c.classList.remove('s'); c.classList.add(c.dataset.k) }, 1400 + Math.random() * 1600))
+    }), { threshold: 0.3 }).observe(fg)
+  }
+
   // ── the year, hung from a rail ───────────────────────
   const MONTHS = [43, 833, 208, 506, 411, 340, 283, 637, 491, 1274, 2358, 1897, 1121]
   const LABELS = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']
@@ -1081,14 +1100,11 @@
       back: ['The camera notices when things disappear from the floor.', 'A stop-motion recap at the end, as the reward.', 'Paused at about 40%. The QA department has opinions.'],
       links: [] },
   ]
-  // three sheets, no tabs: what runs every day, what people pay for, what I made for people I like
-  const SHEETS = [
-    ['the machinery', 'runs every day, mostly unattended', ['Weave', 'Burrow', 'Traffic', 'Codewrights', 'Misra', 'OurWorkshop']],
-    ['out in the world', 'things people pay for', ['Spitball', 'Ember', 'PicPost', 'Mispronounced', 'Miscolored', 'PetalPost']],
-    ['for people I like', 'family, friends, my town, me', ['Know That?', 'Hunch', 'TV Cal', 'Car wash reviews', 'MH Build Studio', 'Cleanup Quest', 'Hushbin']],
-  ]
+  // six lead as full cards; the rest read as range, compact, so the binder says "loves to build", not "scattered"
+  const LEAD = ['Weave', 'Burrow', 'Spitball', 'PicPost', 'Mispronounced', 'Know That?']
+  const REST = ['Codewrights', 'Traffic', 'Ember', 'Misra', 'OurWorkshop', 'Miscolored', 'PetalPost', 'Hunch', 'TV Cal', 'Car wash reviews', 'MH Build Studio', 'Hushbin', 'Cleanup Quest']
   const byName = Object.fromEntries(CARDS.map((c) => [c.n, c]))
-  CARDS.splice(0, CARDS.length, ...SHEETS.flatMap(([, , names]) => names.map((n) => byName[n])))
+  CARDS.splice(0, CARDS.length, ...[...LEAD, ...REST].map((n) => byName[n]))
   function genArt(kind) {
     if (kind.startsWith('logo:')) return `<div class="gen" style="background:radial-gradient(110% 110% at 30% 20%,color-mix(in oklab,var(--hue) 45%,#0b0e15),#0b0e15 72%)"><img src="${kind.slice(5)}" alt="" style="position:absolute;left:50%;top:50%;width:38%;height:auto;transform:translate(-50%,-50%);filter:drop-shadow(0 10px 24px rgba(0,0,0,.5))"></div>`
     switch (kind) {
@@ -1155,13 +1171,22 @@
         <span class="sheen" aria-hidden="true"></span>
       </article>`
   }
+  const mini = (c, i) => {
+    const [t, u] = c.links[0] || []
+    const ext = u && /^https?:/.test(u) ? ' target="_blank" rel="noopener"' : ''
+    const body = `<span class="mn">${esc(c.n)}</span><span class="mt">${esc(c.type)}</span><span class="ms">${esc(c.g[0].toLowerCase())}${u ? ` · ${esc(t)} ${ext ? '↗' : '→'}` : ''}</span>`
+    return u ? `<a class="mini rise" href="${u}"${ext} style="--hue:var(--${c.hue})" data-i="${i}">${body}</a>` : `<div class="mini rise" style="--hue:var(--${c.hue})" data-i="${i}">${body}</div>`
+  }
   function renderCards() {
-    let i = 0
-    cardsEl.innerHTML = SHEETS.map(([name, sub, names], n) => `
-      <section class="sheet" aria-label="Sheet ${n + 1}: ${esc(name)}">
-        <div class="sheet-head"><span class="kicker"><span class="acc">sheet ${n + 1}</span> — ${esc(name)}</span><span class="kicker">${esc(sub)}</span></div>
-        <div class="binder">${names.map((_, k) => slab(CARDS[i], i++, k)).join('')}</div>
-      </section>`).join('')
+    cardsEl.innerHTML = `
+      <section class="sheet" aria-label="The six to start with">
+        <div class="sheet-head"><span class="kicker"><span class="acc">the six</span> — where I'd start you</span><span class="kicker">tap a card to flip it</span></div>
+        <div class="binder">${LEAD.map((_, k) => slab(CARDS[k], k, k)).join('')}</div>
+      </section>
+      <section class="range" aria-label="The range">
+        <div class="sheet-head"><span class="kicker"><span class="acc">the range</span> — the rest of what I build for fun</span><span class="kicker">${REST.length} more</span></div>
+        <div class="range-grid">${REST.map((_, k) => mini(CARDS[LEAD.length + k], LEAD.length + k)).join('')}</div>
+      </section>`
     watchRise(cardsEl)
     $$('.slab', cardsEl).forEach(tilt)
   }
@@ -1221,7 +1246,12 @@
         const q = cmd.slice(5), i = CARDS.findIndex((c) => c.n.toLowerCase().startsWith(q))
         if (i < 0) return line(`no build called “${esc(q)}”. try ls builds`, 'er')
         line(`opening ${esc(CARDS[i].n)}…`, 'ok')
-        setTimeout(() => { const el = $(`.slab[data-i="${i}"]`); el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' }); el.classList.add('in', 'flipped'); $('.flip', el).setAttribute('aria-pressed', 'true') }, 300)
+        setTimeout(() => {
+          const el = $(`.slab[data-i="${i}"]`) || $(`.mini[data-i="${i}"]`)
+          el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' })
+          el.classList.add('in')
+          if (el.classList.contains('slab')) { el.classList.add('flipped'); $('.flip', el).setAttribute('aria-pressed', 'true') } else { el.classList.remove('ping'); void el.offsetWidth; el.classList.add('ping') }
+        }, 300)
         return
       }
       if (cmd.startsWith('sudo')) return CMDS.sudo()
