@@ -74,8 +74,8 @@
   addEventListener('keydown', (e) => { if (e.key === 'Escape') setJump(false) })
 
   // ── § 01 — the climb: a tower that lights up layer by layer ──
-  const LAYERS = ['plan', 'I/O', 'control', 'screens', 'plant', 'cloud', 'mobile']
-  const LONG = ['the plan', 'I/O · field devices', 'machine control', 'screens & workflows', 'local reporting', 'cloud reporting', 'mobile · Pulse']
+  const LAYERS = ['plan', 'I/O', 'control', 'screens', 'people', 'plant', 'cloud', 'mobile']
+  const LONG = ['the plan', 'I/O · field devices', 'machine control', 'screens & workflows', 'people & productivity', 'local reporting', 'cloud reporting', 'mobile · Pulse']
   const steps = $$('.step[data-layer]'), towerStage = $('#tower-stage'), towerAt = $('#tower-at')
   let layer = 0
   const tower = towerStage ? buildTower() : null
@@ -103,12 +103,12 @@
     ]
     const STATES = ['idle', 'ready', 'lifting', 'release']
     const NOTES = ['Dryer 4 · door open 6 min', 'Washers · 1,240 pcs/hr · on target', 'Storage 92% full', 'Shift report ready · 06:00']
-    let G, svg, bags = [], spawnT = 0, last = 0, running = false, pkts = [], kpi = 0, bars = [], rate = 1240, run = 94, faults = 2, faultAt = [6, 15], noteI = 0, noteT = 0, msgT = 0, forcedT = null, state = 0, rxT = 0, gateCls = -1, flies = [], waveT = 0, org = 2481300
+    let G, svg, bags = [], spawnT = 0, last = 0, running = false, pkts = [], kpi = 0, bars = [], rate = 1240, run = 94, faults = 2, faultAt = [6, 15], noteI = 0, noteT = 0, msgT = 0, forcedT = null, state = 0, rxT = 0, crewT = 0, gateCls = -1, flies = [], waveT = 0, org = 2481300
     const forced = new Set()   // sensors forced ON: the controller thinks that spot is taken
 
     function geom() {
       const W = towerStage.clientWidth, H = towerStage.clientHeight, pad = 10, gap = 6
-      const bh = (H - pad * 2 - gap * 6) / 7
+      const bh = (H - pad * 2 - gap * 7) / 8
       const top = (i) => H - pad - (i + 1) * bh - i * gap   // i = 0 is the floor
       const cx0 = 58, cx1 = W - 34
       return { W, H, bh, top, cx0, cx1, cw: cx1 - cx0, spine: W - 18 }
@@ -118,15 +118,15 @@
       if (G.W < 50 || G.H < 120) return
       const { W, H, bh, top, cx0, cx1, cw } = G
       let s = `<defs><marker id="tw-arr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#8b93a3" stroke-width="1.6"/></marker></defs>`
-      for (let i = 0; i < 7; i++) {   // band i is layer Li; L0, the plan, is the foundation at the bottom
+      for (let i = 0; i < 8; i++) {   // band i is layer Li; L0, the plan, is the foundation at the bottom
         const y = top(i)
         s += `<g class="lyr" data-l="${i}"><rect class="band" x="6" y="${y}" width="${W - 12}" height="${bh}" rx="10"/>`
         s += `<text class="tag" x="16" y="${y + 18}">L${i}</text><text class="ink-3" x="16" y="${y + 31}" style="font-size:9px">${LAYERS[i]}</text>`
-        s += i === 0 ? planArt(y) : layerArt(i - 1, y)
+        s += i === 0 ? planArt(y) : i === 4 ? peopleArt(y) : layerArt(i < 4 ? i - 1 : i - 2, y)
         s += `</g>`
       }
       // the bus: data climbs the right edge
-      s += `<line class="bus" x1="${G.spine}" y1="${railY()}" x2="${G.spine}" y2="${top(6) + bh / 2}"/><g id="tw-pkts"></g>`
+      s += `<line class="bus" x1="${G.spine}" y1="${railY()}" x2="${G.spine}" y2="${top(7) + bh / 2}"/><g id="tw-pkts"></g>`
       svg = document.createElementNS(NS, 'svg')
       svg.setAttribute('class', 'tw')
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
@@ -154,6 +154,7 @@
       paintProfile()
       flies = []
       paintOrg()
+      paintCrew()
       setLayer(layer)
       draw()
     }
@@ -194,6 +195,52 @@
       })
       return a
     }
+    // L4: who is working which station, measured the way the work really happens
+    const CREW = [
+      { id: 'MR', task: 'sort 2', how: 'per piece', v: 0.94 },
+      { id: 'JT', task: 'feed 1', how: 'team rate', v: 1.03 },
+      { id: 'AL', task: 'fold 3', how: 'per piece', v: 0.81 },
+      { id: 'KD', task: 'catch', how: 'paced by feed', v: 0.97 },
+    ]
+    function peopleArt(y) {
+      const { bh, cx0, cx1, cw } = G, tight = bh < 64
+      const pw = Math.min(tight ? cw * 0.62 : 300, cw * 0.72), x = cx0, by = y + bh * 0.08, ph = bh * 0.84
+      const rows = tight ? 2 : 4, cols = tight ? 2 : 1, rh = ph / rows
+      let a = `<rect class="box" x="${x}" y="${by}" width="${pw}" height="${ph}" rx="6"/>`
+      G.crew = { x, by, pw, rh, cols, tight }
+      CREW.slice(0, rows * cols).forEach((c, k) => {
+        const col = k % cols, row = Math.floor(k / cols), cwid = pw / cols, rx = x + col * cwid, ry = by + row * rh, my = ry + rh / 2
+        const ar = Math.min(rh * 0.32, tight ? 6 : 7.5)
+        a += `<g class="op" data-o="${k}"><circle cx="${rx + 6 + ar}" cy="${my}" r="${ar}" class="op-av"/><text x="${rx + 6 + ar}" y="${my + 2.6}" text-anchor="middle" style="font-size:${tight ? 6 : 7}px;font-weight:700;fill:#05121c">${c.id}</text>`
+        const bx = rx + 6 + ar * 2 + 6, bw = cwid - (bx - rx) - (tight ? 6 : 64)
+        if (!tight) a += `<text class="ink-2" x="${bx}" y="${my - 3}" style="font-size:8px">${c.task} · <tspan class="ink-3">${c.how}</tspan></text>`
+        const bary = tight ? my - 2 : my + 2
+        a += `<rect x="${bx}" y="${bary}" width="${bw}" height="4" rx="2" style="fill:var(--line)"/><rect class="op-bar" x="${bx}" y="${bary}" width="0" height="4" rx="2" data-w="${bw}"/>`
+        a += `<line x1="${bx + bw / 1.12}" y1="${bary - 2}" x2="${bx + bw / 1.12}" y2="${bary + 6}" style="stroke:var(--fg-3);stroke-width:1"/>`
+        if (!tight) a += `<text class="op-v" x="${x + pw - 8}" y="${my + 3}" text-anchor="end" style="font-size:8.5px;font-weight:700">0%</text>`
+        a += `</g>`
+      })
+      const sx = x + pw + (tight ? 10 : 16)
+      if (sx < cx1 - 40) {
+        a += `<text id="tw-team" class="ink" x="${sx}" y="${y + bh * (tight ? 0.5 : 0.42)}" style="font:800 ${tight ? 11 : 16}px var(--font-display)">1,040</text>`
+        a += `<text class="ink-3" x="${sx}" y="${y + bh * (tight ? 0.5 : 0.42) + (tight ? 11 : 13)}" style="font-size:${tight ? 6.5 : 8}px">lb / operator-hr</text>`
+        if (!tight) a += `<text class="ink-3" x="${sx}" y="${y + bh * 0.42 + 26}" style="font-size:8px">team rate · all stations</text>`
+      }
+      return a
+    }
+    function paintCrew() {
+      if (!svg || !G.crew) return
+      $$('.op', svg).forEach((g) => {
+        const c = CREW[+g.dataset.o], bar = $('.op-bar', g), w = +bar.dataset.w
+        bar.setAttribute('width', c.brk ? 0 : Math.min(w, w * c.v / 1.12).toFixed(1))
+        bar.style.fill = c.v >= 0.95 ? '#3ddc84' : c.v >= 0.85 ? '#f2b100' : '#e5484d'
+        g.classList.toggle('brk', !!c.brk)
+        const v = $('.op-v', g)
+        if (v) { v.textContent = c.brk ? 'on break' : `${Math.round(c.v * 100)}%`; v.style.fill = c.brk ? 'var(--fg-3)' : 'var(--fg)' }
+      })
+      const t = $('#tw-team', svg)
+      if (t) t.textContent = fmt(1000 + CREW.reduce((a, c) => a + (c.brk ? 0 : c.v), 0) * 12)
+    }
     function layerArt(i, y) {
       const { bh, cx0, cx1, cw } = G, cy = y + bh / 2
       const tight = bh < 64   // phone: the bands are short, so the captions go and only the drawing stays
@@ -218,7 +265,8 @@
       if (i === 1) {
         // the controller: input lights (green), output lights (red), a network port with TX/RX
         const w = Math.min(210, cw * 0.52), h = bh * 0.72, x = cx0, by = y + bh * 0.14
-        let a = `<rect class="dark" x="${x}" y="${by}" width="${w}" height="${h}" rx="6"/><text x="${x + 10}" y="${by + (tight ? 11 : 15)}" style="font-size:${tight ? 8 : 9.5}px;fill:#a2a8b4">PLC · generated</text>`
+        let a = `<rect class="dark" x="${x}" y="${by}" width="${w}" height="${h}" rx="6"/>`
+        if (bh >= 48) a += `<text x="${x + 10}" y="${by + (tight ? 11 : 15)}" style="font-size:${tight ? 8 : 9.5}px;fill:#a2a8b4">PLC · generated</text>`   // too short a band for a caption over the lights
         const r1 = by + h * (tight ? 0.52 : 0.5), r2 = by + h * (tight ? 0.82 : 0.78), lr = tight ? 2.8 : 3.4
         a += `<text x="${x + 10}" y="${r1 + 3}" style="font-size:8px;fill:#6b7280">in</text><text x="${x + 10}" y="${r2 + 3}" style="font-size:8px;fill:#6b7280">out</text>`
         for (let k = 0; k < 4; k++) {
@@ -397,7 +445,7 @@
       if (!g) return
       const x = +g.dataset.x, y = +g.dataset.y, w = +g.dataset.w, h = +g.dataset.h, [name, bins] = PROFILES[prof]
       if (+g.dataset.tight) {
-        g.innerHTML = `<text x="${x + 5}" y="${y + 10}" style="font-size:7.5px;fill:#a2a8b4">${name}</text>` +
+        g.innerHTML = (h >= 30 ? `<text x="${x + 5}" y="${y + 10}" style="font-size:7.5px;fill:#a2a8b4">${name}</text>` : '') +
           bins.map(([, c], k) => `<rect x="${x + 5 + k * 11}" y="${y + h - 11}" width="8" height="7" rx="1.5" style="fill:${c}"/>`).join('')
         return
       }
@@ -468,7 +516,7 @@
       } else arrive()
     }
     function arrive() {
-      if (layer >= 4) {
+      if (layer >= 5) {
         kpi += 1 + Math.floor(Math.random() * 3)
         rate = Math.round(clamp(rate + (Math.random() - 0.5) * 60, 1080, 1360))
         run = Math.round(clamp(run + (Math.random() - 0.5) * 2, 88, 98))
@@ -528,13 +576,17 @@
         if (k < 1) return true
         f.c.remove(); f.done && f.done(); return false
       })
-      if (layer >= 5) {
+      if (layer >= 6) {
         waveT -= dt
         if (waveT <= 0) { waveT = 6000; rollup(); RANK.forEach((v, k) => { RANK[k] = clamp(v + (Math.random() - 0.5) * 0.06, 0.78, 0.99) }) }
         const sync = $('#tw-sync', svg)
         if (sync) sync.textContent = `org rollup · next in ${Math.ceil(waveT / 1000)} s`
       }
-      if (layer >= 6) {
+      if (layer >= 4) {
+        crewT += dt
+        if (crewT > 1400) { crewT = 0; CREW.forEach((c, k) => { if (!c.brk) c.v = clamp(c.v + (Math.random() - 0.5) * 0.08, 0.7, 1.12) }); if (Math.random() < 0.25) { const c = CREW[2]; c.brk = !c.brk } paintCrew() }
+      }
+      if (layer >= 7) {
         noteT += dt
         if (noteT > 3400) { noteT = 0; pulseOut() }
       }
@@ -1146,7 +1198,7 @@
       whoami: () => line('Naveed Kakal — Lead Developer, Kannegiesser ETECH. day shift: every layer of a laundry plant. night shift: everything else.'),
       neofetch: () => line([
         ['os', 'plant-floor 20 (since Aug 2006)'], ['host', 'Naperville, IL'], ['uptime', '322 of the last 366 days'],
-        ['kernel', 'sensors + conveyors'], ['stack', 'sensors → controllers → screens → reports → cloud → phone'], ['commits', '10,402 this year'],
+        ['kernel', 'sensors + conveyors'], ['stack', 'layout → field devices → controllers → screens → people → reports → cloud → phone'], ['commits', '10,402 this year'],
         ['binder', `${CARDS.length} cards`], ['crew', 'Zoya &amp; Maya (root)'],
       ].map(([k, v]) => `<span class="pr">${k.padEnd(8)}</span> ${v}`).join('<br>')),
       layers: () => { line(LONG.map((l, i) => `<span class="pr">L${i}</span> ${esc(l)}`).join('<br>') + '<br><span class="cm"># taking you to the bottom floor…</span>'); setTimeout(() => go('climb'), 600) },

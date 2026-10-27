@@ -732,3 +732,9 @@ body.developing .hero .hero-photo { animation: develop .9s var(--ease) .2s both;
 .tower-bar .kicker { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 /* L0 is the bottom band: start its text lower so the tower is already pinned (L0 in view) when you read it */
 @media (min-width: 921px) { .step:first-child { padding-top: 45vh; } }
+
+/* L4 people: an avatar per operator, a bar against target; on break, they grey out */
+.tw .op-av { fill: var(--acc); transition: fill .3s; }
+.tw .op-bar { transition: width .6s cubic-bezier(.2,.7,.2,1), fill .3s; }
+.tw .op.brk .op-av { fill: var(--fg-4); }
+.tw .op.brk text.ink-2 { opacity: .5; }

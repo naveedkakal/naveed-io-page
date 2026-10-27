@@ -14,11 +14,11 @@
 <meta property="og:url" content="https://naveed.io/" />
 <meta property="og:title" content="Naveed Kakal — from the sensor to the phone" />
 <meta property="og:description" content="Twenty years writing every layer of an industrial plant's software, from the I/O to the phone. Plus a night shift of AI builds." />
-<meta property="og:image" content="https://naveed.io/assets/og.png?v=20261028" />
+<meta property="og:image" content="https://naveed.io/assets/og.png?v=20261029" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Naveed Kakal — from the sensor to the phone" />
 <meta name="twitter:description" content="Twenty years writing every layer of an industrial plant's software. Plus a night shift of AI builds." />
-<meta name="twitter:image" content="https://naveed.io/assets/og.png?v=20261028" />
+<meta name="twitter:image" content="https://naveed.io/assets/og.png?v=20261029" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -56,9 +56,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/shift.css?v=20261041" />
+<link rel="stylesheet" href="assets/shift.css?v=20261042" />
 <script src="assets/traffic.js" defer></script>
-<script src="assets/shift.js?v=20261041" defer></script>
+<script src="assets/shift.js?v=20261042" defer></script>
 </head>
 <body>
 <a class="skip" href="#climb">Skip to the stack</a>
@@ -107,7 +107,7 @@
 
     <div class="hero-grid">
       <div class="rise in" style="transition-delay:.08s">
-        <p class="intro">For twenty years I've written the software that runs industrial laundries: the biggest ones, washing for hospitals, hotels and airlines around the clock. Not one layer of it. <b>All of them</b>: the layout on the drawing board, the sensors on the floor, the controller programs that run the machines, the screens operators work from, the plant's own reports, the cloud rollup across <b>400+ plants</b>, and the app that buzzes a supervisor's phone. <b>And not as one of many hands.</b> It's a small team: I've always been at least half of it, and most years I've been the only one building new things. Electrical engineer. IC at heart. Lately, the nights belong to AI.</p>
+        <p class="intro">For twenty years I've written the software that runs industrial laundries: the biggest ones, washing for hospitals, hotels and airlines around the clock. Not one layer of it. <b>All of them</b>: the layout on the drawing board, the sensors on the floor, the controller programs that run the machines, the screens operators work from, the labor tracking that measures their work fairly, the plant's own reports, the cloud rollup across <b>400+ plants</b>, and the app that buzzes a supervisor's phone. <b>And not as one of many hands.</b> It's a small team: I've always been at least half of it, and most years I've been the only one building new things. Electrical engineer. IC at heart. Lately, the nights belong to AI.</p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#climb">Climb the stack <span aria-hidden="true">↓</span></a>
           <a class="btn" href="#binder">Skip to the builds <span aria-hidden="true">→</span></a>
@@ -155,7 +155,7 @@
 <!-- ═══════════ § 01 — the climb (day) ═══════════ -->
 <section class="sec day climb" id="climb" aria-labelledby="h-climb">
   <div class="wrap">
-    <div class="sec-head"><div class="kicker"><span class="acc">§ 01</span> — the stack, bottom up</div><div class="kicker">seven layers · one person · since 2006</div></div>
+    <div class="sec-head"><div class="kicker"><span class="acc">§ 01</span> — the stack, bottom up</div><div class="kicker">eight layers · one person · since 2006</div></div>
     <h2 class="h-sec" id="h-climb">Every layer of a plant. <span class="stroke">I've written code in all of them.</span></h2>
     <p class="lead rise">Most software careers are one cubicle on one floor of the building. <span class="dim">I've worked every desk on every floor, and I take the stairs: from the bit a sensor flips to the alert on a supervisor's phone.</span></p>
 
@@ -190,22 +190,29 @@
           <p>No two laundries work the same way, either. A hospital plant, a hotel plant and an airline plant each sort, store and send work through in their own order. So eVue is <b>configured, not rebuilt</b>, for each one: every station shows its operator just what they need to do that task right, not one generic screen for everything.</p>
           <div class="stack-chips"><span>eVue</span><span>live plant view</span><span>configured per plant</span><span>since 2007</span></div>
         </article>
-        <article class="step" data-layer="4" data-clock="12">
-          <div class="lv"><span>L4</span> local reporting</div>
+        <article class="step" data-layer="4" data-clock="11">
+          <div class="lv"><span>L4</span> people &amp; productivity</div>
+          <h3>Then there's the people.</h3>
+          <p>Machines report on themselves. People are harder, and labor tracking is a different product with a different job: knowing who worked which station, on what, for how long, and measuring it in a way the floor accepts as fair. It takes understanding how a plant actually runs its shifts, not just its machines.</p>
+          <p>Operators log in to a task at a station. Their work is measured the way it really happens: <b>per piece where that's fair, as a team in pounds per operator-hour where it isn't</b>, and some jobs, like catching at the end of a line, are scored by the pace of the people feeding them. Breaks and shifts are built in, logins don't churn every time a customer changes, and supervisors get it by text and email, not just on a screen.</p>
+          <div class="stack-chips"><span>operator logins</span><span>piece rate &amp; team rate</span><span>breaks &amp; shifts</span><span>productivity reports</span></div>
+        </article>
+        <article class="step" data-layer="5" data-clock="12.5">
+          <div class="lv"><span>L5</span> local reporting</div>
           <h3>The plant reads its own numbers.</h3>
-          <p>Every time an item passes a sensor, a machine finishes a load or an operator logs in, it's a row in a database. So the plant can answer for itself: output by the hour, how long each machine runs, how busy each station is, and operator productivity that's fair to the operator. Plus <b>a 6 a.m. report email someone actually opens</b>.</p>
+          <p>Every time an item passes a sensor, a machine finishes a load or an operator logs in, it's a row in a database. So the plant can answer for itself: output by the hour, how long each machine runs, how busy each station is, and where the day is going wrong while there's still time to fix it. Plus <b>a 6 a.m. report email someone actually opens</b>.</p>
           <p>All of it lives on the plant's own server. <b>When the internet goes down, the floor doesn't notice.</b></p>
           <div class="stack-chips"><span>KPI dashboards</span><span>labor standards</span><span>scheduled reports</span></div>
         </article>
-        <article class="step" data-layer="5" data-clock="14">
-          <div class="lv"><span>L5</span> cloud reporting</div>
+        <article class="step" data-layer="6" data-clock="14">
+          <div class="lv"><span>L6</span> cloud reporting</div>
           <h3>Then the company reads all of them.</h3>
           <p>Each plant runs on its own. A hub at every site rolls its numbers up to the cloud <b>every minute</b>, so the people running a company of plants see one picture instead of forty phone calls.</p>
           <p>The fleet is the hard part: 400+ plants, each its own building, floor plan and set of machines. One afternoon this fall, AI agents scanned ~300 plant repos for one rename and opened <b>86 pull requests</b>. 42 landed that day; 14 were held on purpose.</p>
           <div class="stack-chips"><span>edge hub per plant</span><span>1-minute rollup</span><span>multi-tenant warehouse</span></div>
         </article>
-        <article class="step" data-layer="6" data-clock="16">
-          <div class="lv"><span>L6</span> mobile</div>
+        <article class="step" data-layer="7" data-clock="16">
+          <div class="lv"><span>L7</span> mobile</div>
           <h3>And finally, a phone in a pocket.</h3>
           <p>Plant networks are walled off, and they should be. <b>Pulse</b> is how the plant's data gets out anyway, securely: a supervisor links a phone by scanning a QR code at the plant, then gets the numbers that matter, and a push when something is really wrong.</p>
           <p>It's the top of the stack, and the part people actually carry. <b>That's the whole building, bottom to top.</b></p>
@@ -213,8 +220,8 @@
         </article>
       </div>
 
-      <figure class="tower" id="tower" aria-label="The plant's software stack, drawn as seven layers, from the plan up. The layer you are reading lights up; data flows up from the floor.">
-        <div class="tower-bar"><span class="kicker"><span class="acc">fig. 01</span> — one plant, seven layers</span><span class="tower-at" id="tower-at" aria-live="polite">L0 · the plan</span></div>
+      <figure class="tower" id="tower" aria-label="The plant's software stack, drawn as eight layers, from the plan up. The layer you are reading lights up; data flows up from the floor.">
+        <div class="tower-bar"><span class="kicker"><span class="acc">fig. 01</span> — one plant, eight layers</span><span class="tower-at" id="tower-at" aria-live="polite">L0 · the plan</span></div>
         <div class="tower-stage" id="tower-stage"></div>
       </figure>
     </div>
