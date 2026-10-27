@@ -42,6 +42,7 @@
     { i: 70,  kind: "svn", when: "2012", text: 'Ottawa, 1 p.m.: I dropped a running plant\'s production database. Flew out that night, brought the coffee, kept the customer for fourteen years. <a href="writing/seventeen-years-same-problem.html">Case file →</a>' },
     { i: 97,  kind: "svn", text: 'I leave for Centro, in Chicago. The tape goes quiet. <a href="writing/prank-that-brought-him-back.html">Case file →</a>' },
     { i: 127, kind: "git", text: "Back, thanks to a prank phone call. A week in, I learned Kannegiesser had bought the company." },
+    { i: 148, kind: "git", text: 'First trip to Hong Kong: Wireshark in the switch closets of our biggest job yet. <a href="writing/arguing-with-your-own-legacy.html">Case file →</a>' },
     { i: 158, kind: "git", text: "PLC communications move to an Elixir app I started that April." },
     { i: 231, kind: "git", text: "The busiest month on the record: the same sort, the same rails, new tools." },
     { i: 240, kind: "git", text: "Commit #10,000, on the 7th: a cursor that wouldn't land in a password field." }
@@ -75,7 +76,8 @@
   var STORIES = [
     ["1", "seventeen-years", "Seventeen years in the same problem", "writing/seventeen-years-same-problem.html"],
     ["2", "condemned", "Teaching the condemned new tricks", "writing/teaching-the-condemned.html"],
-    ["3", "prank", "The prank that brought him back", "writing/prank-that-brought-him-back.html"]
+    ["3", "prank", "The prank that brought him back", "writing/prank-that-brought-him-back.html"],
+    ["4", "legacy", "Arguing with your own legacy", "writing/arguing-with-your-own-legacy.html"]
   ];
 
   var term = $("#term"), form = $("#term-form"), input = $("#term-input");
