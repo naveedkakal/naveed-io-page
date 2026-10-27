@@ -21,7 +21,8 @@
   system can and can't do) and the product's long-term roadmap.
 - L1 I/O and field devices: photo-eyes, proximity switches, scales, motor drives. One
   plant he supports maps 8,710 I/O points into a single controller. Click-to-force, a
-  commissioning test tool, has been his testing standard since 2009.
+  commissioning test tool, has been his testing standard since early 2009; paired with
+  a test PLC, it exercises the full stack before a real item moves.
 - L2 Machine control: PLC programs generated from each plant's database (129 device
   types, 123 B&R PLCs), replacing hand-written programs. PLC communications via SOAP
   (2007), an Elixir service (2019) and an OPC UA bridge today. Rule: never act on a
