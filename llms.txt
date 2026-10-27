@@ -1,11 +1,11 @@
 # naveed.io — Naveed Kakal
 
 > Naveed Kakal is Lead Developer at Kannegiesser ETECH and an electrical engineer. For
-> twenty years he has built every layer of the software that runs industrial laundry
+> twenty years he has written code in every layer of the software that runs industrial laundry
 > plants, among the hardest material handling there is: plant layout with sales,
 > generated PLC programs, the eVue plant control system (the role a WCS/WES plays in a
-> warehouse, or an MES in a factory), labor tracking and productivity, plant and cloud
-> reporting across 400+ plants, and the Pulse mobile app. Kannegiesser's name is on
+> warehouse, or an MES in a factory), labor tracking and productivity, plant reporting,
+> a share of the cloud reporting that spans 400+ plants, and the Pulse mobile app. Kannegiesser's name is on
 > the product; his is on the design, the decisions and most of the commits. The same stack
 > applies to warehouses, factories and airports: sensors, controllers, routing and
 > reports, with different nouns. Since 2025 he also builds with a fleet of AI agents
@@ -34,7 +34,7 @@
 - L5 Local reporting: KPI dashboards and scheduled reports on the plant's own server,
   so the floor runs when the internet doesn't.
 - L6 Cloud reporting: a hub at every site rolls numbers up every minute across 400+
-  plants.
+  plants. A team build: teammates Jason and Larry did most of it; Naveed contributed.
 - L7 Mobile: Pulse, a phone app that gets plant data securely off isolated plant
   networks to supervisors (QR-linked devices, push alerts).
 
