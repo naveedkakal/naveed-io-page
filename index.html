@@ -56,9 +56,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/shift.css?v=20261038" />
+<link rel="stylesheet" href="assets/shift.css?v=20261041" />
 <script src="assets/traffic.js" defer></script>
-<script src="assets/shift.js?v=20261038" defer></script>
+<script src="assets/shift.js?v=20261041" defer></script>
 </head>
 <body>
 <a class="skip" href="#climb">Skip to the stack</a>
@@ -107,7 +107,7 @@
 
     <div class="hero-grid">
       <div class="rise in" style="transition-delay:.08s">
-        <p class="intro">For twenty years I've written the software that runs industrial laundries: the biggest ones, washing for hospitals, hotels and airlines around the clock. Not one layer of it. <b>All of them</b>: the sensors on the floor, the controller programs that run the machines, the screens operators work from, the plant's own reports, the cloud rollup across <b>400+ plants</b>, and the app that buzzes a supervisor's phone. <b>And not as one of many hands.</b> It's a small team: I've always been at least half of it, and most years I've been the only one building new things. Electrical engineer. IC at heart. Lately, the nights belong to AI.</p>
+        <p class="intro">For twenty years I've written the software that runs industrial laundries: the biggest ones, washing for hospitals, hotels and airlines around the clock. Not one layer of it. <b>All of them</b>: the layout on the drawing board, the sensors on the floor, the controller programs that run the machines, the screens operators work from, the plant's own reports, the cloud rollup across <b>400+ plants</b>, and the app that buzzes a supervisor's phone. <b>And not as one of many hands.</b> It's a small team: I've always been at least half of it, and most years I've been the only one building new things. Electrical engineer. IC at heart. Lately, the nights belong to AI.</p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#climb">Climb the stack <span aria-hidden="true">↓</span></a>
           <a class="btn" href="#binder">Skip to the builds <span aria-hidden="true">→</span></a>
@@ -155,16 +155,23 @@
 <!-- ═══════════ § 01 — the climb (day) ═══════════ -->
 <section class="sec day climb" id="climb" aria-labelledby="h-climb">
   <div class="wrap">
-    <div class="sec-head"><div class="kicker"><span class="acc">§ 01</span> — the stack, bottom up</div><div class="kicker">six layers · one person · since 2006</div></div>
+    <div class="sec-head"><div class="kicker"><span class="acc">§ 01</span> — the stack, bottom up</div><div class="kicker">seven layers · one person · since 2006</div></div>
     <h2 class="h-sec" id="h-climb">Every layer of a plant. <span class="stroke">I've written code in all of them.</span></h2>
     <p class="lead rise">Most software careers are one cubicle on one floor of the building. <span class="dim">I've worked every desk on every floor, and I take the stairs: from the bit a sensor flips to the alert on a supervisor's phone.</span></p>
 
     <div class="climb-grid">
       <div class="steps">
+        <article class="step" data-layer="0" data-clock="6.5">
+          <div class="lv"><span>L0</span> the plan · layout &amp; roadmap</div>
+          <h3>Before the first sensor: the drawing, and the long plan.</h3>
+          <p>I'm in the room while a plant is still a layout drawing. I work with our sales team so the layout really meets the customer's needs, and I bring the gotchas they can't be expected to know: what our controls can and can't do, and which choice on paper turns into a headache in year three.</p>
+          <p>I also try to keep the software from becoming a rule book. It grows with the pressure each new plant puts on it, and I run its long-term roadmap, so even small, fast changes land inside one bigger plan: <b>giving laundries what they need to run.</b> We don't just program these plants. We're part of how they get sold, specified and built.</p>
+          <div class="stack-chips"><span>layout design</span><span>working with sales</span><span>custom requirements</span><span>product roadmap</span></div>
+        </article>
         <article class="step" data-layer="1" data-clock="7">
-          <div class="lv"><span>L1</span> I/O · sensors &amp; motors</div>
+          <div class="lv"><span>L1</span> I/O · field devices</div>
           <h3>Everything starts as a bit.</h3>
-          <p>A photo-eye sees an item go by. A proximity switch confirms a gate is closed. A scale weighs a load, and in this business weight is money. A motor drive moves a conveyor, a reader tells one kind of item from another, and a switch sends each down its own track. Each of those is a wire, and panels of network modules gather hundreds of them onto the plant network: one plant I support has <b>132 of those panels</b>.</p>
+          <p>Out on the floor are the field devices. A photo-eye sees an item go by. A proximity switch confirms a gate is closed. A scale weighs a load, and in this business weight is money. A motor drive moves a conveyor, a reader tells one kind of item from another, and a switch sends each down its own track. Each of those is a wire, an I/O point, and network modules gather them onto the plant network. One plant I support maps <b>8,700 I/O points into a single controller</b>, about 7,700 of them simple on/off signals.</p>
           <p>In my second week on the record, March 2009, I started the habit that became our testing standard: <b>click to force</b>, a test tool for commissioning a plant, not something left on in production. Click any sensor in the software and the plant acts as if a real item were sitting there, so whatever is coming up behind it stops and waits. <span class="try">Tap a ◆ on the conveyor to force it on; tap again to let go.</span></p>
           <div class="stack-chips"><span>photo-eyes</span><span>proximity switches</span><span>scales</span><span>motor drives</span><span>networked I/O</span></div>
         </article>
@@ -179,7 +186,8 @@
           <div class="lv"><span>L3</span> screens &amp; workflows</div>
           <h3>Then a person has to run it.</h3>
           <p>In 2007 the operator screens were a per-seat license. The floor wanted eyes everywhere; the invoice said pick two. So we made the screen a web page, and for nearly twenty years <b>eVue</b> has set the bar for what a laundry's screens can be: a live picture of the whole plant, every item moving through it, and alarms that say in plain words <b>why something isn't moving</b>.</p>
-          <p>And no two laundries work the same way. A hospital plant, a hotel plant and an airline plant each sort, store and send work through in their own order. So eVue is <b>configured, not rebuilt</b>, for each one: every station shows its operator just what they need to do that task right, not one generic screen for everything.</p>
+          <p>And these buildings are big. The largest are the size of a big-box store, with one system running every move across the whole floor: the plant behind that I/O count has <b>611 rail sections and 93 machines</b>, every one routed by eVue.</p>
+          <p>No two laundries work the same way, either. A hospital plant, a hotel plant and an airline plant each sort, store and send work through in their own order. So eVue is <b>configured, not rebuilt</b>, for each one: every station shows its operator just what they need to do that task right, not one generic screen for everything.</p>
           <div class="stack-chips"><span>eVue</span><span>live plant view</span><span>configured per plant</span><span>since 2007</span></div>
         </article>
         <article class="step" data-layer="4" data-clock="12">
@@ -205,8 +213,8 @@
         </article>
       </div>
 
-      <figure class="tower" id="tower" aria-label="The plant's software stack, drawn as six layers. The layer you are reading lights up; data flows up from the floor.">
-        <div class="tower-bar"><span class="kicker"><span class="acc">fig. 01</span> — one plant, six layers</span><span class="tower-at" id="tower-at" aria-live="polite">L1 · I/O</span></div>
+      <figure class="tower" id="tower" aria-label="The plant's software stack, drawn as seven layers, from the plan up. The layer you are reading lights up; data flows up from the floor.">
+        <div class="tower-bar"><span class="kicker"><span class="acc">fig. 01</span> — one plant, seven layers</span><span class="tower-at" id="tower-at" aria-live="polite">L0 · the plan</span></div>
         <div class="tower-stage" id="tower-stage"></div>
       </figure>
     </div>

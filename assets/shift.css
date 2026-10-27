@@ -718,3 +718,17 @@ body.developing .hero .hero-photo { animation: develop .9s var(--ease) .2s both;
 .fmap figcaption { margin-top: 12px; max-width: 90ch; line-height: 1.6; }
 .fmap .swipe { display: none; }
 @media (max-width: 800px) { .fmap .swipe { display: inline; } }
+
+/* L0: the run draws itself when you reach the plan; the gotcha and today's milestone pulse */
+.tw .plan-run { fill: none; stroke: #5bc8ff; stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 600; stroke-dashoffset: 0; }
+.tw .lyr.on .plan-run { animation: plandraw 1.8s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes plandraw { from { stroke-dashoffset: 600; } to { stroke-dashoffset: 0; } }
+.tw .gotcha circle { transform-box: fill-box; transform-origin: center; animation: gpulse 1.6s ease-in-out infinite; }
+@keyframes gpulse { 50% { transform: scale(1.25); } }
+.tw .mile { fill: var(--acc); }
+.tw .mile.now { filter: drop-shadow(0 0 5px var(--acc)); }
+.tw .mile.next { fill: var(--surface); stroke: var(--acc); stroke-dasharray: 2 2; }
+@media (prefers-reduced-motion: reduce) { .tw .lyr.on .plan-run, .tw .gotcha circle { animation: none; } }
+.tower-bar .kicker { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+/* L0 is the bottom band: start its text lower so the tower is already pinned (L0 in view) when you read it */
+@media (min-width: 921px) { .step:first-child { padding-top: 45vh; } }

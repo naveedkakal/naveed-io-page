@@ -74,20 +74,20 @@
   addEventListener('keydown', (e) => { if (e.key === 'Escape') setJump(false) })
 
   // ── § 01 — the climb: a tower that lights up layer by layer ──
-  const LAYERS = ['I/O', 'control', 'screens', 'plant', 'cloud', 'mobile']
-  const LONG = ['I/O · sensors & motors', 'machine control', 'screens & workflows', 'local reporting', 'cloud reporting', 'mobile · Pulse']
+  const LAYERS = ['plan', 'I/O', 'control', 'screens', 'plant', 'cloud', 'mobile']
+  const LONG = ['the plan', 'I/O · field devices', 'machine control', 'screens & workflows', 'local reporting', 'cloud reporting', 'mobile · Pulse']
   const steps = $$('.step[data-layer]'), towerStage = $('#tower-stage'), towerAt = $('#tower-at')
-  let layer = 1
+  let layer = 0
   const tower = towerStage ? buildTower() : null
   function climbStep() {
     if (!steps.length) return
     const line = innerHeight * (innerWidth <= 920 ? 0.78 : 0.55)
-    let n = 1
+    let n = +steps[0].dataset.layer
     steps.forEach((s) => { if (s.getBoundingClientRect().top < line) n = +s.dataset.layer })
-    if (n === layer && steps[n - 1].classList.contains('on')) return
+    if (n === layer && steps.find((s) => +s.dataset.layer === n).classList.contains('on')) return
     layer = n
     steps.forEach((s) => s.classList.toggle('on', +s.dataset.layer === n))
-    towerAt.textContent = `L${n} · ${LONG[n - 1]}`
+    towerAt.textContent = `L${n} · ${LONG[n]}`
     tower && tower.setLayer(n)
   }
 
@@ -108,7 +108,7 @@
 
     function geom() {
       const W = towerStage.clientWidth, H = towerStage.clientHeight, pad = 10, gap = 6
-      const bh = (H - pad * 2 - gap * 5) / 6
+      const bh = (H - pad * 2 - gap * 6) / 7
       const top = (i) => H - pad - (i + 1) * bh - i * gap   // i = 0 is the floor
       const cx0 = 58, cx1 = W - 34
       return { W, H, bh, top, cx0, cx1, cw: cx1 - cx0, spine: W - 18 }
@@ -118,15 +118,15 @@
       if (G.W < 50 || G.H < 120) return
       const { W, H, bh, top, cx0, cx1, cw } = G
       let s = `<defs><marker id="tw-arr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#8b93a3" stroke-width="1.6"/></marker></defs>`
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 7; i++) {   // band i is layer Li; L0, the plan, is the foundation at the bottom
         const y = top(i)
-        s += `<g class="lyr" data-l="${i + 1}"><rect class="band" x="6" y="${y}" width="${W - 12}" height="${bh}" rx="10"/>`
-        s += `<text class="tag" x="16" y="${y + 18}">L${i + 1}</text><text class="ink-3" x="16" y="${y + 31}" style="font-size:9px">${LAYERS[i]}</text>`
-        s += layerArt(i, y)
+        s += `<g class="lyr" data-l="${i}"><rect class="band" x="6" y="${y}" width="${W - 12}" height="${bh}" rx="10"/>`
+        s += `<text class="tag" x="16" y="${y + 18}">L${i}</text><text class="ink-3" x="16" y="${y + 31}" style="font-size:9px">${LAYERS[i]}</text>`
+        s += i === 0 ? planArt(y) : layerArt(i - 1, y)
         s += `</g>`
       }
       // the bus: data climbs the right edge
-      s += `<line class="bus" x1="${G.spine}" y1="${top(0) + bh * 0.66}" x2="${G.spine}" y2="${top(5) + bh / 2}"/><g id="tw-pkts"></g>`
+      s += `<line class="bus" x1="${G.spine}" y1="${railY()}" x2="${G.spine}" y2="${top(6) + bh / 2}"/><g id="tw-pkts"></g>`
       svg = document.createElementNS(NS, 'svg')
       svg.setAttribute('class', 'tw')
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
@@ -157,7 +157,7 @@
       setLayer(layer)
       draw()
     }
-    const railY = () => G.top(0) + G.bh * (G.bh < 64 ? 0.5 : 0.6)
+    const railY = () => G.top(1) + G.bh * (G.bh < 64 ? 0.5 : 0.6)
     const sx = (f) => G.cx0 + (G.cx1 - 10 - G.cx0) * f
     // where an item is at t: along the main line, then eased onto track A (up) or B (down) after the switch
     function route(t, cls, x0, x1, y0, d) {
@@ -167,6 +167,33 @@
       return [x, y0 + (cls ? d : -d) * e]
     }
     const branch = (x0, x1, y0, dd) => { const X = (t) => x0 + (x1 - x0) * t; return `M${X(SW)} ${y0} C ${X(SW + 0.04)} ${y0}, ${X(SW + 0.04)} ${y0 + dd}, ${X(SW + 0.08)} ${y0 + dd} L${x1} ${y0 + dd}` }
+    // L0: the layout drawing (machine footprints, the conveyor run, a gotcha flagged before it's built) and the long roadmap
+    function planArt(y) {
+      const { bh, cx0, cx1, cw } = G, tight = bh < 64, cy = y + bh / 2
+      const bw = Math.min(tight ? cw * 0.46 : 230, cw * 0.56), bhh = bh * 0.8, bx = cx0, by = y + bh * 0.1
+      const X = (f) => bx + bw * f, Y = (f) => by + bhh * f
+      let a = `<rect x="${bx}" y="${by}" width="${bw}" height="${bhh}" rx="5" style="fill:rgba(91,200,255,.07);stroke:#6aa9cf;stroke-opacity:.7"/>`
+      for (let gx = bx + 10; gx < bx + bw; gx += 10) a += `<line x1="${gx}" y1="${by + 1}" x2="${gx}" y2="${by + bhh - 1}" style="stroke:#6aa9cf;stroke-opacity:.14"/>`
+      for (let gy = by + 10; gy < by + bhh; gy += 10) a += `<line x1="${bx + 1}" y1="${gy}" x2="${bx + bw - 1}" y2="${gy}" style="stroke:#6aa9cf;stroke-opacity:.14"/>`
+      ;[[0.08, 'W'], [0.4, 'D'], [0.72, 'F']].forEach(([f, t]) => {
+        a += `<rect x="${X(f)}" y="${Y(0.14)}" width="${bw * 0.2}" height="${bhh * 0.36}" rx="2" style="fill:none;stroke:#6aa9cf;stroke-dasharray:3 2"/>`
+        if (!tight) a += `<text x="${X(f + 0.1)}" y="${Y(0.36)}" text-anchor="middle" style="font-size:8px;fill:#6aa9cf">${t}</text>`
+      })
+      a += `<path class="plan-run" d="M${X(0.03)} ${Y(0.8)} H${X(0.6)} V${Y(0.52)} M${X(0.6)} ${Y(0.8)} H${X(0.97)} M${X(0.18)} ${Y(0.8)} V${Y(0.52)}"/>`
+      a += `<g class="gotcha" transform="translate(${X(0.6)} ${Y(0.8)})"><circle r="${tight ? 4.5 : 6.5}" style="fill:#f2b100;stroke:#11151c;stroke-width:1"/><text y="${tight ? 2.5 : 3.2}" text-anchor="middle" style="font:800 ${tight ? 7 : 9}px var(--font-display);fill:#11151c">!</text></g>`
+      const r0 = bx + bw + (tight ? 12 : 22), r1 = cx1 - 8, ly = tight ? cy + 2 : cy + 4
+      if (!tight) {
+        a += `<text class="ink-3" x="${r0}" y="${y + 18}" style="font-size:9px">roadmap · fast changes, one long plan</text>`
+        a += `<text x="${r0}" y="${y + bh - 12}" style="font-size:8.5px;fill:#b07800">⚠ gotcha flagged before it's built</text>`
+      }
+      a += `<line x1="${r0}" y1="${ly}" x2="${r1}" y2="${ly}" style="stroke:var(--line-2);stroke-width:2;stroke-linecap:round"/>`
+      ;[[0, '’07'], [0.42, '’19'], [0.78, '’26'], [1, 'next']].forEach(([f, t], k) => {
+        const mx = r0 + (r1 - r0) * f
+        a += k === 3 ? `<circle class="mile next" cx="${mx}" cy="${ly}" r="${tight ? 3 : 4.5}"/>` : `<circle class="mile${k === 2 ? ' now' : ''}" cx="${mx}" cy="${ly}" r="${tight ? 3 : 4.5}"/>`
+        if (!tight) a += `<text class="ink-3" x="${mx}" y="${ly + 15}" text-anchor="${k === 0 ? 'start' : k === 3 ? 'end' : 'middle'}" style="font-size:8px">${t}</text>`
+      })
+      return a
+    }
     function layerArt(i, y) {
       const { bh, cx0, cx1, cw } = G, cy = y + bh / 2
       const tight = bh < 64   // phone: the bands are short, so the captions go and only the drawing stays
@@ -437,7 +464,7 @@
         const c = document.createElementNS(NS, 'circle')
         c.setAttribute('class', 'pkt'); c.setAttribute('r', '3.2'); c.setAttribute('cx', G.spine)
         $('#tw-pkts', svg).append(c)
-        pkts.push({ el: c, y: railY(), to: G.top(layer - 1) + G.bh / 2 })
+        pkts.push({ el: c, y: railY(), to: G.top(layer) + G.bh / 2 })
       } else arrive()
     }
     function arrive() {
@@ -511,7 +538,7 @@
         noteT += dt
         if (noteT > 3400) { noteT = 0; pulseOut() }
       }
-      if (forcedT && now - forcedT > 1400) { forcedT = null; towerAt.textContent = `L${layer} · ${LONG[layer - 1]}` }
+      if (forcedT && now - forcedT > 1400) { forcedT = null; towerAt.textContent = `L${layer} · ${LONG[layer]}` }
       draw()
       requestAnimationFrame(tick)
     }
@@ -1122,7 +1149,7 @@
         ['kernel', 'sensors + conveyors'], ['stack', 'sensors → controllers → screens → reports → cloud → phone'], ['commits', '10,402 this year'],
         ['binder', `${CARDS.length} cards`], ['crew', 'Zoya &amp; Maya (root)'],
       ].map(([k, v]) => `<span class="pr">${k.padEnd(8)}</span> ${v}`).join('<br>')),
-      layers: () => { line(LONG.map((l, i) => `<span class="pr">L${i + 1}</span> ${esc(l)}`).join('<br>') + '<br><span class="cm"># taking you to the bottom floor…</span>'); setTimeout(() => go('climb'), 600) },
+      layers: () => { line(LONG.map((l, i) => `<span class="pr">L${i}</span> ${esc(l)}`).join('<br>') + '<br><span class="cm"># taking you to the bottom floor…</span>'); setTimeout(() => go('climb'), 600) },
       'ls builds': () => line(CARDS.map((c) => esc(c.n)).join('  ·  ')),
       pulse: () => line('<span class="y">🔔 Dryer 4 · door open 6 min</span> <span class="cm"># that one, but on your phone</span>'),
       contact: () => line('<a href="mailto:naveed.kakal@gmail.com">naveed.kakal@gmail.com</a> · <a href="https://www.linkedin.com/in/naveed-kakal-b7416417/" target="_blank" rel="noopener">linkedin</a> · <a href="https://github.com/naveedkakal" target="_blank" rel="noopener">github</a>'),
