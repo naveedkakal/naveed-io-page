@@ -706,3 +706,15 @@ body.developing .hero .hero-photo { animation: develop .9s var(--ease) .2s both;
 .sheet-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; max-width: 940px; margin: 0 auto; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
 .sheet .binder { margin-top: 16px; }
 .hero .hero-grid { align-items: start; }
+
+/* Burrow's map: the copy sits beside the quote, the map gets the full width (and scrolls sideways on phones) */
+.factory { grid-template-columns: 1fr; }
+.factory > .rise { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+@media (max-width: 920px) { .factory > .rise { grid-template-columns: 1fr; } }
+.fmap { margin: clamp(28px, 4vw, 44px) 0 0; }
+.fmap-scroll { border: 1px solid var(--line-2); border-radius: 18px; background: radial-gradient(120% 120% at 50% 0%, #0d1220, #07090e 70%); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.fmap svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.fmap svg text { font-family: var(--font-mono); }
+.fmap figcaption { margin-top: 12px; max-width: 90ch; line-height: 1.6; }
+.fmap .swipe { display: none; }
+@media (max-width: 800px) { .fmap .swipe { display: inline; } }

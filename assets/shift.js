@@ -814,32 +814,62 @@
   // ── § 04 — Burrow, drawn ─────────────────────────────
   const fac = $('#factory')
   if (fac) {
-    const nodes = [
-      { id: 'in', x: 10, y: 120, w: 112, t: 'intent in', s: 'cards · tickets · timers' },
-      { id: 'build', x: 160, y: 120, w: 112, t: 'one session', s: 'builds + tests' },
-      { id: 'read', x: 310, y: 120, w: 112, t: 'other vendor', s: 'reviews the diff' },
-      { id: 'ship', x: 400, y: 30, w: 112, t: 'shipped', s: 'merged · deployed' },
-      { id: 'park', x: 400, y: 214, w: 112, t: 'parked', s: 'a question for me', park: true },
+    // Condensed from Burrow's own /map: the same six regions, about a third of the parts, the real routes
+    const REG = [
+      ['lines of work', 10, 14, 150, 300, '#e0b54a'], ['intake', 178, 56, 122, 254, '#5bc8ff'], ['engine', 314, 36, 214, 274, '#9d8bff'],
+      ['authority', 540, 16, 152, 244, '#ff5e8a'], ['where you meet it', 704, 16, 186, 294, '#7fd4ff'], ['runs without you', 178, 324, 712, 66, '#3ddc84'],
     ]
-    const wires = [['in', 'build'], ['build', 'read'], ['read', 'ship'], ['read', 'park'], ['read', 'build']]
-    const c = (id) => { const n = nodes.find((x) => x.id === id); return [n.x + n.w / 2, n.y + 26] }
+    const CHIPS = ['Weave roadmap', 'eVue help', 'Freshdesk triage', 'Research', 'SLX digest', 'Know That', 'Client sites', 'Burrow on Burrow']
+    const N = {
+      feeds: [218, 170, 'Feeds', 1, 1], back: [258, 92, 'Comments', 1], adapt: [258, 130, 'Adapters', 1], env: [258, 222, 'Envelope', 1], fence: [218, 282, 'The fence', 1],
+      sched: [404, 74, 'Scheduler', 2], graphs: [350, 122, 'Graphs', 2], profiles: [446, 98, 'Profiles', 2], walk: [384, 214, 'The walk', 2, 1],
+      session: [474, 168, 'One session', 2, 1], runners: [474, 258, 'Runners', 2], ledger: [350, 284, 'Ledger', 2],
+      bench: [652, 44, 'Blind bench', 3], reader: [578, 76, 'One reader', 3], gate: [628, 134, 'The gate', 3, 1], sent: [578, 190, 'Sent back', 3], park: [662, 228, 'Park', 3],
+      console: [770, 90, 'Console', 4], verbs: [850, 150, 'Your verbs', 4], replies: [770, 214, 'Replies', 4], mail: [850, 272, 'Mail', 4],
+      doctor: [240, 360, 'Doctor', 5], memory: [420, 360, 'Memory', 5], drift: [566, 360, 'PR drift watch', 5], deploy: [708, 360, 'Deploy', 5], brain: [846, 360, 'Second brain', 5],
+    }
+    const P = (id) => N[id]
+    // an orthogonal trace: across then down ('h') or down then across ('v')
+    const trace = (a, b, m = 'h') => { const [x0, y0] = P(a), [x1, y1] = P(b); return m === 'h' ? `M${x0} ${y0} H${x1} V${y1}` : `M${x0} ${y0} V${y1} H${x1}` }
+    const chip = (k) => { const y = 58 + k * 33; return `M50 ${y} H${148 + k * 1.2} V170 H${P('feeds')[0]}` }
+    const E = [
+      ['back', 'adapt', 'v'], ['adapt', 'env', 'v'], ['feeds', 'env', 'v'], ['fence', 'env', 'h'], ['env', 'walk', 'h'], ['sched', 'walk', 'v'], ['graphs', 'walk', 'v'],
+      ['profiles', 'session', 'v'], ['walk', 'session', 'h'], ['session', 'runners', 'v'], ['runners', 'ledger', 'h'], ['ledger', 'walk', 'h'],
+      ['session', 'reader', 'h'], ['bench', 'reader', 'v'], ['reader', 'gate', 'h'], ['gate', 'sent', 'v'], ['sent', 'session', 'h'], ['gate', 'park', 'v'],
+      ['park', 'console', 'h'], ['console', 'verbs', 'h'], ['park', 'replies', 'v'], ['replies', 'mail', 'h'], ['replies', 'brain', 'v'],
+      ['gate', 'deploy', 'v'], ['session', 'memory', 'v'], ['memory', 'walk', 'h'], ['doctor', 'feeds', 'v'], ['drift', 'park', 'v'],
+    ]
+    const col = (id) => REG[P(id)[3]][5]
     let s = ''
-    const paths = []
-    wires.forEach(([a, b], i) => {
-      const [x0, y0] = c(a), [x1, y1] = c(b)
-      const back = b === 'build' && a === 'read'
-      const d = back
-        ? `M${x0} ${y0 + 26} C ${x0} ${y0 + 70}, ${x1} ${y1 + 70}, ${x1} ${y1 + 26}`
-        : `M${x0} ${y0} C ${(x0 + x1) / 2} ${y0}, ${(x0 + x1) / 2} ${y1}, ${x1} ${y1}`
-      paths.push(d)
-      s += `<path class="wire" id="w${i}" d="${d}"${back ? ' stroke-dasharray="4 5"' : ''}/>`
+    REG.forEach(([t, x, y, w, h, c]) => {
+      s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" style="fill:${c};fill-opacity:.035;stroke:${c};stroke-opacity:.35;stroke-dasharray:3 4"/>`
+      s += `<text x="${x + 10}" y="${y + 14}" style="font-size:8px;letter-spacing:1.6px;fill:${c};text-transform:uppercase">${t.toUpperCase()}</text>`
     })
-    nodes.forEach((n) => {
-      s += `<g class="node${n.park ? ' park' : ''}"><rect x="${n.x}" y="${n.y}" width="${n.w}" height="52" rx="10"/><text x="${n.x + 12}" y="${n.y + 22}" style="fill:var(--fg);font-weight:700">${n.t}</text><text x="${n.x + 12}" y="${n.y + 40}" style="font-size:10.5px">${n.s}</text></g>`
+    CHIPS.forEach((_, k) => { s += `<path d="${chip(k)}" style="fill:none;stroke:#e0b54a;stroke-opacity:.45;stroke-width:1.3"/>` })
+    E.forEach(([a, b, m]) => { s += `<path d="${trace(a, b, m)}" style="fill:none;stroke:${col(a)};stroke-opacity:.5;stroke-width:1.4;stroke-linejoin:round${a === 'sent' ? ';stroke-dasharray:4 4' : ''}"/>` })
+    CHIPS.forEach((t, k) => {
+      const y = 58 + k * 33
+      s += `<rect x="26" y="${y - 7}" width="24" height="14" rx="2" style="fill:#e0b54a;fill-opacity:${k % 3 === 1 ? .35 : .85}"/>`
+      for (let q = 0; q < 4; q++) s += `<rect x="${29 + q * 5.5}" y="${y - 10}" width="2" height="3" style="fill:#e0b54a;opacity:.6"/><rect x="${29 + q * 5.5}" y="${y + 7}" width="2" height="3" style="fill:#e0b54a;opacity:.6"/>`
+      s += `<text x="26" y="${y - 13}" style="font-size:9px;fill:#cdb987">${t}</text>`
     })
-    s += `<text x="160" y="226" style="font-size:10.5px;fill:var(--fg-3)">checks fail → same session, again</text>`
-    s += `<circle class="pulse" r="4.5"><animateMotion dur="3.6s" repeatCount="indefinite" path="${paths[0]} ${paths[1].replace('M', 'L')} ${paths[2].replace('M', 'L')}"/></circle>`
-    s += `<circle class="pulse" r="4" style="fill:#f5b82e;filter:drop-shadow(0 0 6px #f5b82e)"><animateMotion dur="5.2s" begin="1.6s" repeatCount="indefinite" path="${paths[0]} ${paths[1].replace('M', 'L')} ${paths[3].replace('M', 'L')}"/></circle>`
+    Object.values(N).forEach(([x, y, t, r, big]) => {
+      const c = REG[r][5], z = big ? 20 : 13
+      s += `<rect x="${x - z / 2}" y="${y - z / 2}" width="${z}" height="${z}" rx="${big ? 4 : 3}" style="fill:${c};fill-opacity:.22;stroke:${c}"/><circle cx="${x}" cy="${y}" r="${big ? 3.6 : 2.4}" style="fill:#eef0f4"/>`
+      s += `<text x="${x}" y="${y + z / 2 + 12}" text-anchor="middle" style="font-size:${big ? 11 : 9.5}px;fill:${big ? '#fff' : '#c3c8d2'};font-weight:${big ? 700 : 400};paint-order:stroke;stroke:#07090e;stroke-width:3px">${t}</text>`
+    })
+    // current: real routes through the factory
+    const join = (...ps) => ps.map((d, k) => (k ? d.replace(/^M/, 'L') : d)).join(' ')
+    const ROUTES = [
+      [join(chip(0), trace('feeds', 'env', 'v'), trace('env', 'walk'), trace('walk', 'session'), trace('session', 'reader'), trace('reader', 'gate'), trace('gate', 'deploy', 'v')), '#5bc8ff', 7, 0],
+      [join(chip(2), trace('feeds', 'env', 'v'), trace('env', 'walk'), trace('walk', 'session'), trace('session', 'reader'), trace('reader', 'gate'), trace('gate', 'park', 'v'), trace('park', 'console')), '#f2b100', 8, 2.4],
+      [join(trace('gate', 'sent', 'v'), trace('sent', 'session'), trace('session', 'reader'), trace('reader', 'gate')), '#ff5e8a', 3.4, 1],
+      [join(trace('session', 'memory', 'v'), trace('memory', 'walk'), trace('walk', 'session')), '#3ddc84', 5, 3.2],
+      [join(chip(5), trace('feeds', 'env', 'v'), trace('env', 'walk'), trace('walk', 'session'), trace('session', 'runners', 'v')), '#9d8bff', 6.2, 4.4],
+    ]
+    ROUTES.forEach(([d, c, dur, begin]) => {
+      s += `<circle r="3.6" style="fill:${c};filter:drop-shadow(0 0 5px ${c})"><animateMotion dur="${dur}s" begin="${begin}s" repeatCount="indefinite" path="${d}"/></circle>`
+    })
     fac.innerHTML = s
     if (reduced) $$('animateMotion', fac).forEach((a) => a.remove())
   }
@@ -883,7 +913,7 @@
       links: [['case file', 'apps/weave.html']] },
     { n: 'Burrow', cert: 'ead20af', hue: 'burrow', holo: 1, art: 'burrow', pos: '0% 50%', type: 'personal software factory',
       flav: 'Intent goes in. Questions come back. A path decides what the model does next.',
-      g: ['RUNNING', '1,436', 'runs logged'], stat: ['27 feeds', 'every run costed'],
+      g: ['RUNNING', '1,436', 'runs logged'], stat: ['29 feeds', 'every run costed'],
       back: ['Every change it writes is reviewed by a model from a different vendor. Unsure work parks; it never guesses.', 'Merge authority is mechanical — a prompt can’t merge anything.', 'Runs a Monday industry digest, a nightly product review, and a YouTube channel.'],
       links: [['case file', 'apps/burrow.html']] },
     { n: 'Spitball', cert: '695cdbc', hue: 'spitball', holo: 1, art: 'spitball', type: 'baseball roguelite · iPhone · iPad · Mac',
@@ -901,6 +931,11 @@
       g: ['LIVE', '109', 'tests'], stat: ['from $3', 'holiday cards'],
       back: ['The holiday version went from a blocked spec to a live, paid product in one evening.', 'Fulfillment only fires from a verified payment; addresses are verified before anyone is charged.', 'An AI assistant can build your card list. You approve it inside PicPost.'],
       links: [['picpost.io', 'https://picpost.io'], ['case file', 'apps/picpost.html']] },
+    { n: 'Codewrights', cert: '0584f45', hue: 'codewrights', art: 'gen:checks', type: 'client portal + weekly AI health check',
+      flav: 'Small-business sites with a portal, automatic search and brand checks, and a weekly AI review of every one.',
+      g: ['LIVE', '241', 'tests'], stat: ['78 → 100', 'agent-ready score'],
+      back: ['A request filed in the portal becomes a shipped change and a “live now” note.', 'Every month: what ChatGPT, Gemini, Claude and Perplexity say about each business.', 'AI spend tracked per site, and kept to pocket change.'],
+      links: [['codewrights.io', 'https://codewrights.io']] },
     { n: 'Mispronounced', cert: '1a63169', hue: 'mis', art: 'mispronounced', pos: '0% 50%', type: 'AI accent test',
       flav: 'Talk for a minute. It tells you what gives your accent away — down to the word.',
       g: ['LIVE', '279', 'tests'], stat: ['$3', 'unlocks a run'],
@@ -969,9 +1004,9 @@
   ]
   // three sheets, no tabs: what runs every day, what people pay for, what I made for people I like
   const SHEETS = [
-    ['the machinery', 'runs every day, mostly unattended', ['Weave', 'Burrow', 'Traffic', 'Misra', 'Hushbin', 'OurWorkshop']],
+    ['the machinery', 'runs every day, mostly unattended', ['Weave', 'Burrow', 'Traffic', 'Codewrights', 'Misra', 'OurWorkshop']],
     ['out in the world', 'things people pay for', ['Spitball', 'Ember', 'PicPost', 'Mispronounced', 'Miscolored', 'PetalPost']],
-    ['for people I like', 'family, friends, my town', ['Know That?', 'Hunch', 'TV Cal', 'Car wash reviews', 'MH Build Studio', 'Cleanup Quest']],
+    ['for people I like', 'family, friends, my town, me', ['Know That?', 'Hunch', 'TV Cal', 'Car wash reviews', 'MH Build Studio', 'Cleanup Quest', 'Hushbin']],
   ]
   const byName = Object.fromEntries(CARDS.map((c) => [c.n, c]))
   CARDS.splice(0, CARDS.length, ...SHEETS.flatMap(([, , names]) => names.map((n) => byName[n])))
@@ -1010,6 +1045,7 @@
         svg += `<text x="${hub.x}" y="160" text-anchor="middle" style="font:600 10px var(--font-display);fill:#f1f2f5;${halo}">mispronounced.io</text><text x="${hub.x}" y="170" text-anchor="middle" style="font:400 7.5px var(--font-mono);letter-spacing:.4px;fill:#5fe3f2;${halo}">575 visits</text>`
         return `<div class="gen" style="background:#0b0b10"><svg viewBox="0 0 260 179" role="img" aria-label="Where visits to mispronounced.io came from and where they landed" style="position:absolute;inset:0;width:100%;height:100%">${svg}</svg></div>`
       }
+      case 'checks': return `<div class="gen" style="background:radial-gradient(110% 110% at 20% 0%,#2a2350,#0b0e15 70%);padding:9% 8%;display:grid;gap:5px;align-content:center">${[['AI answers', 'named · linked'], ['search health', '20 checks'], ['paperwork', 'renews in 41 d'], ['traffic', 'live']].map(([a, b]) => `<span style="display:flex;justify-content:space-between;align-items:center;gap:6px;padding:4px 7px;border-radius:5px;background:rgba(157,139,255,.14);border:1px solid rgba(157,139,255,.35);font:500 9px var(--font-mono);color:#e4defd"><span>✓ ${a}</span><span style="opacity:.6">${b}</span></span>`).join('')}</div>`
       case 'hunch': return `<div class="gen" style="background:repeating-linear-gradient(90deg,#1f5a2a 0 22px,#236a31 22px 44px)"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 43px,rgba(255,255,255,.55) 43px 45px)"></div><span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-4deg);background:#fff;color:#123;padding:6px 12px;border-radius:6px;font:800 16px var(--font-display)">MY TAKE ✓</span></div>`
       case 'cleanup': return `<div class="gen" style="background:linear-gradient(180deg,#2a2440,#141024)">${[['#ffd166', 12, 58, 14], ['#ef476f', 30, 66, -10], ['#06d6a0', 50, 54, 8], ['#118ab2', 68, 64, -6], ['#ffd166', 82, 58, 18]].map(([c, x, y, r]) => `<span style="position:absolute;left:${x}%;top:${y}%;width:26px;height:26px;border-radius:5px;background:${c};transform:rotate(${r}deg);box-shadow:0 6px 0 rgba(0,0,0,.3)"></span>`).join('')}<span class="gtag" style="color:#ffd166">put the blue block in the bin</span></div>`
     }
