@@ -56,9 +56,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/shift.css?v=20261044" />
+<link rel="stylesheet" href="assets/shift.css?v=20261045" />
 <script src="assets/traffic.js" defer></script>
-<script src="assets/shift.js?v=20261043" defer></script>
+<script src="assets/shift.js?v=20261045" defer></script>
 </head>
 <body>
 <a class="skip" href="#climb">Skip to the stack</a>
@@ -234,7 +234,7 @@
           <div class="lv"><span>L6</span> cloud reporting</div>
           <h3>Then the company reads all of them.</h3>
           <p>Each plant runs on its own. A hub at every site rolls its numbers up to the cloud <b>every minute</b>, so the people running a company of plants see one picture instead of forty phone calls.</p>
-          <p>The fleet is the hard part: 400+ plants, each its own building, floor plan and set of machines. One afternoon this fall, AI agents carried a single change across ~300 plant repos in about an hour. That story is on the night shift, below.</p>
+          <p>The fleet is the hard part: 400+ plants, each its own building, floor plan and set of machines.</p>
           <div class="stack-chips"><span>edge hub per plant</span><span>1-minute rollup</span><span>multi-tenant warehouse</span></div>
         </article>
         <article class="step" data-layer="7" data-clock="16">
@@ -375,28 +375,10 @@
       <figcaption class="small mono"><span class="acc">fig. 03</span> — Burrow, condensed from its own map: 29 feeds, 18 graphs, 27 profiles. Current shows where work moves. Pink is the authority that decides, and it's never the model that wrote the change.<span class="swipe"> Swipe the map.</span></figcaption>
     </figure>
 
-    <figure class="fleet rise" id="fleet">
-      <div class="fleet-head">
-        <div>
-          <div class="kicker"><span class="acc">fig. 04</span> — one change, the whole fleet</div>
-          <h3>One afternoon. About an hour. Every plant.</h3>
-          <p class="prose">A rename in eVue had to reach every plant's own code. AI agents scanned <b>296 plant repositories</b>, found the 112 that needed it, and opened <b>86 pull requests</b>: 15 agents on the changes that needed judgment, 97 on the mechanical ones. 42 merged that afternoon. 14 were held on purpose, because merging them early would have collided with an upgrade those plants already had in flight.</p>
-        </div>
-        <dl class="fleet-legend">
-          <div><dt><i class="sw s"></i>scanned</dt><dd>296</dd></div>
-          <div><dt><i class="sw n"></i>needed it</dt><dd>112</dd></div>
-          <div><dt><i class="sw p"></i>pull requests</dt><dd>86</dd></div>
-          <div><dt><i class="sw m"></i>merged that day</dt><dd>42</dd></div>
-          <div><dt><i class="sw h"></i>held on purpose</dt><dd>14</dd></div>
-        </dl>
-      </div>
-      <div class="fleet-grid" id="fleet-grid" aria-hidden="true"></div>
-    </figure>
-
     <div class="year rise" style="margin-top:clamp(56px,7vw,96px)">
       <div class="year-head">
         <div>
-          <div class="kicker"><span class="acc">fig. 05</span> — the year, one month at a time</div>
+          <div class="kicker"><span class="acc">fig. 04</span> — the year, one month at a time</div>
           <div class="bignum" id="yearnum" aria-live="off">0</div>
         </div>
         <div class="bignum-l">commits · 366 days<br><span id="over" class="over" aria-hidden="true">it's over 9000</span></div>

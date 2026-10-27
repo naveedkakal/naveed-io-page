@@ -953,25 +953,6 @@
     if (reduced) $$('animateMotion', fac).forEach((a) => a.remove())
   }
 
-  // ── the fleet sweep: one change through every plant's repo ──
-  const fg = $('#fleet-grid')
-  if (fg) {
-    // 296 repos scanned → 112 needed it → 86 PRs (42 merged, 14 held, 30 still open) → 26 left for later
-    const kinds = [...Array(42).fill('m'), ...Array(14).fill('h'), ...Array(30).fill('p'), ...Array(26).fill('n'), ...Array(184).fill('s')]
-    for (let i = kinds.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [kinds[i], kinds[j]] = [kinds[j], kinds[i]] }
-    fg.innerHTML = kinds.map((k) => `<i data-k="${k}"></i>`).join('')
-    const cells = $$('i', fg)
-    const settle = () => cells.forEach((c) => c.classList.add(c.dataset.k))
-    if (reduced) settle()
-    else new IntersectionObserver((es, o) => es.forEach((e) => {
-      if (!e.isIntersecting) return
-      o.disconnect()
-      // first the scan sweeps every repo, then the results land
-      cells.forEach((c, i) => setTimeout(() => c.classList.add('s'), i * 4))
-      cells.forEach((c, i) => setTimeout(() => { c.classList.remove('s'); c.classList.add(c.dataset.k) }, 1400 + Math.random() * 1600))
-    }), { threshold: 0.3 }).observe(fg)
-  }
-
   // ── the year, hung from a rail ───────────────────────
   const MONTHS = [43, 833, 208, 506, 411, 340, 283, 637, 491, 1274, 2358, 1897, 1121]
   const LABELS = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']
