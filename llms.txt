@@ -1,6 +1,6 @@
 # naveed.io — Naveed Kakal
 
-> Naveed Kakal is Director of Software Development at Kannegiesser ETECH. He has spent
+> Naveed Kakal is Lead Developer at Kannegiesser ETECH. He has spent
 > two decades building the software that runs industrial laundry plants — plant-floor
 > state management, PLC/machine communications, telemetry, and the teams that ship them.
 > This site is his dossier: case files and field notes drawn from recorded interviews
@@ -28,7 +28,7 @@
 - August 2026: 10,000th commit on the record.
 - October 2026: On site in Hong Kong for Vogue's eVue 5 → v26 upgrade (layout, PLC,
   network and fiber work included); 36-hour window, most of the system running in under 20.
-- Today: Director of Software Development, Kannegiesser ETECH; 400+ plants run eVue.
+- Today: Lead Developer, Kannegiesser ETECH; 400+ plants run eVue.
 
 ## Working principles
 
