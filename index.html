@@ -56,9 +56,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/shift.css?v=20261028" />
+<link rel="stylesheet" href="assets/shift.css?v=20261035" />
 <script src="assets/traffic.js" defer></script>
-<script src="assets/shift.js?v=20261028" defer></script>
+<script src="assets/shift.js?v=20261035" defer></script>
 </head>
 <body>
 <a class="skip" href="#climb">Skip to the stack</a>
@@ -79,7 +79,7 @@
   <a href="#top"><span class="h">06:00</span><span>the short version</span></a>
   <a href="#climb"><span class="h">07:00</span><span>§ 01 the stack, bottom up</span></a>
   <a href="#break"><span class="h">16:30</span><span>§ 02 try to break it</span></a>
-  <a href="#steward"><span class="h">17:00</span><span>§ 03 I take care of things</span></a>
+  <a href="#steward"><span class="h">17:00</span><span>§ 03 the long run</span></a>
   <a href="#dusk"><span class="h">18:00</span><span>shift change</span></a>
   <a href="#ai"><span class="h">22:00</span><span>§ 04 then AI showed up</span></a>
   <a href="#binder"><span class="h">23:30</span><span>§ 05 the binder</span></a>
@@ -107,7 +107,7 @@
 
     <div class="hero-grid">
       <div class="rise in" style="transition-delay:.08s">
-        <p class="intro">For twenty years I've written the software that runs industrial laundries: the biggest ones, washing for hospitals, hotels and airlines around the clock. Not one layer of it. <b>All of them</b>: the I/O on the floor, the PLC programs, the screens operators work from, the plant's own reports, the cloud rollup across <b>400+ plants</b>, and the app that buzzes a supervisor's phone. <b>And not as one of many hands.</b> It's a small team: I've always been at least half of it, and most years I've been the only one building new things. Electrical engineer. IC at heart. Lately, the nights belong to AI.</p>
+        <p class="intro">For twenty years I've written the software that runs industrial laundries: the biggest ones, washing for hospitals, hotels and airlines around the clock. Not one layer of it. <b>All of them</b>: the sensors on the floor, the controller programs that run the machines, the screens operators work from, the plant's own reports, the cloud rollup across <b>400+ plants</b>, and the app that buzzes a supervisor's phone. <b>And not as one of many hands.</b> It's a small team: I've always been at least half of it, and most years I've been the only one building new things. Electrical engineer. IC at heart. Lately, the nights belong to AI.</p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#climb">Climb the stack <span aria-hidden="true">↓</span></a>
           <a class="btn" href="#binder">Skip to the builds <span aria-hidden="true">→</span></a>
@@ -123,7 +123,7 @@
           <h3>Lead Developer, Kannegiesser ETECH. Material handling.</h3>
           <ul>
             <li>Twenty years writing software for the hardest stuff to move: dirty laundry.</li>
-            <li>Every layer, from a photo-eye on the rail to a push notification in a pocket.</li>
+            <li>Every layer, from a sensor on a conveyor to a push notification in a pocket.</li>
             <li>Hands-on. I'm an IC at heart.</li>
           </ul>
         </div>
@@ -162,30 +162,30 @@
     <div class="climb-grid">
       <div class="steps">
         <article class="step" data-layer="1" data-clock="7">
-          <div class="lv"><span>L1</span> I/O · the floor</div>
+          <div class="lv"><span>L1</span> I/O · sensors &amp; motors</div>
           <h3>Everything starts as a bit.</h3>
-          <p>A photo-eye sees a bag go by. A load cell weighs it, and in this business weight is money. A drive spins a lift. Bus couplers turn hundreds of these into network traffic: one plant I support runs <b>132 networked I/O panels</b>.</p>
-          <p>In my second week on the record, March 2009, I started the habit that became our testing standard: <b>click to force</b>. Click any sensor in the software and the plant acts as if a real bag had tripped it. <span class="try">Tap a ◆ on the rail to try it.</span></p>
-          <div class="stack-chips"><span>photo-eyes</span><span>load cells</span><span>Phoenix Contact bus couplers</span><span>Danfoss drives</span></div>
+          <p>A photo-eye sees an item go by. A proximity switch confirms a gate is closed. A scale weighs a load, and in this business weight is money. A motor drive moves a conveyor, a reader tells one kind of item from another, and a switch sends each down its own track. Each of those is a wire, and panels of network modules gather hundreds of them onto the plant network: one plant I support has <b>132 of those panels</b>.</p>
+          <p>In my second week on the record, March 2009, I started the habit that became our testing standard: <b>click to force</b>, a test tool for commissioning a plant, not something left on in production. Click any sensor in the software and the plant acts as if a real item were sitting there, so whatever is coming up behind it stops and waits. <span class="try">Tap a ◆ on the conveyor to force it on; tap again to let go.</span></p>
+          <div class="stack-chips"><span>photo-eyes</span><span>proximity switches</span><span>scales</span><span>motor drives</span><span>networked I/O</span></div>
         </article>
         <article class="step" data-layer="2" data-clock="8.5">
           <div class="lv"><span>L2</span> machine control</div>
           <h3>I don't hand-write the PLC programs. I generate them.</h3>
-          <p>Each plant's database describes its rails, lifts and panels. A generator I maintain turns that into the B&amp;R PLC program: <b>129 device types, 123 PLCs</b> in the fleet, and a hash check that proves a change didn't move a byte it shouldn't.</p>
+          <p>The PLC is the plant's industrial controller: it reads the sensors and runs the motors, many times a second. When I started, we wrote those programs by hand, plant by plant. One of the first things I did was turn our standards into a generator: describe a plant's conveyors, lifts and panels once, and the program writes itself. <b>Fewer errors, much faster projects</b>, and a small team that could take on far more of them at once. Today it covers <b>129 device types and 123 PLCs</b>, with a hash check that proves a change didn't move a byte it shouldn't.</p>
           <p>Talking to the PLC has had three lives: SOAP from Rails in 2007, an Elixir service I started in 2019, an OPC UA bridge today. One rule survived all three. <b>Never act on a stale sensor.</b> Read it again, live, before releasing anything.</p>
-          <div class="stack-chips"><span>B&amp;R Automation Studio</span><span>Structured Text</span><span>OPC UA</span><span>Modbus TCP</span><span>CANopen</span><span>POWERLINK</span></div>
+          <div class="stack-chips"><span>B&amp;R controllers</span><span>generated programs</span><span>OPC UA</span><span>Modbus TCP</span></div>
         </article>
         <article class="step" data-layer="3" data-clock="10">
           <div class="lv"><span>L3</span> screens &amp; workflows</div>
           <h3>Then a person has to run it.</h3>
-          <p>In 2007 the operator screens were a per-seat license. The floor wanted eyes everywhere; the invoice said pick two. So we made the screen a web page.</p>
-          <p>That became <b>eVue</b>: routing over the rail graph, storage lanes, sort stations, operator logins by task, an autopilot that decides which batch goes next, and alarms that say in plain words <b>why a bag isn't moving</b>. Today it runs on Rails 8 and React 19, brought forward plant by plant, never rewritten.</p>
-          <div class="stack-chips"><span>eVue</span><span>Rails</span><span>React</span><span>since 2007</span></div>
+          <p>In 2007 the operator screens were a per-seat license. The floor wanted eyes everywhere; the invoice said pick two. So we made the screen a web page, and for nearly twenty years <b>eVue</b> has set the bar for what a laundry's screens can be: a live picture of the whole plant, every item moving through it, and alarms that say in plain words <b>why something isn't moving</b>.</p>
+          <p>And no two laundries work the same way. A hospital plant, a hotel plant and an airline plant each sort, store and send work through in their own order. So eVue is <b>configured, not rebuilt</b>, for each one: every station shows its operator just what they need to do that task right, not one generic screen for everything.</p>
+          <div class="stack-chips"><span>eVue</span><span>live plant view</span><span>configured per plant</span><span>since 2007</span></div>
         </article>
         <article class="step" data-layer="4" data-clock="12">
           <div class="lv"><span>L4</span> local reporting</div>
           <h3>The plant reads its own numbers.</h3>
-          <p>Every rail visit, machine visit and login is a row, so the plant can answer for itself: throughput by the hour, dryer time, sort use, and operator productivity that's fair to the operator. Plus <b>a 6 a.m. report email someone actually opens</b>.</p>
+          <p>Every time an item passes a sensor, a machine finishes a load or an operator logs in, it's a row in a database. So the plant can answer for itself: output by the hour, how long each machine runs, how busy each station is, and operator productivity that's fair to the operator. Plus <b>a 6 a.m. report email someone actually opens</b>.</p>
           <p>All of it lives on the plant's own server. <b>When the internet goes down, the floor doesn't notice.</b></p>
           <div class="stack-chips"><span>KPI dashboards</span><span>labor standards</span><span>scheduled reports</span></div>
         </article>
@@ -224,16 +224,16 @@
     <div class="plant rise" id="plant">
       <div class="plant-bar">
         <span class="kicker"><span class="acc">fig. 02</span> — a laundry line, simplified</span>
-        <span class="hint">tap a <span style="color:var(--fg)">◆</span> sensor to force it</span>
+        <span class="hint">tap a <span style="color:var(--fg)">◆</span> sensor to force it on (a test tool), again to let go</span>
       </div>
       <div class="plant-stage" id="plant-stage"></div>
-      <div class="console"><span class="out" id="plant-out" aria-live="polite">Bags in, soiled and heavy. Watch the tags: soiled, wet and heavier, dry and lighter, folded.</span><span class="cnt" id="plant-cnt">0 through</span></div>
+      <div class="console"><span class="out" id="plant-out" aria-live="polite">Laundry in, dirty and heavy. Watch the tags: heavier when wet, lighter when dry, then folded.</span><span class="cnt" id="plant-cnt">0 through</span></div>
       <div class="switches" id="switches">
         <button type="button" class="sw" data-sw="wan" aria-pressed="false"><b>Cut the internet</b><span>The plant doesn't notice. The cloud catches up when it's back.</span></button>
         <button type="button" class="sw" data-sw="halt" aria-pressed="false"><b>Halt one side</b><span>Only that side stops. The rest of the plant keeps working.</span></button>
         <button type="button" class="sw" data-sw="stale" aria-pressed="false"><b>Make a sensor lie</b><span>Never act on a stale sensor. When in doubt, read it again.</span></button>
       </div>
-      <div class="small mono" style="padding:8px 14px 12px">an illustration, not a real plant. Tap a stopped bag to ask it why.</div>
+      <div class="small mono" style="padding:8px 14px 12px">an illustration, not a real plant. Tap a stopped item to ask it why.</div>
     </div>
   </div>
 </section>
@@ -241,11 +241,13 @@
 <!-- ═══════════ § 03 — steward (day) ═══════════ -->
 <section class="sec day" id="steward" aria-labelledby="h-steward" data-clock="17">
   <div class="wrap">
-    <div class="sec-head"><div class="kicker"><span class="acc">§ 03</span> — the boring superpower</div><div class="kicker">twenty years, one domain</div></div>
-    <h2 class="h-sec" id="h-steward">I don't leave. <span class="stroke">I take care of things.</span></h2>
+    <div class="sec-head"><div class="kicker"><span class="acc">§ 03</span> — the long run</div><div class="kicker">twenty years, one domain</div></div>
+    <h2 class="h-sec" id="h-steward">I stay for <span class="stroke">the results.</span></h2>
+    <p class="lead rise" style="max-width:34ch">The decisions I make this year are the ones I get to check in year three. <span class="dim">That's the part I like.</span></p>
 
     <div class="bio">
       <div class="prose rise">
+        <p>A lot of software gets put in place by someone who's gone before anyone knows whether it worked. I'd rather stay and take care of it. My main codebase started in 2007 and has never been rewritten, so <b>every lesson from year one shows up in a later version</b>, and every call I make today is one I'll be around to validate, or to fix.</p>
         <p>Before laundry there was a car wash: nine years at Royal Oaks in Shoreview, Minnesota, ending as the manager. In 2006 an industrial controls company hired me, fresh out of electrical engineering, on a hunch that car washes and laundries have a lot in common. <b>They do.</b> Machines, water, valuable things moving through a tunnel on a schedule, and nobody can stop the line.</p>
         <p>I left once, for two and a half years of Chicago tech at Centro. I wrote better software there and solved fewer problems per developer dollar, got promoted to engineering manager, and learned I'm an IC at heart. Then a prank phone call brought me home, just as Kannegiesser acquired ETECH.</p>
         <p>Today I'm Lead Developer at Kannegiesser ETECH. <b>The building can't stop, so the software can't either</b>, and I'm still the one who gets on the plane.</p>
@@ -291,7 +293,7 @@
     <div class="rules">
       <div class="rise"><div class="r">R-01 · learned at Centro</div><h4>Count problems solved per developer dollar.</h4><p>Well-run teams can still produce a flotilla of blah. The ledger that matters is what the floor stopped suffering.</p></div>
       <div class="rise" style="transition-delay:.06s"><div class="r">R-02</div><h4>Remove the seams.</h4><p>Responsibility leaks out through the joints between specialists. I'd rather own the stack top to bottom than hand off at every floor.</p></div>
-      <div class="rise" style="transition-delay:.12s"><div class="r">R-03</div><h4>Speak the floor's language.</h4><p>Sling, rail, batch. When the software uses the floor's own words, the floor can tell when the software is wrong.</p></div>
+      <div class="rise" style="transition-delay:.12s"><div class="r">R-03</div><h4>Speak the floor's language.</h4><p>Use the words operators use, not the ones engineers invent. When the software talks like the floor, the floor can tell when it's wrong.</p></div>
       <div class="rise"><div class="r">R-04</div><h4>Let reality win.</h4><p>When the plant and its digital picture disagree, ask a human what happened, and offer only answers that can physically occur.</p></div>
       <div class="rise" style="transition-delay:.06s"><div class="r">R-05</div><h4>Chase the bottleneck, not the fashion.</h4><p>I moved my analytics service from Rails to Rust in a day. I kept the PLC bridge in Node: the PLC is the slow part, and a rewrite would reopen nine solved production bugs.</p></div>
       <div class="rise" style="transition-delay:.12s"><div class="r">R-06</div><h4>Improve the condemned.</h4><p>Push a dying system as far as it will go. Its real limits, not the rumored ones, become the spec for whatever replaces it.</p></div>
@@ -357,7 +359,7 @@
     <div class="year rise" style="margin-top:clamp(56px,7vw,96px)">
       <div class="year-head">
         <div>
-          <div class="kicker"><span class="acc">fig. 04</span> — the year, hung from a rail</div>
+          <div class="kicker"><span class="acc">fig. 04</span> — the year, one month at a time</div>
           <div class="bignum" id="yearnum" aria-live="off">0</div>
         </div>
         <div class="bignum-l">commits · 366 days<br><span id="over" class="over" aria-hidden="true">it's over 9000</span></div>

@@ -75,7 +75,7 @@
 
   // ── § 01 — the climb: a tower that lights up layer by layer ──
   const LAYERS = ['I/O', 'control', 'screens', 'plant', 'cloud', 'mobile']
-  const LONG = ['I/O · the floor', 'machine control', 'screens & workflows', 'local reporting', 'cloud reporting', 'mobile · Pulse']
+  const LONG = ['I/O · sensors & motors', 'machine control', 'screens & workflows', 'local reporting', 'cloud reporting', 'mobile · Pulse']
   const steps = $$('.step[data-layer]'), towerStage = $('#tower-stage'), towerAt = $('#tower-at')
   let layer = 1
   const tower = towerStage ? buildTower() : null
@@ -92,10 +92,19 @@
   }
 
   function buildTower() {
-    const SENS = [0.18, 0.4, 0.62, 0.84]
-    const MSGS = ['bag 0412 · waiting on storage lane 3', 'sort 2 · 14 bags · operator logged in', 'autopilot · calling lane 7 to the tunnel', 'dryer 4 · door open · bag held', 'rail 12 · clear']
-    const NOTES = ['Dryer 4 · door open 6 min', 'Tunnel · 1,240 pcs/hr · on target', 'Storage 92% full · soil side', 'Shift report ready · 06:00']
-    let G, svg, bags = [], spawnT = 0, last = 0, running = false, pkts = [], kpi = 0, bars = [], msgI = 0, noteI = 0, noteT = 0, msgT = 0, forcedT = null
+    const SENS = [0.12, 0.28, 0.44, 0.58]   // the second one is the reader that tells items apart
+    const SW = 0.66                           // where the switch splits the conveyor into tracks A and B
+    const CLS = ['#5bc8ff', '#f2b100']        // the two kinds of item, once the reader has seen them
+    // the same sort station, configured three ways: each plant sees only what its own workflow needs
+    const PROFILES = [
+      ['hospital', [['gowns', '#5bc8ff'], ['sheets', '#3ddc84'], ['scrubs', '#9d8bff']]],
+      ['hotel', [['towels', '#f2b100'], ['sheets', '#3ddc84'], ['robes', '#ff7694']]],
+      ['airline', [['blankets', '#5bc8ff'], ['napkins', '#f2b100'], ['headrests', '#ff5a5f']]],
+    ]
+    const STATES = ['idle', 'ready', 'lifting', 'release']
+    const NOTES = ['Dryer 4 · door open 6 min', 'Washers · 1,240 pcs/hr · on target', 'Storage 92% full', 'Shift report ready · 06:00']
+    let G, svg, bags = [], spawnT = 0, last = 0, running = false, pkts = [], kpi = 0, bars = [], rate = 1240, run = 94, faults = 2, faultAt = [6, 15], noteI = 0, noteT = 0, msgT = 0, forcedT = null, state = 0, rxT = 0
+    const forced = new Set()   // sensors forced ON: the controller thinks that spot is taken
 
     function geom() {
       const W = towerStage.clientWidth, H = towerStage.clientHeight, pad = 10, gap = 6
@@ -108,7 +117,7 @@
       G = geom()
       if (G.W < 50 || G.H < 120) return
       const { W, H, bh, top, cx0, cx1, cw } = G
-      let s = ''
+      let s = `<defs><marker id="tw-arr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#8b93a3" stroke-width="1.6"/></marker></defs>`
       for (let i = 0; i < 6; i++) {
         const y = top(i)
         s += `<g class="lyr" data-l="${i + 1}"><rect class="band" x="6" y="${y}" width="${W - 12}" height="${bh}" rx="10"/>`
@@ -126,24 +135,50 @@
       towerStage.innerHTML = ''
       towerStage.append(svg)
       $$('.sensor', svg).forEach((el) => {
-        const go = () => { fire(+el.dataset.i); forcedT = performance.now(); towerAt.textContent = `FORCE ◆${+el.dataset.i + 1} → ON` }
+        const k = +el.dataset.i
+        const go = () => {
+          const on = !forced.has(k)
+          on ? forced.add(k) : forced.delete(k)
+          paintForced()
+          if (on) fire(k)
+          forcedT = performance.now()
+          towerAt.textContent = on ? `TEST FORCE ◆${k + 1} ON · line holds` : `TEST FORCE ◆${k + 1} OFF · line moves`
+        }
         el.addEventListener('click', go)
         el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go() } })
       })
       bags.forEach((b) => { b.el = null; b.dot = null })
       pkts = []
+      paintForced()
+      paintState()
+      paintProfile()
       setLayer(layer)
       draw()
     }
-    const railY = () => G.top(0) + G.bh * 0.66
+    const railY = () => G.top(0) + G.bh * (G.bh < 64 ? 0.5 : 0.6)
     const sx = (f) => G.cx0 + (G.cx1 - 10 - G.cx0) * f
+    // where an item is at t: along the main line, then eased onto track A (up) or B (down) after the switch
+    function route(t, cls, x0, x1, y0, d) {
+      const x = x0 + (x1 - x0) * Math.min(t, 1)
+      if (t <= SW) return [x, y0]
+      const k = Math.min(1, (t - SW) / 0.08), e = k * k * (3 - 2 * k)
+      return [x, y0 + (cls ? d : -d) * e]
+    }
+    const branch = (x0, x1, y0, dd) => { const X = (t) => x0 + (x1 - x0) * t; return `M${X(SW)} ${y0} C ${X(SW + 0.04)} ${y0}, ${X(SW + 0.04)} ${y0 + dd}, ${X(SW + 0.08)} ${y0 + dd} L${x1} ${y0 + dd}` }
     function layerArt(i, y) {
       const { bh, cx0, cx1, cw } = G, cy = y + bh / 2
       const tight = bh < 64   // phone: the bands are short, so the captions go and only the drawing stays
       if (i === 0) {
-        const ry = y + bh * 0.66
-        let a = tight ? '' : `<text class="ink-3" x="${cx0}" y="${y + 18}" style="font-size:9.5px">photo-eyes · load cells · drives</text>`
-        a += `<line class="rail" x1="${cx0}" y1="${ry}" x2="${cx1 - 10}" y2="${ry}"/><g id="tw-bags"></g>`
+        const ry = railY(), d = Math.min(bh * 0.2, tight ? 9 : 15), x0 = sx(0), x1 = sx(1)
+        G.fd = d
+        let a = tight ? '' : `<text class="ink-3" x="${cx0}" y="${y + 18}" style="font-size:9.5px">sensors · a reader · a switch · two tracks</text>`
+        a += `<line class="rail" x1="${x0}" y1="${ry}" x2="${sx(SW)}" y2="${ry}"/>`
+        ;[-d, d].forEach((dd) => { a += `<path class="rail" d="${branch(x0, x1, ry, dd)}" style="fill:none"/>` })
+        if (!tight) {
+          a += `<text class="ink-3" x="${sx(SENS[1])}" y="${ry + 20}" text-anchor="middle" style="font-size:8.5px">reader</text>`
+          a += `<text x="${x1 + 4}" y="${ry - d + 3}" style="font-size:8.5px;fill:${CLS[0]};font-weight:700">A</text><text x="${x1 + 4}" y="${ry + d + 3}" style="font-size:8.5px;fill:${CLS[1]};font-weight:700">B</text>`
+        }
+        a += `<g id="tw-gate" transform="translate(${sx(SW)} ${ry})"><line class="gate" x1="-2" y1="0" x2="${tight ? 10 : 14}" y2="0"/></g><g id="tw-bags"></g>`
         SENS.forEach((f, k) => {
           const x = sx(f)
           a += `<g class="sensor" data-i="${k}" tabindex="0" role="button" aria-label="Force sensor ${k + 1}"><circle cx="${x}" cy="${ry}" r="16" fill="transparent"/><rect class="d" x="${x - 6}" y="${ry - 6}" width="12" height="12" transform="rotate(45 ${x} ${ry})"/></g>`
@@ -151,29 +186,70 @@
         return a
       }
       if (i === 1) {
-        const w = Math.min(230, cw * 0.62), h = bh * 0.64, x = cx0, by = y + bh * 0.18
+        // the controller: input lights (green), output lights (red), a network port with TX/RX
+        const w = Math.min(210, cw * 0.52), h = bh * 0.72, x = cx0, by = y + bh * 0.14
         let a = `<rect class="dark" x="${x}" y="${by}" width="${w}" height="${h}" rx="6"/><text x="${x + 10}" y="${by + (tight ? 11 : 15)}" style="font-size:${tight ? 8 : 9.5}px;fill:#a2a8b4">PLC · generated</text>`
-        for (let k = 0; k < 8; k++) a += `<circle class="led" data-o="${k}" cx="${x + 14 + k * 14}" cy="${by + h * (tight ? 0.74 : 0.7)}" r="${tight ? 3 : 3.6}"/>`
-        if (!tight) a += `<text x="${x + 14 + 8 * 14}" y="${by + h * 0.7 + 3}" style="font-size:8.5px;fill:#6b7280">in · out</text>`
-        // wires from each sensor on the floor up to its input LED
-        SENS.forEach((f, k) => { a += `<path class="wire" d="M${sx(f)} ${railY() - 9} L${x + 14 + k * 14} ${by + h}"/>` })
-        const mr = Math.min(bh * 0.28, 17), mx = Math.min(cx1 - mr - 6, x + w + 22 + mr)
-        if (mx - mr > x + w + 6) a += `<circle class="box" cx="${mx}" cy="${cy}" r="${mr}"/><g id="tw-rotor" transform="translate(${mx} ${cy})"><line x1="0" y1="${-mr + 4}" x2="0" y2="${mr - 4}" style="stroke:var(--acc);stroke-width:2;stroke-linecap:round"/></g>${tight ? '' : `<text class="ink-3" x="${mx}" y="${cy + mr + 11}" text-anchor="middle" style="font-size:8.5px">drive</text>`}`
+        const r1 = by + h * (tight ? 0.52 : 0.5), r2 = by + h * (tight ? 0.82 : 0.78), lr = tight ? 2.8 : 3.4
+        a += `<text x="${x + 10}" y="${r1 + 3}" style="font-size:8px;fill:#6b7280">in</text><text x="${x + 10}" y="${r2 + 3}" style="font-size:8px;fill:#6b7280">out</text>`
+        for (let k = 0; k < 4; k++) {
+          a += `<circle class="led in" data-o="${k}" cx="${x + 36 + k * 13}" cy="${r1}" r="${lr}"/>`
+          a += `<circle class="led out" data-q="${k}" cx="${x + 36 + k * 13}" cy="${r2}" r="${lr}"/>`
+        }
+        const px = x + w - 30, py = by + h * 0.6
+        a += `<rect x="${px}" y="${py - 7}" width="20" height="15" rx="2" style="fill:#151a23;stroke:#3f4a5c"/><rect x="${px + 6}" y="${py + 3}" width="8" height="5" style="fill:#3f4a5c"/>`
+        a += `<circle class="led tx" cx="${px + 4}" cy="${py - 11}" r="2.2"/><circle class="led rx" cx="${px + 16}" cy="${py - 11}" r="2.2"/>`
+        if (!tight) a += `<text x="${px + 10}" y="${py + 19}" text-anchor="middle" style="font-size:7.5px;fill:#6b7280">tx · rx</text>`
+        // wires from each sensor on the floor up to its input light
+        SENS.forEach((f, k) => { a += `<path class="wire" d="M${sx(f)} ${railY() - 9} L${x + 36 + k * 13} ${by + h}"/>` })
+        // a mini state machine: one device stepping through its states as items arrive
+        const s0 = x + w + 18, s1 = cx1 - 8, sw = s1 - s0
+        if (sw > 70) {
+          const mx = s0 + sw / 2, dx = Math.min(sw * 0.3, 58), dy = Math.min(bh * 0.24, 17), nr = tight ? 4.5 : 6
+          const P = [[mx - dx, cy - dy], [mx + dx, cy - dy], [mx + dx, cy + dy], [mx - dx, cy + dy]]
+          P.forEach(([x0, y0], n) => {
+            const [x1, y1] = P[(n + 1) % 4], L = Math.hypot(x1 - x0, y1 - y0), ux = (x1 - x0) / L, uy = (y1 - y0) / L, g = nr + 3
+            a += `<line class="smw" x1="${(x0 + ux * g).toFixed(1)}" y1="${(y0 + uy * g).toFixed(1)}" x2="${(x1 - ux * (g + 2)).toFixed(1)}" y2="${(y1 - uy * (g + 2)).toFixed(1)}" marker-end="url(#tw-arr)"/>`
+          })
+          P.forEach(([px0, py0], n) => {
+            a += `<circle class="sm" data-s="${n}" cx="${px0}" cy="${py0}" r="${nr}"/>`
+            if (!tight) a += `<text class="sml" data-s="${n}" x="${px0}" y="${n < 2 ? py0 - nr - 5 : py0 + nr + 11}" text-anchor="middle">${STATES[n]}</text>`
+          })
+          if (!tight) a += `<text class="ink-3" x="${mx}" y="${cy + 3}" text-anchor="middle" style="font-size:8px">lift</text>`
+        }
         return a
       }
       if (i === 2) {
-        const w = Math.min(340, cw * 0.9), h = bh * 0.78, x = cx0, by = y + bh * 0.11
-        let a = `<rect class="dark" x="${x}" y="${by}" width="${w}" height="${h}" rx="6"/>${tight ? '' : `<text x="${x + 9}" y="${by + 13}" style="font-size:9px;fill:#6b7280">eVue · soil side</text>`}`
-        a += `<line x1="${x + 12}" y1="${by + h * (tight ? 0.34 : 0.5)}" x2="${x + w - 12}" y2="${by + h * (tight ? 0.34 : 0.5)}" style="stroke:#3f4a5c;stroke-width:2;stroke-linecap:round"/><g id="tw-dots"></g>`
-        a += `<text id="tw-msg" x="${x + 9}" y="${by + h - (tight ? 5 : 7)}" style="font-size:${tight ? 8.5 : 9.5}px;fill:#5bc8ff">${MSGS[0]}</text>`
+        // eVue: a live overview of the plant, and a station screen configured for this plant's workflow
+        const w = Math.min(360, cw * 0.92), h = bh * 0.8, x = cx0, by = y + bh * 0.1
+        let a = `<rect class="dark" x="${x}" y="${by}" width="${w}" height="${h}" rx="6"/>`
+        if (!tight) a += `<text x="${x + 9}" y="${by + 12}" style="font-size:8.5px;fill:#6b7280">eVue · live plant view · two routes</text>`
+        const ox = x + 10, oy = by + (tight ? 6 : 20), ow = w * 0.55, oh = h - (tight ? 12 : 28)
+        const q0 = ox + 4, q1 = ox + ow - 34, qy = oy + oh / 2, qd = oh * 0.3, mh = Math.min(oh * 0.36, 16)
+        G.scr = { x0: q0, x1: q1, y0: qy, d: qd }
+        a += `<path class="route" d="M${q0} ${qy} L${q0 + (q1 - q0) * SW} ${qy}"/>`
+        ;[0, 1].forEach((c) => {
+          const dd = c ? qd : -qd
+          a += `<path class="route" data-r="${c}" d="${branch(q0, q1, qy, dd)}"/>`
+          a += `<rect class="mach" data-m="${c}" x="${q1 + 4}" y="${qy + dd - mh / 2}" width="26" height="${mh}" rx="3"/><text x="${q1 + 17}" y="${qy + dd + 3}" text-anchor="middle" style="font-size:${tight ? 7 : 8.5}px;fill:#a2a8b4;font-weight:700">${tight ? 'AB'[c] : 'W' + (c + 1)}</text>`
+        })
+        a += `<g id="tw-dots"></g>`
+        const px = ox + ow + 10, pw = x + w - 8 - px
+        a += `<rect x="${px}" y="${oy}" width="${pw}" height="${oh}" rx="5" style="fill:#151a23;stroke:#2a323f"/><g id="tw-prof" data-x="${px}" data-y="${oy}" data-w="${pw}" data-h="${oh}" data-tight="${tight ? 1 : 0}"></g>`
         return a
       }
       if (i === 3) {
-        const w = Math.min(340, cw * 0.9), h = bh * 0.78, x = cx0, by = y + bh * 0.11
+        // the plant's own dashboard: four live numbers over the day's production, faults marked on it
+        const w = Math.min(360, cw * 0.92), h = bh * 0.8, x = cx0, by = y + bh * 0.1
         let a = `<rect class="box" x="${x}" y="${by}" width="${w}" height="${h}" rx="6"/>`
-        a += `<text id="tw-kpi" class="ink" x="${x + 10}" y="${by + h * 0.55}" style="font:800 ${Math.min(22, bh * 0.3).toFixed(0)}px var(--font-display)">0</text>${tight ? '' : `<text class="ink-3" x="${x + 10}" y="${by + h * 0.55 + 13}" style="font-size:8.5px">pieces today</text>`}`
-        const n = 12, bx0 = x + w * 0.42, bw = (w * 0.58 - 10) / n
-        for (let k = 0; k < n; k++) a += `<rect class="bar" data-b="${k}" x="${(bx0 + k * bw + 1).toFixed(1)}" y="${by + h - 8}" width="${(bw - 2).toFixed(1)}" height="0" rx="1.5"/>`
+        const th = tight ? h - 8 : Math.min(h * 0.5, 42), tw = (w - 10 - 3 * 5) / 4
+        ;[['pieces today', 'ink'], ['pcs / hr', 'ink'], ['runtime', 'ink'], ['faults', 'bad']].forEach(([lab, cls], k) => {
+          const tx = x + 5 + k * (tw + 5), ty = by + 4
+          a += `<rect x="${tx}" y="${ty}" width="${tw}" height="${th}" rx="4" style="fill:var(--bg);stroke:var(--line)"/>`
+          a += `<text class="kv ${cls}" id="tw-k${k}" x="${tx + 6}" y="${ty + (tight ? th / 2 + 4 : th * 0.5 + 3)}" style="font:800 ${tight ? 10.5 : 15}px var(--font-display)">0</text>`
+          if (!tight) a += `<text class="ink-3" x="${tx + 6}" y="${ty + th - 6}" style="font-size:7.5px">${lab}</text>`
+          if (k === 2) a += `<rect x="${tx + tw - 8}" y="${ty + 4}" width="3" height="${th - 8}" rx="1.5" style="fill:var(--line)"/><rect id="tw-runbar" x="${tx + tw - 8}" y="${ty + 4}" width="3" height="${th - 8}" rx="1.5" style="fill:#3ddc84"/>`
+        })
+        if (!tight) a += `<g id="tw-spark" data-x="${x + 8}" data-y="${by + th + 10}" data-w="${w - 16}" data-h="${h - th - 16}"></g>`
         return a
       }
       if (i === 4) {
@@ -195,6 +271,19 @@
       return a
     }
 
+    function paintForced() {
+      if (!svg) return
+      SENS.forEach((_, k) => {
+        $(`.sensor[data-i="${k}"]`, svg).classList.toggle('forced', forced.has(k))
+        $(`.led[data-o="${k}"]`, svg).classList.toggle('forced', forced.has(k))
+      })
+    }
+    // each arrival steps the lift one state round its loop; the output light for that state is on
+    function paintState() {
+      if (!svg) return
+      $$('.sm, .sml', svg).forEach((el) => el.classList.toggle('on', +el.dataset.s === state))
+      $$('.led.out', svg).forEach((el) => el.classList.toggle('on', +el.dataset.q === state))
+    }
     function setLayer(n) {
       if (!svg) return
       $$('.lyr', svg).forEach((g) => {
@@ -206,7 +295,7 @@
     function bagShape(b) {
       b.el = document.createElementNS(NS, 'g')
       const r = Math.min(9, G.bh * 0.14)
-      b.el.innerHTML = `<path d="M${-r} 0 C ${-r} ${-r * 1.2}, ${r} ${-r * 1.25}, ${r} 0 S ${-r * 0.2} ${r * 1.15}, ${-r} 0Z" fill="#8f8a7e" stroke="#11151c" stroke-width="1.1"/>`
+      b.el.innerHTML = `<path d="M${-r} 0 C ${-r} ${-r * 1.2}, ${r} ${-r * 1.25}, ${r} 0 S ${-r * 0.2} ${r * 1.15}, ${-r} 0Z" fill="#8f8a7e" stroke="#11151c" stroke-width="1.1" style="transition:fill .25s"/>`
       $('#tw-bags', svg).append(b.el)
       b.dot = document.createElementNS(NS, 'circle')
       b.dot.setAttribute('r', '3.2'); b.dot.setAttribute('fill', '#eef0f4')
@@ -214,21 +303,46 @@
     }
     function draw() {
       if (!svg) return
-      const scr = $('#tw-dots', svg).previousElementSibling   // the mini rail on the operator screen
-      const x1 = +scr.getAttribute('x1'), x2 = +scr.getAttribute('x2'), y = +scr.getAttribute('y1')
+      const lit = [false, false]
       bags.forEach((b) => {
         if (!b.el) bagShape(b)
-        b.el.setAttribute('transform', `translate(${sx(b.t).toFixed(1)} ${(railY() - 8).toFixed(1)})`)
-        b.dot.setAttribute('cx', (x1 + (x2 - x1) * b.t).toFixed(1)); b.dot.setAttribute('cy', y)
+        const [fx, fy] = route(b.t, b.cls, sx(0), sx(1), railY(), G.fd)
+        b.el.setAttribute('transform', `translate(${fx.toFixed(1)} ${(fy - 8).toFixed(1)})`)
+        const c = b.seen ? CLS[b.cls] : '#8f8a7e'
+        b.el.firstChild.setAttribute('fill', c)
+        const { x0, x1, y0, d } = G.scr   // the same item, on the operator's live view
+        const [dx, dy] = route(b.t, b.cls, x0, x1, y0, d)
+        b.dot.setAttribute('cx', dx.toFixed(1)); b.dot.setAttribute('cy', dy.toFixed(1)); b.dot.setAttribute('fill', b.seen ? c : '#eef0f4')
+        if (b.t > SW) lit[b.cls] = true
       })
-      $('#tw-kpi', svg).textContent = fmt(kpi)
+      lit.forEach((on, c) => $(`.route[data-r="${c}"]`, svg).classList.toggle('lit', on))
+      // the switch points at the track the next item needs; that is the controller's output
+      const next = bags.filter((b) => b.t <= SW).sort((p, q) => q.t - p.t)[0]
+      if (next) $('#tw-gate', svg).setAttribute('transform', `translate(${sx(SW)} ${railY()}) rotate(${next.cls ? 28 : -28})`)
+    }
+    let prof = 0
+    function paintProfile() {
+      const g = svg && $('#tw-prof', svg)
+      if (!g) return
+      const x = +g.dataset.x, y = +g.dataset.y, w = +g.dataset.w, h = +g.dataset.h, [name, bins] = PROFILES[prof]
+      if (+g.dataset.tight) {
+        g.innerHTML = `<text x="${x + 5}" y="${y + 10}" style="font-size:7.5px;fill:#a2a8b4">${name}</text>` +
+          bins.map(([, c], k) => `<rect x="${x + 5 + k * 11}" y="${y + h - 11}" width="8" height="7" rx="1.5" style="fill:${c}"/>`).join('')
+        return
+      }
+      const rh = (h - 20) / 3
+      g.innerHTML = `<text x="${x + 7}" y="${y + 12}" style="font-size:8px;fill:#a2a8b4">sort · ${name} plant</text>` +
+        bins.map(([t, c], k) => `<rect x="${x + 7}" y="${(y + 17 + k * rh).toFixed(1)}" width="${w - 14}" height="${(rh - 3).toFixed(1)}" rx="3" style="fill:${c};opacity:.24"/><rect x="${x + 7}" y="${(y + 17 + k * rh).toFixed(1)}" width="3" height="${(rh - 3).toFixed(1)}" rx="1" style="fill:${c}"/><text x="${x + 15}" y="${(y + 17 + k * rh + rh / 2 + 1.5).toFixed(1)}" style="font-size:8.5px;fill:#eef0f4">${t}</text>`).join('')
+      g.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 350 })
     }
     function hot(el, ms = 260) { if (!el) return; el.classList.add('hot'); setTimeout(() => el.classList.remove('hot'), ms) }
     function fire(k) {
       if (!svg) return
       hot($(`.sensor[data-i="${k}"]`, svg), 320)
       hot($(`.led[data-o="${k}"]`, svg), 320)
-      hot($(`.led[data-o="${4 + ((k + 1) % 4)}"]`, svg), 240)
+      hot($('.led.tx', svg), 140)
+      state = (state + 1) % 4
+      paintState()
       if (layer >= 2 && !reduced) {
         const c = document.createElementNS(NS, 'circle')
         c.setAttribute('class', 'pkt'); c.setAttribute('r', '3.2'); c.setAttribute('cx', G.spine)
@@ -239,39 +353,58 @@
     function arrive() {
       if (layer >= 4) {
         kpi += 1 + Math.floor(Math.random() * 3)
-        const b = bars.length ? bars : (bars = Array.from({ length: 12 }, () => 0.15 + Math.random() * 0.4))
-        b[b.length - 1] = clamp(b[b.length - 1] + 0.06)
-        if (b[b.length - 1] >= 1) { b.shift(); b.push(0.12) }
+        rate = Math.round(clamp(rate + (Math.random() - 0.5) * 60, 1080, 1360))
+        run = Math.round(clamp(run + (Math.random() - 0.5) * 2, 88, 98))
+        bars.shift(); bars.push(clamp(0.35 + (rate - 1080) / 560 + (Math.random() - 0.5) * 0.15, 0.1, 1))
+        faultAt = faultAt.map((f) => f - 1).filter((f) => f >= 0)
+        if (Math.random() < 0.06) { faults++; faultAt.push(bars.length - 1) }
         paintBars()
       }
       if (layer >= 5) hot($(`.site[data-s="${Math.floor(Math.random() * 7)}"]`, svg), 380)
     }
     function paintBars() {
-      if (!svg) return
-      const panel = $('#tw-kpi', svg).previousElementSibling, by = +panel.getAttribute('y'), h = +panel.getAttribute('height')
-      $$('.bar', svg).forEach((r, k) => { const v = (bars[k] || 0) * (h - 24); r.setAttribute('height', v.toFixed(1)); r.setAttribute('y', (by + h - 8 - v).toFixed(1)) })
+      if (!svg || !$('#tw-k0', svg)) return
+      $('#tw-k0', svg).textContent = fmt(kpi)
+      $('#tw-k1', svg).textContent = fmt(rate)
+      $('#tw-k2', svg).textContent = `${run}%`
+      $('#tw-k3', svg).textContent = String(faults)
+      const rb = $('#tw-runbar', svg), full = +rb.previousElementSibling.getAttribute('height'), top = +rb.previousElementSibling.getAttribute('y')
+      rb.setAttribute('height', (full * run / 100).toFixed(1)); rb.setAttribute('y', (top + full * (1 - run / 100)).toFixed(1))
+      const g = $('#tw-spark', svg)
+      if (!g) return
+      const x = +g.dataset.x, y = +g.dataset.y, w = +g.dataset.w, h = +g.dataset.h, n = bars.length
+      const pts = bars.map((v, k) => [x + (k / (n - 1)) * w, y + h - v * (h - 10)])
+      const line = pts.map(([px, py], k) => `${k ? 'L' : 'M'}${px.toFixed(1)} ${py.toFixed(1)}`).join('')
+      g.innerHTML = `<path d="${line} L${x + w} ${y + h} L${x} ${y + h}Z" style="fill:var(--acc);opacity:.12"/><path d="${line}" style="fill:none;stroke:var(--acc);stroke-width:1.6"/>` +
+        faultAt.map((f) => `<rect x="${(x + (f / (n - 1)) * w - 1.5).toFixed(1)}" y="${y}" width="3" height="${h}" rx="1" style="fill:#ff5a5f;opacity:.55"/>`).join('') +
+        `<text x="${x}" y="${y + 6}" style="font-size:7.5px;fill:var(--fg-3)">production · last 24 h · faults in red</text>`
     }
     function tick(now) {
       if (!running) return
       const dt = Math.min(64, now - (last || now)); last = now
       spawnT -= dt
-      if (spawnT <= 0 && !bags.some((b) => b.t < 0.08)) { bags.push({ t: 0 }); spawnT = 1300 }
-      bags.forEach((b) => {
-        const nt = b.t + 0.00009 * dt
-        SENS.forEach((f, k) => { if (b.t < f && nt >= f) fire(k) })
+      if (spawnT <= 0 && !bags.some((b) => b.t < 0.08)) { bags.push({ t: 0, cls: Math.random() < 0.5 ? 0 : 1 }); spawnT = 1300 }
+      // front to back: each bag stops short of the one ahead, and of any sensor forced ON
+      bags.sort((a, b) => b.t - a.t)
+      bags.forEach((b, i) => {
+        let lim = 1.05
+        if (i) lim = Math.min(lim, bags[i - 1].t - 0.07)
+        forced.forEach((k) => { if (b.t < SENS[k] - 0.03) lim = Math.min(lim, SENS[k] - 0.04) })
+        const nt = Math.max(b.t, Math.min(b.t + 0.00009 * dt, lim))
+        SENS.forEach((f, k) => { if (b.t < f && nt >= f) { fire(k); if (k === 1) b.seen = true } })
         b.t = nt
       })
-      bags = bags.filter((b) => { if (b.t >= 1) { b.el && b.el.remove(); b.dot && b.dot.remove(); return false } return true })
+      bags = bags.filter((b) => { if (b.t >= 1) { b.el && b.el.remove(); b.dot && b.dot.remove(); hot($(`.mach[data-m="${b.cls}"]`, svg), 500); return false } return true })
       pkts = pkts.filter((p) => {
         p.y -= 0.32 * dt
         p.el.setAttribute('cy', p.y.toFixed(1))
         if (p.y <= p.to) { p.el.remove(); arrive(); return false }
         return true
       })
-      const rot = $('#tw-rotor', svg)
-      if (rot) rot.setAttribute('transform', rot.getAttribute('transform').replace(/ rotate\([^)]*\)|$/, ` rotate(${((now / 6) % 360).toFixed(1)})`))
+      rxT += dt
+      if (rxT > 420) { rxT = 0; hot($('.led.rx', svg), 110) }   // the bridge polls the PLC
       msgT += dt
-      if (msgT > 2600) { msgT = 0; msgI = (msgI + 1) % MSGS.length; $('#tw-msg', svg).textContent = MSGS[msgI] }
+      if (msgT > 3000) { msgT = 0; prof = (prof + 1) % PROFILES.length; paintProfile();  }
       if (layer >= 6) {
         noteT += dt
         if (noteT > 3200) {
@@ -290,11 +423,11 @@
     let lastSize = ''
     new ResizeObserver(() => { const k = `${towerStage.clientWidth}x${towerStage.clientHeight}`; if (k !== lastSize) { lastSize = k; build(); paintBars() } }).observe(towerStage)
     if (reduced) {
-      bags = [{ t: 0.1 }, { t: 0.3 }, { t: 0.52 }, { t: 0.74 }]
-      kpi = 1240; bars = Array.from({ length: 12 }, (_, k) => 0.3 + 0.5 * Math.abs(Math.sin(k)))
+      bags = [{ t: 0.08, cls: 0 }, { t: 0.36, cls: 1, seen: true }, { t: 0.55, cls: 0, seen: true }, { t: 0.82, cls: 1, seen: true }]
+      kpi = 8412; bars = Array.from({ length: 24 }, (_, k) => 0.45 + 0.35 * Math.abs(Math.sin(k / 3)))
       draw(); paintBars()
     } else {
-      bars = Array.from({ length: 12 }, () => 0.15 + Math.random() * 0.4)
+      kpi = 8412; bars = Array.from({ length: 24 }, (_, k) => 0.45 + 0.3 * Math.abs(Math.sin(k / 3)) + Math.random() * 0.1)
       paintBars()
       new IntersectionObserver((es) => es.forEach((e) => {
         running = e.isIntersecting
@@ -380,14 +513,15 @@
 
   // ── § 02 — the plant, on hard mode ───────────────────
   const STATIONS = [
-    ['Soiled in', 'dock'], ['Soil sort', 'classify by hand'], ['Storage rail', 'buffer lanes'], ['Call-off', 'what goes next'],
-    ['Tunnel + dryers', 'wash · press · dry'], ['Finishing', 'fold · iron'], ['Clean out', 'to the customer'],
+    ['Dirty in', 'receiving'], ['Sort', 'by type, by hand'], ['Storage', 'waits its turn'], ['Release', 'what goes next'],
+    ['Wash + dry', 'the big machines'], ['Fold', 'finishing'], ['Clean out', 'shipped back'],
   ]
   const stage = $('#plant-stage')
   if (stage) plant()
   function plant() {
     const out = $('#plant-out'), cnt = $('#plant-cnt')
-    let vertical = false, svg, items = [], done = 0, forces = 0, last = 0, spawnT = 0, running = false
+    let vertical = false, svg, items = [], done = 0, last = 0, spawnT = 0, running = false
+    const forced = new Set()   // sensors forced ON hold the line behind them
     const sw = { wan: false, halt: false, stale: false }
     let queued = 0
     const cloud = document.createElement('div')
@@ -414,7 +548,7 @@
       svg = document.createElementNS(NS, 'svg')
       svg.setAttribute('viewBox', `0 0 ${G.w} ${G.h}`)
       svg.setAttribute('role', 'img')
-      svg.setAttribute('aria-label', 'A laundry line with seven stations. Bags move from soiled in to clean out.')
+      svg.setAttribute('aria-label', 'A laundry line with seven stations. Items move from dirty in to clean out.')
       const [x0, y0] = G.at(0), [x1, y1] = G.at(1)
       let s = `<defs><pattern id="hz" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="14" fill="#f2b100"/><rect x="7" width="7" height="14" fill="#11151c"/></pattern></defs>`
       const [hx0, hy0] = G.at(HALT_T), [hx1, hy1] = G.at(1)
@@ -447,6 +581,7 @@
         el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go() } })
       })
       items.forEach((it) => { it.el = null })
+      forced.forEach((i) => $(`.sensor[data-i="${i}"]`, svg).classList.add('on'))
       paintSwitches()
       draw()
     }
@@ -459,7 +594,7 @@
       $('#items', svg).append(g)
     }
     function state(t) {
-      if (t < ST[4] - 0.02) return 'SOILED'
+      if (t < ST[4] - 0.02) return 'DIRTY'
       if (t < ST[4] + 0.035) return 'WET ↑'
       if (t < ST[5] + 0.02) return 'DRY ↓'
       return 'FOLDED'
@@ -473,7 +608,7 @@
         const tagY = vertical ? 4 : -24, tagX = vertical ? -50 : 0
         const body = st === 'FOLDED'
           ? `<rect x="-12" y="-8" width="24" height="16" rx="4" fill="#e8f3fb" stroke="#0a6fab" stroke-width="1.2"/>`
-          : `<path d="M${-r} 0 C ${-r} ${-r * 1.2}, ${r} ${-r * 1.25}, ${r} 0 S ${-r * .2} ${r * 1.15}, ${-r} 0Z" fill="${st === 'SOILED' ? '#8f8a7e' : st === 'WET ↑' ? '#4b8fbf' : '#d9e6f0'}" stroke="#11151c" stroke-width="1.1"/>`
+          : `<path d="M${-r} 0 C ${-r} ${-r * 1.2}, ${r} ${-r * 1.25}, ${r} 0 S ${-r * .2} ${r * 1.15}, ${-r} 0Z" fill="${st === 'DIRTY' ? '#8f8a7e' : st === 'WET ↑' ? '#4b8fbf' : '#d9e6f0'}" stroke="#11151c" stroke-width="1.1"/>`
         it.el.innerHTML = `${body}<text x="${tagX}" y="${tagY}" text-anchor="middle" style="font-family:var(--font-mono);font-size:10px;fill:var(--fg-2)">${st}</text>`
       }
       const [x, y] = G.at(it.t)
@@ -485,13 +620,12 @@
 
     function say(html) { out.innerHTML = html }
     function force(i, el) {
-      forces++
-      el.classList.add('on')
-      setTimeout(() => el.classList.remove('on'), 1200)
-      const at = ST[i] - 0.03
-      const cand = items.filter((it) => it.t < at).sort((a, b) => b.t - a.t)[0]
-      if (cand && !items.some((o) => o !== cand && Math.abs(o.t - at) < 0.03)) { cand.t = at; paint(cand) }
-      say(`<span class="k">FORCE ◆ ${esc(STATIONS[i][0])} → ON.</span> Click-to-force: since March 2009, how we prove a control system without waiting for real goods. ${forces > 1 ? `(${forces} forces)` : ''}`)
+      const on = !forced.has(i)
+      on ? forced.add(i) : forced.delete(i)
+      el.classList.toggle('on', on)
+      say(on
+        ? `<span class="k">TEST FORCE ◆ ${esc(STATIONS[i][0])} → ON.</span> As far as the controller knows, that spot is taken, so the next item stops and waits. Click-to-force is a test tool: since March 2009, how we prove a control system during commissioning, before real goods arrive.`
+        : `<span class="k">TEST FORCE ◆ ${esc(STATIONS[i][0])} → OFF.</span> Spot's free. The line moves again.`)
     }
     function why(it) {
       const msg = it.reason || (it.moving ? 'Moving. Nothing to explain.' : 'Waiting on the one ahead.')
@@ -513,7 +647,11 @@
         const it = items[k], ahead = items[k - 1]
         let limit = 1.05, reason = null
         if (ahead) limit = Math.min(limit, ahead.t - 0.055)
-        if (sw.halt && it.t < HALT_T) { if (HALT_T - 0.012 < limit) { limit = HALT_T - 0.012; reason = 'Clean side halted. A person restarts it when it\'s safe.' } }
+        forced.forEach((s) => {
+          const at = ST[s] - 0.03
+          if (it.t < at - 0.01 && at - 0.045 < limit) { limit = at - 0.045; reason = `The sensor ahead is forced ON. The controller thinks that spot is taken.` }
+        })
+        if (sw.halt && it.t < HALT_T) { if (HALT_T - 0.012 < limit) { limit = HALT_T - 0.012; reason = 'Back half halted. A person restarts it when it\'s safe.' } }
         if (sw.stale && it.t <= STALE_T && !it.reread) {
           if (STALE_T < limit) { limit = STALE_T; if (it.t >= STALE_T - 0.002) { it.hold = (it.hold || 0) + dt; reason = 'Sensor looks stale. Re-reading it live before release.'; if (it.hold > 1800) it.reread = true } }
         }
@@ -557,8 +695,8 @@
       b.setAttribute('aria-pressed', sw[k])
       if (k === 'wan' && !sw.wan && queued) { say(`<span class="k">WAN back.</span> ${queued} queued events caught up in one burst. Nothing on the floor waited for the internet.`); queued = 0 }
       else if (k === 'wan' && sw.wan) say('<span class="w">Internet cut.</span> The line keeps moving. The plant runs on its own server; the cloud gets the story later.')
-      else if (k === 'halt') say(sw.halt ? '<span class="w">Clean side halted.</span> Only that side stops. The soil side keeps working.' : 'Clean side restarted — by a person, on purpose.')
-      else if (k === 'stale') { items.forEach((it) => { it.reread = false; it.hold = 0 }); say(sw.stale ? '<span class="w">The release sensor is lying.</span> The next bag stops and reads it again, live, before it goes.' : 'Sensor honest again.') }
+      else if (k === 'halt') say(sw.halt ? '<span class="w">Back half halted.</span> Only that half stops. The front half keeps working.' : 'Back half restarted — by a person, on purpose.')
+      else if (k === 'stale') { items.forEach((it) => { it.reread = false; it.hold = 0 }); say(sw.stale ? '<span class="w">The release sensor is lying.</span> The next item stops and reads it again, live, before it goes.' : 'Sensor honest again.') }
       paintSwitches()
     }))
 
@@ -847,8 +985,8 @@
       help: () => line('whoami · neofetch · layers · ls builds · open &lt;build&gt; · contact · clear<br><span class="cm"># a few others. no hints.</span>'),
       whoami: () => line('Naveed Kakal — Lead Developer, Kannegiesser ETECH. day shift: every layer of a laundry plant. night shift: everything else.'),
       neofetch: () => line([
-        ['os', 'laundry-floor 20 (since Aug 2006)'], ['host', 'Naperville, IL'], ['uptime', '322 of the last 366 days'],
-        ['kernel', 'sling + rail'], ['stack', 'I/O → PLC → eVue → reports → cloud → Pulse'], ['commits', '10,402 this year'],
+        ['os', 'plant-floor 20 (since Aug 2006)'], ['host', 'Naperville, IL'], ['uptime', '322 of the last 366 days'],
+        ['kernel', 'sensors + conveyors'], ['stack', 'sensors → controllers → screens → reports → cloud → phone'], ['commits', '10,402 this year'],
         ['binder', `${CARDS.length} cards`], ['crew', 'Zoya &amp; Maya (root)'],
       ].map(([k, v]) => `<span class="pr">${k.padEnd(8)}</span> ${v}`).join('<br>')),
       layers: () => { line(LONG.map((l, i) => `<span class="pr">L${i + 1}</span> ${esc(l)}`).join('<br>') + '<br><span class="cm"># taking you to the bottom floor…</span>'); setTimeout(() => go('climb'), 600) },

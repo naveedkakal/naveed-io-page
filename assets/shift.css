@@ -594,11 +594,25 @@ button.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); bord
 .tw .rail { stroke: var(--fg-3); stroke-width: 4; stroke-linecap: round; }
 .tw .sensor { cursor: pointer; }
 .tw .sensor .d { fill: var(--surface); stroke: var(--fg-3); stroke-width: 1.5; transition: fill .15s; }
-.tw .sensor.hot .d { fill: #f2b100; stroke: #11151c; }
+.tw .sensor.hot .d, .tw .sensor.forced .d { fill: #f2b100; stroke: #11151c; }
 .tw .sensor:focus { outline: none; }
 .tw .sensor:focus-visible .d { stroke: var(--acc); stroke-width: 2.5; }
 .tw .led { fill: #2a323f; transition: fill .12s; }
-.tw .led.hot { fill: #3ddc84; }
+.tw .led.hot, .tw .led.forced { fill: #3ddc84; }
+.tw .led.out.on { fill: #ff5a5f; }
+.tw .led.tx.hot { fill: #f2b100; }
+.tw .route { fill: none; stroke: #3f4a5c; stroke-width: 2.2; stroke-linecap: round; transition: stroke .3s; }
+.tw .route[data-r="0"].lit { stroke: #5bc8ff; }
+.tw .route[data-r="1"].lit { stroke: #f2b100; }
+.tw .gate { stroke: var(--acc); stroke-width: 3.2; stroke-linecap: round; }
+.tw .mach { fill: #151a23; stroke: #3ddc84; stroke-opacity: .55; transition: fill .3s; }
+.tw .mach.hot { fill: rgba(61,220,132,.22); }
+.tw .kv.bad { fill: #e5484d; }
+.tw .smw { stroke: #8b93a3; stroke-width: 1.2; }
+.tw .sm { fill: var(--surface); stroke: var(--fg-3); stroke-width: 1.4; transition: fill .2s, stroke .2s; }
+.tw .sm.on { fill: var(--acc); stroke: var(--acc); filter: drop-shadow(0 0 4px var(--acc)); }
+.tw .sml { font-size: 8.5px; fill: var(--fg-3); }
+.tw .sml.on { fill: var(--acc); font-weight: 700; }
 .tw .wire { stroke: var(--line-2); stroke-dasharray: 2 4; fill: none; }
 .tw .bus { stroke: color-mix(in oklab, var(--acc) 35%, var(--line-2)); stroke-width: 2; }
 .tw .pkt { fill: var(--acc); }
