@@ -49,8 +49,8 @@
     if (!sec) return
     let night = sec.classList.contains('night') || sec.classList.contains('dawn')
     if (sec.classList.contains('dusk')) night = duskP > 0.5
-    topbar.classList.toggle('night', night)
-    topbar.classList.toggle('day', !night)
+    // the jump menu hangs off the bar, outside every section, so it takes the bar's shift too
+    for (const el of [topbar, jump]) { el.classList.toggle('night', night); el.classList.toggle('day', !night) }
     setTheme(sec.classList.contains('dusk') ? skyAt(duskP)[0] : night ? '#07090e' : '#f1f3f6')
   }
   function onScroll() {
