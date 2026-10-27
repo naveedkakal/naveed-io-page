@@ -103,9 +103,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/shift.css?v=20261046" />
+<link rel="stylesheet" href="assets/shift.css?v=20261047" />
 <script src="assets/traffic.js" defer></script>
-<script src="assets/shift.js?v=20261046" defer></script>
+<script src="assets/shift.js?v=20261047" defer></script>
 </head>
 <body>
 <a class="skip" href="#climb">Skip to the stack</a>
@@ -179,7 +179,7 @@
             <span class="lbl" style="color:#a2a8b4"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.6 1.6a6.6 6.6 0 1 0 3.8 10.8A5.6 5.6 0 0 1 10.6 1.6z" fill="#9d8bff"/></svg>night shift</span>
             <span class="hrs" style="color:#6b7280">peaks at 11 p.m.</span>
           </div>
-          <h3 style="color:#eef0f4">10,402 commits in 366 days. 20+ new products since May.</h3>
+          <h3 style="color:#eef0f4">20+ new products since May, mostly after bedtime.</h3>
           <ul style="color:#a2a8b4">
             <li>An AI maintenance system running in real laundries.</li>
             <li>Two paid games on the App Store. A science channel my daughters pick topics for.</li>
@@ -374,12 +374,12 @@
     <div class="horizon" aria-hidden="true"></div>
     <div class="inner">
       <div class="copy">
-        <div class="kicker"><span class="acc" style="color:inherit">shift change</span> — every commit, last 366 days, by hour</div>
+        <div class="kicker"><span class="acc" style="color:inherit">shift change</span> — when my code goes in, by hour</div>
         <h2 id="h-dusk">I like work.</h2>
-        <p>The day job peaks at noon. My own builds peak at 11 p.m. Code went in on <b>322 of the last 366 days</b>; the longest streak ran 80 days.</p>
+        <p>The day job peaks at noon. My own builds start once the QA dept. (Zoya &amp; Maya) is asleep, and <b>peak at 11 p.m.</b></p>
         <div class="legend">
-          <span><i style="background:#2f8fd0"></i>day job · 4,688</span>
-          <span><i style="background:#9d8bff"></i>my own builds · 5,714</span>
+          <span><i style="background:#2f8fd0"></i>day job</span>
+          <span><i style="background:#9d8bff"></i>my own builds</span>
         </div>
       </div>
       <svg class="clockviz" id="clockviz" viewBox="-214 -214 428 428" role="img" aria-label="Commits by hour of day. Day-job commits peak at noon; my own builds peak at 11 p.m."></svg>
@@ -423,25 +423,15 @@
       <figcaption class="small mono"><span class="acc">fig. 03</span> — Burrow, condensed from its own map: 29 feeds, 18 graphs, 27 profiles. Current shows where work moves. Pink is the authority that decides, and it's never the model that wrote the change.<span class="swipe"> Swipe the map.</span></figcaption>
     </figure>
 
-    <div class="year rise" style="margin-top:clamp(56px,7vw,96px)">
-      <div class="year-head">
-        <div>
-          <div class="kicker"><span class="acc">fig. 04</span> — the year, one month at a time</div>
-          <div class="bignum" id="yearnum" aria-live="off">0</div>
-        </div>
-        <div class="bignum-l">commits · 366 days<br><span id="over" class="over" aria-hidden="true">it's over 9000</span></div>
-      </div>
-      <div class="tape" id="tape" role="img" aria-label="Commits per month, October 2025 to October 2026: 43, 833, 208, 506, 411, 340, 283, 637, 491, 1274, 2358, 1897, 1121.">
-        <div class="rail"></div>
-        <div class="months" id="months"></div>
-        <div class="axis" id="axis" aria-hidden="true"></div>
-        <div class="note">My commits across every repo, deduped, through Oct 24, 2026. 1,760 are PR merges; 3,973 carry a Claude co-author line. Busiest day: Sept 12, 259 commits; an analytics service that didn't exist at 11 p.m. was running in nine products by evening.</div>
-      </div>
-      <div class="counters">
-        <div><div class="n">103</div><div class="l">repos touched</div></div>
-        <div><div class="n">50</div><div class="l">of them new this year</div></div>
-        <div><div class="n">2</div><div class="l">paid games on the App Store</div></div>
-        <div><div class="n">322</div><div class="l">of the last 366 days with code in</div></div>
+    <div class="notes-block" style="margin-top:clamp(56px,7vw,96px)">
+      <div class="kicker"><span class="acc">fig. 04</span> — night notes · true stories from after bedtime</div>
+      <div class="nnotes">
+        <a class="nn rise" href="apps/knowthat.html" style="transition-delay:0.00s"><span class="nn-k">note 01 · Know That?</span><h4>The QA dept. writes the questions.</h4><p>My daughters pick what our science channel asks. I find the answers, every fact sourced, and decide what ships. Our best reel has 91.7K views.</p></a>
+        <a class="nn rise" href="apps/ember.html" style="transition-delay:0.05s"><span class="nn-k">note 02 · Ember</span><h4>A campfire, built at a campfire.</h4><p>Over a camping weekend I built a question game you pass hand to hand, so my friends would be a little jealous. The fire is drawn in Metal. It became the first thing I ever sold on the App Store.</p></a>
+        <a class="nn rise" href="apps/spitball.html" style="transition-delay:0.10s"><span class="nn-k">note 03 · Spitball</span><h4>A pitcher who cheats, tuned by robots.</h4><p>A baseball roguelite where you're the pitcher, and you cheat. Three simulated players play thousands of seasons to tune the fun. Friends and mentors are hiding in the clubhouse crew.</p></a>
+        <a class="nn rise" href="apps/weave.html" style="transition-delay:0.15s"><span class="nn-k">note 04 · Weave</span><h4>Software that joined the group text.</h4><p>The crew already lived in a group text. So instead of asking them to install one more app, Weave joined the group text.</p></a>
+        <a class="nn rise" href="apps/picpost.html" style="transition-delay:0.20s"><span class="nn-k">note 05 · PicPost</span><h4>Postcards, in the actual mail.</h4><p>Your photo, printed and mailed. The holiday version went from a stuck spec to a live, paid product in one evening.</p></a>
+        <a class="nn rise" href="apps/burrow.html" style="transition-delay:0.25s"><span class="nn-k">note 06 · Burrow</span><h4>A factory where no prompt can merge.</h4><p>My personal software factory. Every change it writes is reviewed by a model from a different vendor; unsure work parks instead of guessing. Merge authority is mechanical, so no prompt can merge anything.</p></a>
       </div>
     </div>
   </div>

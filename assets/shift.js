@@ -1034,7 +1034,7 @@
     { n: 'Weave', cert: '1362263', hue: 'weave', holo: 1, art: 'gen:weave', type: 'AI maintenance (CMMS) · in production',
       flav: 'A QR code on every machine. Procedures written from the manual, page cited. A report the owner reads on Monday.',
       g: ['LIVE', '14', 'written invariants'], stat: ['1,832 commits', 'since Dec ’25'],
-      back: ['The crew already lived in a group text, so Weave joined the group text — idea to production in about 3½ hours.', 'Every instruction and every AI answer written in Simplified Technical English.', 'A roadmap of 99 specs that grades its own items; production deploys are manual, on purpose.'],
+      back: ['The crew already lived in a group text, so Weave joined the group text.', 'Every instruction and every AI answer written in Simplified Technical English.', 'A roadmap of 99 specs that grades its own items; production deploys are manual, on purpose.'],
       links: [['case file', 'apps/weave.html']] },
     { n: 'Burrow', cert: 'ead20af', hue: 'burrow', holo: 1, art: 'burrow', pos: '0% 50%', type: 'personal software factory',
       flav: 'Intent goes in. Questions come back. A path decides what the model does next.',

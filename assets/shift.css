@@ -757,3 +757,11 @@ a.mini:hover { border-color: color-mix(in oklab, var(--hue) 55%, var(--line-2));
 .mini.ping { animation: miniping 1.4s var(--ease); }
 @keyframes miniping { 0%, 60% { box-shadow: 0 0 0 3px var(--hue); } 100% { box-shadow: none; } }
 @media (max-width: 640px) { .range-grid { grid-template-columns: 1fr 1fr; } .mini .mn { font-size: 15px; } .mini .mt { font-size: 12px; } }
+
+/* § 04 — night notes: short true stories in place of the commit tape */
+.nnotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 22px; }
+.nn { display: block; padding: 20px 20px 18px; border: 1px solid var(--line-2); border-radius: 16px; background: var(--bg-2); color: inherit; text-decoration: none; transition: border-color .25s, transform .25s var(--ease); }
+.nn:hover { border-color: var(--acc); transform: translateY(-2px); }
+.nn-k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--fg-3); }
+.nn h4 { font-family: var(--font-display); font-weight: 800; font-size: clamp(20px, 1.8vw, 24px); letter-spacing: -.025em; line-height: 1.1; margin: 10px 0 10px; color: var(--fg); text-wrap: balance; }
+.nn p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--fg-2); text-wrap: pretty; }
