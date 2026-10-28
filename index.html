@@ -103,16 +103,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/shift.css?v=20261047" />
+<link rel="stylesheet" href="assets/shift.css?v=20261048" />
 <script src="assets/traffic.js" defer></script>
-<script src="assets/shift.js?v=20261047" defer></script>
+<script src="assets/shift.js?v=20261048" defer></script>
 </head>
 <body>
 <a class="skip" href="#climb">Skip to the stack</a>
 
 <!-- ─── top bar: brand · shift clock · open a line ─── -->
 <header class="topbar day" id="topbar">
-  <a class="brand" href="#top"><span class="mk">nk</span><span>naveed<span class="acc">.io</span></span></a>
+  <a class="brand" href="#top"><span class="mk">nk</span><span class="name">naveed<span class="acc">.io</span></span></a>
+  <nav class="tnav" aria-label="Jump to">
+    <a href="#break" data-go="break"><span class="lg"><span class="x">the </span>day job</span><span class="sm">work</span></a>
+    <a href="#ai" data-go="ai"><span class="lg"><span class="x">the </span>night builds</span><span class="sm">builds</span></a>
+    <a href="#record" data-go="record"><span class="lg">on record</span><span class="sm">writing</span></a>
+  </nav>
   <div class="right">
     <button class="clock" id="clock" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="jump" title="Jump to a section">
       <svg class="face" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.2"/><line id="hand" x1="10" y1="10" x2="10" y2="4.5"/></svg>

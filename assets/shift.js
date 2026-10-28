@@ -65,6 +65,15 @@
     dusk()
     climbStep()
     themeUnderBar()
+    navAt()
+  }
+  // light the top-bar link for the stretch of page you're in: the job (through the dusk), the builds, the writing
+  const tnav = $$('.tnav a'), at = (id) => { const el = $('#' + id); return el ? el.getBoundingClientRect().top + scrollY : Infinity }
+  function navAt() {
+    const y = scrollY + innerHeight * 0.35, cuts = [['break', at('break')], ['ai', at('dusk')], ['record', at('record')], ['', at('contact')]]
+    let on = ''
+    cuts.forEach(([k, t]) => { if (y >= t) on = k })
+    tnav.forEach((a) => a.classList.toggle('on', a.dataset.go === on))
   }
   const jump = $('#jump'), clockBtn = $('#clock')
   const setJump = (open) => { jump.classList.toggle('open', open); clockBtn.setAttribute('aria-expanded', open) }
