@@ -20,13 +20,13 @@ Last read from the Namecheap API: 2026-10-07.
 | mispronounced.io | Cloudflare | accent-app `dns/dnsconfig.js` | 2027-07-04 | **Yes (keeping).** Renew on Cloudflare: transfer any time before expiry. Eligible now |
 | napervillecarwashes.com | Cloudflare (site is a Worker, proxied) | npv-car-washes `dns/dnsconfig.js` | 2027-07-21 | **No. Lapses 2027-07-21.** Auto-renew turned off 2026-10-07 |
 | spitballgame.io | Cloudflare | (dashboard) | 2027-10-07 | Keep? Registered 2026-10-07, locked until 2026-12-06 |
-| glowgardenusa.com | GoDaddy nameservers (half broken: IPv4 points at GoDaddy, only IPv6 reaches Pages); Cloudflare zone created, not active | glow-garden repo, GitHub Pages | 2027-08-28 | **Transferring GoDaddy → Namecheap (pending since 2026-10-08).** When it lands: write `dns/dnsconfig.js` in glow-garden (GitHub Pages A/AAAA + `www`, drop GoDaddy's `_domainconnect` and `pay` records), push, switch nameservers. A Cloudflare transfer then waits 60 days after the Namecheap one |
+| glowgardenusa.com | Cloudflare (GitHub Pages behind the proxy, SSL Full) | glow-garden `dns/dnsconfig.js` | 2028-08-28 | **Yes (keeping).** Transferred GoDaddy → Namecheap 2026-10-14; DNS moved to Cloudflare the same day. Cloudflare Registrar transfer eligible after 2026-12-13 (60-day lock). Auto-renew is off at Namecheap |
 | weave-linen.com | Namecheap | — | **2026-12-30** | Decide before 2026-12-30 |
 | weave-linen.dev | Namecheap | — | 2027-01-11 | Auto-renew off; lapsing? |
 | tychocore.com | Namecheap (Google mail) | — | 2027-03-26 | Auto-renew off; lapsing? |
 | nazneen.io | Cloudflare | petalpost `dns/dnsconfig.js` (for now; moves with the site if it gets its own app) | 2027-03-16 | **Yes (keeping).** Transfer any time before 2027-03-16. Eligible now |
 | tycholinen.com | Namecheap | — | 2027-03-23 | Decide |
-| weavecmms.com | Namecheap | — | 2027-03-27 | Decide |
+| weavecmms.com | Cloudflare (moved 2026-11-12; Fly app, Workspace + Postmark mail) | weave `dns/dnsconfig.js` | 2027-03-27 | **Yes (keeping, prod).** Transfer any time before 2027-03-27. Eligible now. Namecheap still holds the old record set, so switching the nameservers back is the rollback |
 | petalpost.io | Namecheap | — (served by petalpost Fly app) | 2027-05-22 | **No. Let it lapse;** everything unifies under picpost.io. Turn auto-renew OFF at Namecheap (still on as of 2026-10-07). Not worth moving its DNS |
 | pawpost.io | Namecheap | — (served by petalpost Fly app) | 2027-05-24 | **No. Let it lapse;** everything unifies under picpost.io. Turn auto-renew OFF at Namecheap (still on as of 2026-10-07). Not worth moving its DNS |
 | potionpost.io | Namecheap | — (served by petalpost Fly app) | 2027-05-24 | **No. Let it lapse;** everything unifies under picpost.io. Turn auto-renew OFF at Namecheap (still on as of 2026-10-07). Not worth moving its DNS |
