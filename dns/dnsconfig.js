@@ -56,6 +56,14 @@ D("naveed.io", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
 
   TXT("@", "google-site-verification=yZj00p0HgkOlxhyguSpqLv6EtJh1jeNO_UuDnjchmx0"),
 
+  // Apex DMARC, monitor only. Reports go to Cloudflare DMARC Management
+  // (dashboard → Email → DMARC Management), enabled 2026-11-11, which created
+  // this record. Nothing is known to send as @naveed.io itself (misra and
+  // nazneen send from outbound., which has its own record below), but this
+  // zone hosts many apps: read a few weeks of reports before adding
+  // "v=spf1 -all" and tightening to p=reject.
+  TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:99b5a110a37343d79fcec7344ee0faac@dmarc-reports.cloudflare.net"),
+
   // ---- Postmark outbound -------------------------------------------------
   // misra sends as misra@outbound.naveed.io, so these are misra's deliverability.
   TXT("_dmarc.outbound", "v=DMARC1; p=none; adkim=r; aspf=r"),
