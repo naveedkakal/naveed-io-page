@@ -98,5 +98,7 @@ D("naveed.io", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
   CNAME("spitball", "naveedkakal.github.io."),
   CNAME("knowthat", "naveedkakal.github.io."),
   CNAME("tv", "naveedkakal.github.io."),
-  CNAME("xfm", "naveedkakal.github.io.")
+  CNAME("xfm", "naveedkakal.github.io."),
+  // GameStop application page, taken down 2026-11-23; rwl-site now only redirects to naveed.io
+  CNAME("ryan-will-love", "naveedkakal.github.io.")
 );

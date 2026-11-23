@@ -14,7 +14,7 @@ Last read from the Namecheap API: 2026-10-07.
 
 | Domain | DNS | Records live in | Expires | Transfer to Cloudflare |
 |---|---|---|---|---|
-| naveed.io | Cloudflare | naveed-io `dns/dnsconfig.js` | **2026-11-26** | **Yes (keeping).** Target: start by 2026-11-12. A transfer takes up to ~5 days and *is* the renewal, so leave margin before the 2026-11-26 expiry. Do not let Namecheap auto-renew first |
+| naveed.io | Cloudflare | naveed-io `dns/dnsconfig.js` | **2027-11-26** | **Yes (keeping).** Renewed at Namecheap 2026-11-23 rather than transferred first; a transfer can happen any time (it adds a year). |
 | codewrights.io | Cloudflare | codewrights `dns/dnsconfig.js` | 2027-06-09 | Yes (business domain). Eligible now |
 | picpost.io | Cloudflare | petalpost `dns/dnsconfig.js` | 2027-05-30 | **Yes (keeping).** Renew on Cloudflare: transfer any time before expiry. Eligible now |
 | mispronounced.io | Cloudflare | accent-app `dns/dnsconfig.js` | 2027-07-04 | **Yes (keeping).** Renew on Cloudflare: transfer any time before expiry. Eligible now |
